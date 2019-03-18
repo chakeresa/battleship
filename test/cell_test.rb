@@ -1,6 +1,5 @@
 require 'minitest/autorun'
 require './lib/cell'
-require './lib/ship'
 
 class CellTest < Minitest::Test
   def test_it_exists
@@ -30,5 +29,23 @@ class CellTest < Minitest::Test
     assert_instance_of Ship, cell.ship
     assert_equal boat, cell.ship
     refute cell.empty?
+  end
+
+  def test_it_is_not_fired_upon_initially
+    cell = Cell.new("B4")
+    boat = Ship.new("Boot", 5)
+
+    refute cell.fired_upon?
+  end
+
+  def test_a_hit
+    cell = Cell.new("B4")
+    boat = Ship.new("Boot", 5)
+
+    cell.place_ship(boat)
+    cell.fire_upon
+
+    assert cell.fired_upon?
+    assert_equal 4, cell.ship.health
   end
 end
