@@ -18,8 +18,8 @@ class Board
             C4: Cell.new('C4'),
             D1: Cell.new('D1'),
             D2: Cell.new('D2'),
-            D4: Cell.new('D3'),
-            D3: Cell.new('D4')
+            D3: Cell.new('D3'),
+            D4: Cell.new('D4')
         }
     end
     def valid_coordinate?(coord)
