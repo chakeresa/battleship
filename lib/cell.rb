@@ -21,8 +21,21 @@ class Cell
     end
 
     def fire_upon
-        @ship.hit
+        if !self.empty?
+            @ship.hit
+        end
         @fired = true
     end
 
+    def render(reveal = false)
+        if self.empty?
+            return @fired ? 'M' : '.'
+        else
+            if @fired
+                return @ship.sunk? ? 'X' : 'H'
+            else
+                return reveal ? 'S' : '.'
+            end
+        end
+    end
 end
