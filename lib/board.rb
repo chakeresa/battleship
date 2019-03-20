@@ -21,24 +21,24 @@ class Board
     def place(ship, coord, horizontal = false)
         #Test for out of bounds
             #Starting coordinate out of bounds?
-        return false if coord[0] > (64 + @size).chr || coord[1].to_i > @size
+        return :oob if coord[0] > (64 + @size).chr || coord[1].to_i > @size
             #Ending coordinate out of bounds?
         if horizontal
             #We only need to check the furthest coord from out start.
-            return false if coord[1].to_i + ship.length > @size
+            return :oob if coord[1].to_i + ship.length > @size
         else
-            return false if (coord[0].ord + ship.length).chr > (64 + @size).chr
+            return :oob if (coord[0].ord + ship.length).chr > (64 + @size).chr
         end
         #Test for overlap
         if horizontal
             0.upto(ship.length - 1) do |i|
                 at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
-                return false if !(@cells[at].empty?)
+                return :overlap if !(@cells[at].empty?)
             end
         else
             0.upto(ship.length - 1) do |i|
                 at = ((coord[0].ord + i).chr + coord[1]).to_sym
-                return false if !(@cells[at].empty?)
+                return :overlap if !(@cells[at].empty?)
             end
         end
         #If tests passed, add ship
@@ -54,6 +54,6 @@ class Board
                 @cells[at].place(ship)
             end
         end
-        return true
+        return :success
     end
 end

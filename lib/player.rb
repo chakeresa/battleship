@@ -7,7 +7,32 @@ class Player
     end
 
     def place(ship)
+        valid = :none
+        while valid != :success do
+            puts "Placing :" + ship.name + ", with Length of " + ship.length
+            puts "Pick a starting coordinate."
+            print ">> "; startcoord = gets.chomp
+            puts "Pick a direction (left,right,up,down OR l,r,u,d)."
+            print ">> "; direction = gets.chomp.downcase
+            if @board.valid_coordinate?(startcoord)
+                if direction.match?(/^l$|^left$/)
+                    
 
+                elsif direction.match?(/^r$|^right$/)
+                    valid = @board.place(ship, startcoord, true)
+                elsif direction.match?(/^u$|^up$/)
+
+                elsif direction.match?(/^d$|^down$/)
+                    valid = @board.place(ship, startcoord)
+                else
+                    puts "Invalid direction."
+                end
+                puts "Out of bounds!" if valid == :oob
+                puts "Overlap!" if valid == :overlap
+            else
+                puts "Invalid starting coordinate."
+            end
+        end
     end
 
     def turn
