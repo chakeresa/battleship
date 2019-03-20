@@ -2,8 +2,9 @@ require './lib/board'
 
 class Render
 
-  def render(board)
+  def render(board, reveal = false)
     @board = board
+    @reveal = reveal
     render_return = first_row
 
     @board.size.times do |i|
@@ -24,7 +25,15 @@ class Render
 
   def subsequent_row(i)
     row_counter = i + 1 # starts at one
-    row_render = (64 + row_counter).chr
-    row_render += " . . . . \n" # HARD CODED
+    letter = (64 + row_counter).chr
+    row_render = letter
+
+    @board.size.times do |i|
+      number = (i + 1).to_s
+      cell = (letter + number).to_sym
+      row_render += " " + @board.cells[cell].render(@reveal) # TO DO: Board has a new method to get rid of .cells from this line -- update accordingly after merging
+    end
+
+    row_render += " \n"
   end
 end
