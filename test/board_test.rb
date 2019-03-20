@@ -49,7 +49,7 @@ class BoardTest < Minitest::Test
         testShip = Ship.new("test", 5)
         assert testBoard.place(testShip, 'B2', true)
         assert_equal [testShip], testBoard.ships
-        0.upto(5) {|i| refute testBoard.cells[('B' + (2 + i).to_s).to_sym].empty?}
+        0.upto(4) {|i| refute testBoard.cells[('B' + (2 + i).to_s).to_sym].empty?}
     end
 
     def test_ship_placement_out_bounds

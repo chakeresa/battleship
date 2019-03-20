@@ -77,6 +77,59 @@ class RenderTest < Minitest::Test
     assert_equal "D . . . . \n", render.subsequent_row(3)
   end
 
+  def test_subsequent_renders_hit_ships
+    board = Board.new(4)
+    render = Render.new
+    sub = Ship.new("Sub", 2)
+
+    board.place(sub, "A1", true)
+    # ^ places sub in A1 horizontally -- A1 and A2
+    board.cells[:A1].fire_upon
+
+    render.render(board, true)
+
+    assert_equal "A H S . . \n", render.subsequent_row(0)
+    assert_equal "B . . . . \n", render.subsequent_row(1)
+    assert_equal "C . . . . \n", render.subsequent_row(2)
+    assert_equal "D . . . . \n", render.subsequent_row(3)
+  end
+
+  def test_subsequent_renders_sunken_ships
+    board = Board.new(4)
+    render = Render.new
+    sub = Ship.new("Sub", 2)
+
+    board.place(sub, "A1", true)
+    # ^ places sub in A1 horizontally -- A1 and A2
+    board.cells[:A1].fire_upon
+    board.cells[:A2].fire_upon
+
+    render.render(board)
+
+    assert_equal "A X X . . \n", render.subsequent_row(0)
+    assert_equal "B . . . . \n", render.subsequent_row(1)
+    assert_equal "C . . . . \n", render.subsequent_row(2)
+    assert_equal "D . . . . \n", render.subsequent_row(3)
+  end
+
+  def test_subsequent_renders_misses
+    board = Board.new(4)
+    render = Render.new
+    sub = Ship.new("Sub", 2)
+
+    board.place(sub, "A1", true)
+    # ^ places sub in A1 horizontally -- A1 and A2
+    board.cells[:A4].fire_upon # miss
+    board.cells[:C2].fire_upon # miss
+
+    render.render(board, true)
+
+    assert_equal "A S S . M \n", render.subsequent_row(0)
+    assert_equal "B . . . . \n", render.subsequent_row(1)
+    assert_equal "C . M . . \n", render.subsequent_row(2)
+    assert_equal "D . . . . \n", render.subsequent_row(3)
+  end
+
   def test_entire_reveal
     board = Board.new(5)
     render = Render.new
