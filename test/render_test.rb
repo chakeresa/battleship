@@ -27,13 +27,29 @@ class RenderTest < Minitest::Test
     assert_equal "  1 2 3 4 \n", render.first_row
   end
 
-  def test_subsequent_row_renders
+  def test_subsequent_row_renders_initial_board
     board = Board.new(4)
     render = Render.new
 
     render.render(board)
 
     assert_equal "A . . . . \n", render.subsequent_row(0)
+    assert_equal "B . . . . \n", render.subsequent_row(1)
+    assert_equal "C . . . . \n", render.subsequent_row(2)
+    assert_equal "D . . . . \n", render.subsequent_row(3)
+  end
+
+  def test_subsequent_row_renders_ships_if_reveal
+    board = Board.new(4)
+    render = Render.new
+    sub = Ship.new("Sub", 2)
+
+    board.place(sub, "A1", true)
+    # ^ places sub in A1 horizontally -- A1 and A2
+
+    render.render(board, true)
+
+    assert_equal "A S S . . \n", render.subsequent_row(0)
     assert_equal "B . . . . \n", render.subsequent_row(1)
     assert_equal "C . . . . \n", render.subsequent_row(2)
     assert_equal "D . . . . \n", render.subsequent_row(3)

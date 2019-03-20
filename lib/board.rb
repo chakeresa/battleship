@@ -28,12 +28,12 @@ class Board
         end
         #Test for overlap
         if horizontal
-            0.upto(ship.length) do |i|
+            0.upto(ship.length - 1) do |i|
                 at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
                 return false if !(@cells[at].empty?)
             end
         else
-            0.upto(ship.length) do |i|
+            0.upto(ship.length - 1) do |i|
                 at = ((coord[0].ord + i).chr + coord[1]).to_sym
                 return false if !(@cells[at].empty?)
             end
@@ -41,12 +41,12 @@ class Board
         #If tests passed, add ship
         @ships << ship
         if horizontal
-            0.upto(ship.length) do |i|
+            0.upto(ship.length - 1) do |i|
                 at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
                 @cells[at].place(ship)
             end
         else
-            0.upto(ship.length) do |i|
+            0.upto(ship.length - 1) do |i|
                 at = ((coord[0].ord + i).chr + coord[1]).to_sym
                 @cells[at].place(ship)
             end
