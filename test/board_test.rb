@@ -43,4 +43,29 @@ class BoardTest < Minitest::Test
         assert_equal expected.keys, test.cells.keys
         #assert_equal expected.values, test.cells.values
     end
+
+    def test_ship_placement_valid
+        testBoard = Board.new
+        testShip = Ship.new("test", 5)
+        assert testBoard.place(testShip, 'B2', true)
+        assert_equal [testShip], testBoard.ships
+        0.upto(5) {|i| refute testBoard.cells[('B' + (2 + i).to_s).to_sym].empty?}
+    end
+
+    def test_ship_placement_out_bounds
+        testBoard = Board.new
+        testShip = Ship.new("test", 5)
+        refute testBoard.place(testShip, 'B8', true)
+        assert_equal [], testBoard.ships
+        assert testBoard.cells[:B8].empty?
+        assert testBoard.cells[:B10].empty?
+    end
+
+    def test_ship_placement_overlap
+        testBoard = Board.new
+        testShip = Ship.new("test", 5)
+        testShip2 = Ship.new("bad", 5)
+        assert testBoard.place(testShip, 'F5', true)
+        refute testBoard.place(testShip2, 'E7')
+    end
 end

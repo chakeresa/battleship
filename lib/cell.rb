@@ -7,7 +7,7 @@ class Cell
         @fired = false
     end
 
-    def place_ship(ship)
+    def place(ship)
         @ship = ship
     end
 
