@@ -1,9 +1,8 @@
 require './lib/board'
 
 class Render
-  attr_reader :board
-  
-  def initialize(board)
-    @board = board
+
+  def render(board)
+
   end
 end
