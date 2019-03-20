@@ -1,14 +1,13 @@
 require './lib/ship'
 
 class Cell
-    attr_reader :coord, :ship
-    def initialize(coord)
-        @coord = coord
+    attr_reader :ship
+    def initialize
         @ship
         @fired = false
     end
 
-    def place_ship(ship)
+    def place(ship)
         @ship = ship
     end
 
