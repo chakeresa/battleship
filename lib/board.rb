@@ -4,8 +4,8 @@ class Board
     attr_reader :cells
     def initialize
         @cells = {}
-        ('A'..'D').each do |x| #As in x coord of graph
-            ('1'..'4').each do |y|
+        ('A'..'J').each do |x| #As in x coord of graph
+            ('1'..'10').each do |y|
                 @cells[(x+y).to_sym] = Cell.new
             end
         end
@@ -13,4 +13,5 @@ class Board
     def valid_coordinate?(coord)
         @cells.keys.any? {|cell| cell.to_s == coord}
     end
+    def
 end
