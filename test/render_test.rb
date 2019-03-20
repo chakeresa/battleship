@@ -43,16 +43,52 @@ class RenderTest < Minitest::Test
     board = Board.new(4)
     render = Render.new
     sub = Ship.new("Sub", 2)
+    cruiser = Ship.new("Cruiser", 3)
 
     board.place(sub, "A1", true)
     # ^ places sub in A1 horizontally -- A1 and A2
+    board.place(cruiser, "A4", false)
+    # ^ places cruiser in A1 vertically -- A4 thru D4
 
     render.render(board, true)
 
-    assert_equal "A S S . . \n", render.subsequent_row(0)
+    assert_equal "A S S . S \n", render.subsequent_row(0)
+    assert_equal "B . . . S \n", render.subsequent_row(1)
+    assert_equal "C . . . S \n", render.subsequent_row(2)
+    assert_equal "D . . . . \n", render.subsequent_row(3)
+  end
+
+  def test_subsequent_row_doesnt_render_ships_if_reveal_is_false
+    board = Board.new(4)
+    render = Render.new
+    sub = Ship.new("Sub", 2)
+    cruiser = Ship.new("Cruiser", 3)
+
+    board.place(sub, "A1", true)
+    # ^ places sub in A1 horizontally -- A1 and A2
+    board.place(cruiser, "A4", false)
+    # ^ places cruiser in A1 vertically -- A4 thru D4
+
+    render.render(board) # inherent false for reveal
+
+    assert_equal "A . . . . \n", render.subsequent_row(0)
     assert_equal "B . . . . \n", render.subsequent_row(1)
     assert_equal "C . . . . \n", render.subsequent_row(2)
     assert_equal "D . . . . \n", render.subsequent_row(3)
+  end
+
+  def test_entire_reveal
+    board = Board.new(5)
+    render = Render.new
+
+    expected = "  1 2 3 4 5 \n"
+    expected += "A . . . . . \n"
+    expected += "B . . . . . \n"
+    expected += "C . . . . . \n"
+    expected += "D . . . . . \n"
+    expected += "E . . . . . \n"
+
+    assert_equal expected, render.render(board)
   end
 
 end

@@ -10,6 +10,8 @@ class Render
     @board.size.times do |i|
       render_return += subsequent_row(i)
     end
+
+    render_return
   end
 
   def first_row
