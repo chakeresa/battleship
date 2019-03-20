@@ -67,5 +67,6 @@ class BoardTest < Minitest::Test
         testShip2 = Ship.new("bad", 5)
         assert testBoard.place(testShip, 'F5', true)
         refute testBoard.place(testShip2, 'E7')
+        assert_equal [testShip], testBoard.ships
     end
 end

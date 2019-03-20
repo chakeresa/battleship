@@ -9,6 +9,7 @@ class Board
                 @cells[(x+y).to_sym] = Cell.new
             end
         end
+        @size = size
         @ships = []
     end
     def valid_coordinate?(coord)
@@ -17,14 +18,14 @@ class Board
     def place(ship, coord, horizontal = false)
         #Test for out of bounds
             #Starting coordinate out of bounds?
-
-            #coorequire 'pry';binding.pry
-        return false if coord[0] > 'J' || coord[1].to_i > 10
+        return false if coord[0] > (64 + @size).chr || coord[1].to_i > @size
             #Ending coordinate out of bounds?
+            #Mind, letters are
         if horizontal
-            return false if coord[1].to_i + ship.length > 10
+            #We only need to check the furthest coord from out start.
+            return false if coord[1].to_i + ship.length > @size
         else
-            return false if (coord[0].ord + ship.length).chr > 'J'
+            return false if (coord[0].ord + ship.length).chr > (64 + @size).chr
         end
         #Test for overlap
         if horizontal
