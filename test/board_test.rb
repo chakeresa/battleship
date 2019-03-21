@@ -80,14 +80,14 @@ class BoardTest < Minitest::Test
       board = Board.new(4)
       sub = Ship.new("Submarine", 2)
 
-      assert board.out_of_bounds?(sub, 'Z2', true)
+      assert board.out_of_bounds?(sub, 'Z4', true)
     end
 
     def test_out_of_bounds_returns_true_if_number_starting_out_of_bounds
       board = Board.new(4)
       sub = Ship.new("Submarine", 2)
 
-      assert board.out_of_bounds?(sub, 'B9', true)
+      assert board.out_of_bounds?(sub, 'D9', true)
     end
 
     def test_out_of_bounds_returns_true_if_horizontal_ending_out_of_bounds
@@ -107,11 +107,6 @@ class BoardTest < Minitest::Test
     def test_out_of_bounds_returns_false_if_horizontal_and_in_bounds
       board = Board.new(4)
       sub = Ship.new("Submarine", 2)
-        # debugging:
-        # require './lib/render'
-        # render = Render.new
-        # require "pry"; binding.pry
-        # render.render(board)
 
       assert_equal false, board.out_of_bounds?(sub, 'C3', true)
     end
@@ -120,6 +115,6 @@ class BoardTest < Minitest::Test
       board = Board.new(4)
       sub = Ship.new("Submarine", 2)
 
-      assert_equal false, board.out_of_bounds?(sub, 'A1', false)
+      assert_equal false, board.out_of_bounds?(sub, 'C3', false)
     end
 end
