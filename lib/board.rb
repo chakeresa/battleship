@@ -11,7 +11,6 @@ class Board
             end
         end
         @size = size
-        @ships = []
         @render = Render.new
     end
 
@@ -28,7 +27,6 @@ class Board
         return :overlap if overlap?(ship, coord, horizontal)
 
         #If tests passed, add ship
-        @ships << ship
         horizontal ? add_horizontal_ship(ship, coord) : add_vertical_ship(ship, coord)
         return :success
     end
