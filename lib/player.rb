@@ -12,8 +12,10 @@ class Player
             puts "Placing :" + ship.name + ", with Length of " + ship.length
             puts "Pick a starting coordinate."
             print ">> "; coord = gets.chomp
+            return :quit if input == '!'
             puts "Pick a direction (left,right,up,down OR l,r,u,d)."
             print ">> "; direction = gets.chomp.downcase
+            return :quit if input == '!'
             if @board.valid_coordinate?(coord)
                 if direction.match?(/^l$|^left$/)
                     coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
