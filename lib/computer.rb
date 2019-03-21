@@ -42,7 +42,7 @@ class Computer
   end
 
   def turn(opp)
-    target = find_valid_target
+    target = find_valid_target(opp)
 
     puts "Computer fired on #{target}."
 
