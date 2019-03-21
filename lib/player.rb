@@ -11,19 +11,20 @@ class Player
         while valid != :success do
             puts "Placing :" + ship.name + ", with Length of " + ship.length
             puts "Pick a starting coordinate."
-            print ">> "; startcoord = gets.chomp
+            print ">> "; coord = gets.chomp
             puts "Pick a direction (left,right,up,down OR l,r,u,d)."
             print ">> "; direction = gets.chomp.downcase
-            if @board.valid_coordinate?(startcoord)
+            if @board.valid_coordinate?(coord)
                 if direction.match?(/^l$|^left$/)
-                    
-
+                    coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
+                    valid = @board.place(ship, coord, true)
                 elsif direction.match?(/^r$|^right$/)
-                    valid = @board.place(ship, startcoord, true)
+                    valid = @board.place(ship, coord, true)
                 elsif direction.match?(/^u$|^up$/)
-
+                    coord = (coord[0].ord - (ship.length - 1)).chr + coord[1]
+                    valid = @board.place(ship, coord)
                 elsif direction.match?(/^d$|^down$/)
-                    valid = @board.place(ship, startcoord)
+                    valid = @board.place(ship, coord)
                 else
                     puts "Invalid direction."
                 end
