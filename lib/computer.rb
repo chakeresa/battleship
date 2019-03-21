@@ -26,6 +26,31 @@ class Computer
   end
 
   def turn
+    valid = false
+    target = nil
+    while !valid do
+      target = @board[@board.cells.keys.sample]
+      # TO DO ^ iter 4 smart computer
 
+      if @board.valid_coordinate?(target)
+        if !@board[target.to_sym].fired_upon?
+          @board[target.to_sym].fire_upon; valid = true
+        end
+      end
+    end
+
+    puts "Computer fired on #{target}."
+
+    if @board[target.to_sym].empty?
+      puts " --- MISS!"
+      return :none
+    else
+      puts " --- HIT!"
+      if @ships.all {|ship| ship.sunk?}
+        return :win
+      else
+        return :none
+      end
+    end
   end
 end
