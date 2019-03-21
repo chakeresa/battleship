@@ -68,6 +68,8 @@ class Player
       return :none
     else
       puts " --- HIT!"
+
+      # TO DO: message when sunk
       if @ships.all? {|ship| ship.sunk?}
         return :win
       else
