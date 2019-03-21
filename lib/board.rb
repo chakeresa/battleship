@@ -1,8 +1,8 @@
 require './lib/cell'
 
 class Board
-    attr_reader :cells, :ships, :size
-    def initialize(size = 10)
+    attr_reader :cells, :size, :name
+    def initialize(name, size)
         @cells = {}
         ('A'..(64+size).chr).each do |x| #As in x coord of graph
             ('1'..size.to_s).each do |y|
@@ -10,13 +10,13 @@ class Board
             end
         end
         @size = size
-        @ships = []
+        @name = name
     end
-  
+
     def [](at)
         return @cells[at]
     end
-  
+
     def valid_coordinate?(coord)
         @cells.keys.any? {|cell| cell.to_s == coord}
     end
@@ -26,7 +26,6 @@ class Board
         return :overlap if overlap?(ship, coord, horizontal)
 
         #If tests passed, add ship
-        @ships << ship
         horizontal ? add_horizontal_ship(ship, coord) : add_vertical_ship(ship, coord)
         return :success
     end

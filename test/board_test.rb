@@ -54,7 +54,6 @@ class BoardTest < Minitest::Test
       actual = board.place(ship, 'B2', true) # B2 thru B3 (horizontal)
 
       assert_equal :success, actual
-      assert_equal [ship], board.ships
       assert board.cells[:B1].empty?
       assert_equal false, board.cells[:B2].empty?
       assert_equal false, board.cells[:B3].empty?
@@ -68,7 +67,6 @@ class BoardTest < Minitest::Test
       actual = board.place(ship, 'B2', false) # B2 thru C2 (vertical)
 
       assert_equal :success, actual
-      assert_equal [ship], board.ships
       assert board.cells[:A2].empty?
       assert_equal false, board.cells[:B2].empty?
       assert_equal false, board.cells[:C2].empty?
@@ -82,7 +80,6 @@ class BoardTest < Minitest::Test
       actual = board.place(ship, 'B8', true)
 
       assert_equal :oob, actual
-      assert_equal [], board.ships
       assert board.cells[:B8].empty?
       assert board.cells[:B10].empty?
     end
@@ -96,14 +93,13 @@ class BoardTest < Minitest::Test
       actual = board.place(ship2, 'E7')
 
       assert_equal :overlap, actual
-      assert_equal [ship], board.ships
     end
 
     def test_out_of_bounds_returns_true_if_letter_starting_out_of_bounds
       board = Board.new(4)
       sub = Ship.new("Submarine", 2)
 
-      assert board.out_of_bounds?(sub, 'Z4', true)
+      assert board.out_of_bounds?(sub, 'E5', true)
     end
 
     def test_out_of_bounds_returns_true_if_number_starting_out_of_bounds

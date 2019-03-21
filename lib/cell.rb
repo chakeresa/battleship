@@ -3,7 +3,7 @@ require './lib/ship'
 class Cell
     attr_reader :ship
     def initialize
-        @ship
+        @ship = nil
         @fired = false
     end
 
