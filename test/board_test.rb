@@ -180,4 +180,29 @@ class BoardTest < Minitest::Test
 
       assert board.overlap?(ship2, 'F3', false) # F3 G3 H3 (vertical)
     end
+
+    def test_add_horizontal_ship_adds_correct_length_ship
+      board = Board.new(4)
+      sub = Ship.new("Submarine", 2)
+
+      board.add_horizontal_ship(sub, 'B2') # B2 and B3
+
+      assert board.cells[:B1].empty?
+      assert_equal false, board.cells[:B2].empty?
+      assert_equal false, board.cells[:B3].empty?
+      assert board.cells[:B4].empty?
+    end
+
+    def test_add_vertical_ship_adds_correct_length_ship
+      board = Board.new(4)
+      sub = Ship.new("Submarine", 2)
+
+      board.add_vertical_ship(sub, 'B2') # B2 and C2
+
+      assert board.cells[:A2].empty?
+      assert_equal false, board.cells[:B2].empty?
+      assert_equal false, board.cells[:C2].empty?
+      assert board.cells[:D2].empty?
+
+    end
 end
