@@ -31,7 +31,7 @@ class Computer
     end
   end
 
-  def turn
+  def find_valid_target
     @valid_target = false
     target = nil
 
@@ -45,9 +45,15 @@ class Computer
         end
       end
     end
+    target
+  end
+
+  def turn
+    target = find_valid_target
 
     puts "Computer fired on #{target}."
 
+    # TO DO: abstract into a helper method
     if @board[target.to_sym].empty?
       puts " --- MISS!"
       return :none
