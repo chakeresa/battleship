@@ -66,7 +66,7 @@ class Player
       return :none
     else
       puts " --- HIT!"
-      if @ships.all {|ship| ship.sunk?}
+      if @ships.all? {|ship| ship.sunk?}
         return :win
       else
         return :none
