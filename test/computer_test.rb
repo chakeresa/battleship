@@ -9,7 +9,9 @@ class ComputerTest < Minitest::Test
     assert_instance_of Computer, computer
   end
 
-  def test_
-
+  def test_it_has_board_upon_init
+    computer = Computer.new
+    
+    assert_instance_of Board, computer.board
   end
 end

@@ -8,33 +8,40 @@ class Computer
   end
 
   def place(ship)
-    valid = :none
+    @valid_place = :none
 
-    while valid != :success do
+    while @valid_place != :success do
       coord = @board[@board.cells.keys.sample]
       direction = rand(2)
       # 0 = right (horizontal), 1 = down (vertical)
 
-      if @board.valid_coordinate?(coord)
-        if direction == 0 # right
-          valid = @board.place(ship, coord, true)
-        else direction == 1 # down
-          valid = @board.place(ship, coord)
-        end
+      place_if_valid(ship, coord, direction)
+    end
+
+    @valid_place = :none
+  end
+
+  def place_if_valid(ship, coord, direction)
+    if @board.valid_coordinate?(coord)
+      if direction == 0 # right
+        @valid_place = @board.place(ship, coord, true)
+      else direction == 1 # down
+        @valid_place = @board.place(ship, coord)
       end
     end
   end
 
   def turn
-    valid = false
+    @valid_target = false
     target = nil
-    while !valid do
+
+    while !@valid_target do
       target = @board[@board.cells.keys.sample]
       # TO DO ^ iter 4 smart computer
 
       if @board.valid_coordinate?(target)
         if !@board[target.to_sym].fired_upon?
-          @board[target.to_sym].fire_upon; valid = true
+          @board[target.to_sym].fire_upon; @valid_target = true
         end
       end
     end
@@ -46,6 +53,7 @@ class Computer
       return :none
     else
       puts " --- HIT!"
+      # TO DO: message when sunk
       if @ships.all {|ship| ship.sunk?}
         return :win
       else

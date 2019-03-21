@@ -11,6 +11,8 @@ class PlayerTest < Minitest::Test
         assert_instance_of Board, test.board
     end
 
+    # TO DO: need tests of place method
+
     def test_player_turn_valid_input
         test = Player.new
         testInp = StringIO.new
@@ -56,7 +58,7 @@ class PlayerTest < Minitest::Test
         result, stdout, stderr = OStreamCatcher.catch do
             test.turn; test.turn
         end
-        
+
         assert_equal "Pick a target.\n>>  --- MISS!\nPick a target.\n"\
                 ">> That's already been fired upon!\nPick a target.\n>> ",\
                 stdout
