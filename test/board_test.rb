@@ -142,6 +142,42 @@ class BoardTest < Minitest::Test
     end
 
     def test_overlap_returns_true_if_horizontal_and_first_cell_occupied
+      board = Board.new
+      ship1 = Ship.new("test", 2)
+      ship2 = Ship.new("bad", 3)
 
+      board.place(ship1, 'F4', true) # F4 and F5 (horizontal)
+
+      assert board.overlap?(ship2, 'F5', true) # F5 F6 F7 (horizontal)
+    end
+
+    def test_overlap_returns_true_if_horizontal_and_later_cell_occupied
+      board = Board.new
+      ship1 = Ship.new("test", 2)
+      ship2 = Ship.new("bad", 3)
+
+      board.place(ship1, 'F4', false) # F4 and G4 (vertical)
+
+      assert board.overlap?(ship2, 'F3', true) # F3 F4 F5 (horizontal)
+    end
+
+    def test_overlap_returns_true_if_vertical_and_first_cell_occupied
+      board = Board.new
+      ship1 = Ship.new("test", 2)
+      ship2 = Ship.new("bad", 3)
+
+      board.place(ship1, 'F4', false) # F4 and G4 (vertical)
+
+      assert board.overlap?(ship2, 'G4', false) # G4 H4 I4 (vertical)
+    end
+
+    def test_overlap_returns_true_if_vertical_and_later_cell_occupied
+      board = Board.new
+      ship1 = Ship.new("test", 2)
+      ship2 = Ship.new("bad", 3)
+
+      board.place(ship1, 'G2', true) # G2 and G3 (horizontal)
+
+      assert board.overlap?(ship2, 'F3', false) # F3 G3 H3 (vertical)
     end
 end
