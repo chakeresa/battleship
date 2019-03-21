@@ -18,13 +18,13 @@ class Board
     end
 
     def place(ship, coord, horizontal = false)
-        return false if out_of_bounds?(ship, coord, horizontal)
-        return false if overlap?(ship, coord, horizontal)
+        return :oob if out_of_bounds?(ship, coord, horizontal)
+        return :overlap if overlap?(ship, coord, horizontal)
 
         #If tests passed, add ship
         @ships << ship
         horizontal ? add_horizontal_ship(ship, coord) : add_vertical_ship(ship, coord)
-        return true
+        return :success
     end
 
     def out_of_bounds?(ship, coord, horizontal)

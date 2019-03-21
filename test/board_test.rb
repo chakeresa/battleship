@@ -47,13 +47,13 @@ class BoardTest < Minitest::Test
       # are not the same exact objects
     end
 
-    def test_ship_valid_horizontal_placement_returns_true
+    def test_ship_valid_horizontal_placement_returns_success
       board = Board.new
       ship = Ship.new("test", 2)
 
       actual = board.place(ship, 'B2', true) # B2 thru B3 (horizontal)
 
-      assert actual
+      assert_equal :success, actual
       assert_equal [ship], board.ships
       assert board.cells[:B1].empty?
       assert_equal false, board.cells[:B2].empty?
@@ -61,13 +61,13 @@ class BoardTest < Minitest::Test
       assert board.cells[:B4].empty?
     end
 
-    def test_ship_valid_vertical_placement_returns_true
+    def test_ship_valid_vertical_placement_returns_success
       board = Board.new
       ship = Ship.new("test", 2)
 
       actual = board.place(ship, 'B2', false) # B2 thru C2 (vertical)
 
-      assert actual
+      assert_equal :success, actual
       assert_equal [ship], board.ships
       assert board.cells[:A2].empty?
       assert_equal false, board.cells[:B2].empty?
@@ -75,19 +75,19 @@ class BoardTest < Minitest::Test
       assert board.cells[:D2].empty?
     end
 
-    def test_ship_placement_out_bounds
+    def test_ship_placement_returns_oob_if_out_of_bounds
       board = Board.new
       ship = Ship.new("test", 5)
 
       actual = board.place(ship, 'B8', true)
 
-      assert_equal false, actual
+      assert_equal :oob, actual
       assert_equal [], board.ships
       assert board.cells[:B8].empty?
       assert board.cells[:B10].empty?
     end
 
-    def test_ship_placement_false_if_overlap
+    def test_ship_placement_returns_overlap_if_overlapping
       board = Board.new
       ship = Ship.new("test", 5)
       ship2 = Ship.new("bad", 5)
@@ -95,7 +95,7 @@ class BoardTest < Minitest::Test
       board.place(ship, 'F5', true)
       actual = board.place(ship2, 'E7')
 
-      assert_equal false, actual
+      assert_equal :overlap, actual
       assert_equal [ship], board.ships
     end
 
