@@ -44,16 +44,16 @@ class Player
     @ships << ship
   end
 
-  def turn
+  def turn(opp)
     valid = false
     while !valid do
       puts "Pick a target."
       print ">> "; input = gets.chomp
       return :quit if input == '!'
 
-      if @board.valid_coordinate?(input)
-        if !@board[input.to_sym].fired_upon?
-          @board[input.to_sym].fire_upon; valid = true
+      if opp.board.valid_coordinate?(input)
+        if !opp.board[input.to_sym].fired_upon?
+          opp.board[input.to_sym].fire_upon; valid = true
         else
           puts "That's already been fired upon!"
         end
@@ -63,14 +63,14 @@ class Player
       end
     end
 
-    if @board[input.to_sym].empty?
+    if opp.board[input.to_sym].empty?
       puts " --- MISS!"
       return :none
     else
       puts " --- HIT!"
 
       # TO DO: message when sunk
-      if @ships.all? {|ship| ship.sunk?}
+      if opp.ships.all? {|ship| ship.sunk?}
         return :win
       else
         return :none

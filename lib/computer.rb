@@ -22,17 +22,17 @@ class Computer
     valid
   end
 
-  def find_valid_target
+  def find_valid_target(opp)
     @valid_target = false
     target = nil
 
     while !@valid_target do
-      target = @board.cells.keys.sample
+      target = opp.board.cells.keys.sample
       # TO DO ^ iter 4 smart computer
 
-      if @board.valid_coordinate?(target.to_s)
-        if !@board[target.to_sym].fired_upon?
-          @board[target.to_sym].fire_upon; @valid_target = true
+      if opp.board.valid_coordinate?(target.to_s)
+        if !opp.board[target.to_sym].fired_upon?
+          opp.board[target.to_sym].fire_upon; @valid_target = true
         end
       end
     end
@@ -40,18 +40,18 @@ class Computer
   end
 
   def turn
-    target = find_valid_target
+    target = find_valid_target(opp)
 
     puts "Computer fired on #{target}."
 
     # TO DO: abstract into a helper method
-    if @board[target.to_sym].empty?
+    if opp.board[target.to_sym].empty?
       puts " --- MISS!"
       return :none
     else
       puts " --- HIT!"
       # TO DO: message when sunk
-      if @ships.all {|ship| ship.sunk?}
+      if opp.ships.all {|ship| ship.sunk?}
         return :win
       else
         return :none
