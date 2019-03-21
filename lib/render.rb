@@ -33,7 +33,7 @@ class Render
     @board.size.times do |i|
       number = (i + 1).to_s
       cell = (letter + number).to_sym
-      row_render += " " + @board.cells[cell].render(@reveal) # TO DO: Board has a new method to get rid of .cells from this line -- update accordingly after merging
+      row_render += " " + @board[cell].render(@reveal)
     end
 
     row_render += " \n"
