@@ -19,6 +19,7 @@ class Computer
       valid = @board.place(ship, coord, horizontal)
       # TO DO: ^ similar simplification to Player
     end
+    valid
   end
 
   def find_valid_target
