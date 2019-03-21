@@ -5,6 +5,7 @@ class Player
 
   def initialize(size = 10)
     @board = Board.new(size)
+    @ships = []
   end
 
   def place(ship)
@@ -40,6 +41,7 @@ class Player
         puts "Invalid starting coordinate."
       end
     end
+    @ships << ship
   end
 
   def turn

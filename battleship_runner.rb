@@ -52,6 +52,7 @@ def setup
             return false if result == :quit
         end
         $playertwo = Player.new(boardsize)
+        print "\n" * 100
         puts "PLAYER TWO: Place your ships."
         $listships.each do |ship|
             puts $renderer.render($playertwo.board, true)
@@ -64,12 +65,51 @@ def setup
 end
 
 def game
+    victor = :none
     if $humanplayers == 0
+        while victor == :none
 
+        end
     elsif $humanplayers == 1
+        while victor == :none
+            #PLAYER ONE GO:
+            puts "Player One's Turn."
+            puts $renderer.render($playertwo.board)
+            result = $playerone.turn
+            return false if result == :quit
+            if result == :win
+                victor = :one
+                break
+            end
+            #COMPUTER GO:
+            puts "Computer Turn"
 
+        end
     elsif $humanplayers == 2
-        
+        while victor == :none
+            #PLAYER ONE GO:
+            puts "Player One's Turn."
+            puts $renderer.render($playerone.board)
+            result = $playerone.turn
+            return false if result == :quit
+            if result == :win
+                victor = :one
+                break
+            end
+            print "\n\n\n"
+            puts "-" * 35
+            #PLAYER TWO GO:
+            puts "Player Two's Turn."
+            puts $renderer.render($playertwo.board)
+            result = $playertwo.turn
+            return false if result == :quit
+            if result == :win
+                victor = :one
+                break
+            end
+            print "\n\n\n"
+            puts "-" * 35
+        end
     end
     return true
 end
