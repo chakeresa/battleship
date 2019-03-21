@@ -12,7 +12,11 @@ class Board
         @size = size
         @ships = []
     end
-
+  
+    def [](at)
+        return @cells[at]
+    end
+  
     def valid_coordinate?(coord)
         @cells.keys.any? {|cell| cell.to_s == coord}
     end
