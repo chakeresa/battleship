@@ -5,13 +5,14 @@ class Player
 
   def initialize(size = 10)
     @board = Board.new(size)
+    @ships = []
   end
 
   def place(ship)
     valid = :none
 
     while valid != :success do
-      puts "Placing :" + ship.name + ", with Length of " + ship.length.to_s
+      puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
       puts "Pick a starting coordinate."
       print ">> "; coord = gets.chomp
       return :quit if coord == '!'
@@ -40,10 +41,10 @@ class Player
         puts "Invalid starting coordinate."
       end
     end
+    @ships << ship
   end
 
   def turn
-    puts @board.render
     valid = false
     while !valid do
       puts "Pick a target."
@@ -67,8 +68,9 @@ class Player
       return :none
     else
       puts " --- HIT!"
+
       # TO DO: message when sunk
-      if @ships.all {|ship| ship.sunk?}
+      if @ships.all? {|ship| ship.sunk?}
         return :win
       else
         return :none

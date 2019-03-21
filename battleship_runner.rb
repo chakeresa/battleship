@@ -4,7 +4,17 @@ require './lib/computer'
 $playerone = nil
 $playertwo = nil
 $humanplayers = nil
-$listships = [Ship.new("Test1", 3), Ship.new("Test2", 5)]
+$renderer = Render.new
+
+def load
+    ships = []
+    xs = IO.readlines('ships.csv')
+    xs.each {|x| y = x.chomp.split(/,/); ships << Ship.new(y[0], y[1])}
+    return ships
+end
+
+$listships = load
+
 def setup
     valid = false
     while !valid do
@@ -21,7 +31,8 @@ def setup
         puts "Enter number of players: (0, 1, or 2)."
         print ">> "; players = gets.chomp
         return false if players == '!'
-        players.match?(/^[012]{1}$/) ? valid = true : (puts "Invalid input, options are 0, 1, or 2")
+        players.match?(/^[012]{1}$/) ? valid = true : \
+                                (puts "Invalid input, options are 0, 1, or 2")
     end
     $humanplayers = players.to_i
     if $humanplayers == 0
@@ -33,6 +44,8 @@ def setup
         $playerone = Player.new(boardsize)
         puts "Place your ships."
         $listships.each do |ship|
+            puts $renderer.render($playerone.board, true)
+            puts "-" * 35
             result = $playerone.place(ship)
             return false if result == :quit
         end
@@ -42,12 +55,17 @@ def setup
         $playerone = Player.new(boardsize)
         puts "PLAYER ONE: Place your ships."
         $listships.each do |ship|
+            puts $renderer.render($playerone.board, true)
+            puts "-" * 35
             result = $playerone.place(ship)
             return false if result == :quit
         end
         $playertwo = Player.new(boardsize)
+        print "\n" * 100
         puts "PLAYER TWO: Place your ships."
         $listships.each do |ship|
+            puts $renderer.render($playertwo.board, true)
+            puts "-" * 35
             result = $playertwo.place(ship)
             return false if result == :quit
         end
@@ -56,12 +74,57 @@ def setup
 end
 
 def game
+    victor = :none
     if $humanplayers == 0
+        while victor == :none
 
+        end
     elsif $humanplayers == 1
+        while victor == :none
+            #PLAYER ONE GO:
+            puts "Player One's Turn."
+            puts $renderer.render($playertwo.board)
+            puts "-" * 35
+            result = $playerone.turn
+            return false if result == :quit
+            if result == :win
+                victor = :one
+                break
+            end
+            gets
+            #COMPUTER GO:
+            puts "Computer Turn"
 
+        end
     elsif $humanplayers == 2
-
+        while victor == :none
+            #PLAYER ONE GO:
+            puts "Player One's Turn."
+            puts $renderer.render($playerone.board)
+            puts "-" * 35
+            result = $playerone.turn
+            return false if result == :quit
+            if result == :win
+                victor = :one
+                break
+            end
+            gets
+            print "\n\n\n"
+            puts "-" * 35
+            #PLAYER TWO GO:
+            puts "Player Two's Turn."
+            puts $renderer.render($playertwo.board)
+            puts "-" * 35
+            result = $playertwo.turn
+            return false if result == :quit
+            if result == :win
+                victor = :one
+                break
+            end
+            gets
+            print "\n\n\n"
+            puts "-" * 35
+        end
     end
     return true
 end

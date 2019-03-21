@@ -2,8 +2,8 @@ require './lib/cell'
 require './lib/render'
 
 class Board
-    attr_reader :cells, :ships, :size
-    def initialize(size)
+    attr_reader :cells, :size
+    def initialize(size = 10)
         @cells = {}
         ('A'..(64+size).chr).each do |x| #As in x coord of graph
             ('1'..size.to_s).each do |y|
@@ -11,8 +11,6 @@ class Board
             end
         end
         @size = size
-        @ships = []
-        @render = Render.new
     end
 
     def [](at)
@@ -28,7 +26,6 @@ class Board
         return :overlap if overlap?(ship, coord, horizontal)
 
         #If tests passed, add ship
-        @ships << ship
         horizontal ? add_horizontal_ship(ship, coord) : add_vertical_ship(ship, coord)
         return :success
     end
@@ -78,6 +75,6 @@ class Board
     end
 
     def render(reveal = false)
-      render_return = @render.render(@board, reveal)
+      render_return = $renderer.render(@board, reveal)
     end
 end
