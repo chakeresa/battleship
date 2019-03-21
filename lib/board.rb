@@ -34,9 +34,9 @@ class Board
       #Ending coordinate out of bounds?
       if horizontal
           #We only need to check the furthest coord from out start.
-          return coord[1].to_i + ship.length > @size
+          return coord[1].to_i + ship.length - 1 > @size
       else
-          return (coord[0].ord + ship.length).chr > (64 + @size).chr
+          return (coord[0].ord + ship.length - 1).chr > (64 + @size).chr
       end
 
     end
