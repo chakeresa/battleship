@@ -75,12 +75,14 @@ def game
             #PLAYER ONE GO:
             puts "Player One's Turn."
             puts $renderer.render($playertwo.board)
+            puts "-" * 35
             result = $playerone.turn
             return false if result == :quit
             if result == :win
                 victor = :one
                 break
             end
+            gets
             #COMPUTER GO:
             puts "Computer Turn"
 
@@ -90,23 +92,27 @@ def game
             #PLAYER ONE GO:
             puts "Player One's Turn."
             puts $renderer.render($playerone.board)
+            puts "-" * 35
             result = $playerone.turn
             return false if result == :quit
             if result == :win
                 victor = :one
                 break
             end
+            gets
             print "\n\n\n"
             puts "-" * 35
             #PLAYER TWO GO:
             puts "Player Two's Turn."
             puts $renderer.render($playertwo.board)
+            puts "-" * 35
             result = $playertwo.turn
             return false if result == :quit
             if result == :win
                 victor = :one
                 break
             end
+            gets
             print "\n\n\n"
             puts "-" * 35
         end
