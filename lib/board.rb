@@ -1,4 +1,5 @@
 require './lib/cell'
+require './lib/render'
 
 class Board
     attr_reader :cells, :ships, :size
@@ -11,12 +12,13 @@ class Board
         end
         @size = size
         @ships = []
+        @render = Render.new
     end
-  
+
     def [](at)
         return @cells[at]
     end
-  
+
     def valid_coordinate?(coord)
         @cells.keys.any? {|cell| cell.to_s == coord}
     end
@@ -73,5 +75,9 @@ class Board
           at = ((coord[0].ord + i).chr + coord[1]).to_sym
           @cells[at].place(ship)
       end
+    end
+
+    def render(reveal = false)
+      render_return = @render.render(@board, reveal)
     end
 end
