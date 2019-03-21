@@ -1,10 +1,11 @@
 require './lib/board'
 
 class Computer
-  attr_reader :board
+  attr_reader :board, :ships
 
-  def initialize(size = 10)
-    @board = Board.new(size)
+  def initialize(name, size = 10)
+    @board = Board.new(name, size)
+    @ships = []
   end
 
   def place(ship)
@@ -18,6 +19,7 @@ class Computer
 
       valid = @board.place(ship, coord, horizontal)
       # TO DO: ^ similar simplification to Player
+      @ships << ship
     end
     valid
   end
@@ -39,8 +41,8 @@ class Computer
     target
   end
 
-  def turn
-    target = find_valid_target(opp)
+  def turn(opp)
+    target = find_valid_target
 
     puts "Computer fired on #{target}."
 
@@ -51,7 +53,7 @@ class Computer
     else
       puts " --- HIT!"
       # TO DO: message when sunk
-      if opp.ships.all {|ship| ship.sunk?}
+      if opp.ships.all? {|ship| ship.sunk?}
         return :win
       else
         return :none

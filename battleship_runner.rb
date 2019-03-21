@@ -1,5 +1,6 @@
 require './lib/player'
 require './lib/computer'
+require './lib/render'
 
 $playerone = nil
 $playertwo = nil
@@ -36,35 +37,35 @@ def setup
     end
     $humanplayers = players.to_i
     if $humanplayers == 0
-        $playerone = Computer.new(boardsize)
+        $playerone = Computer.new("COMPUTER ONE", boardsize)
         $listships.each {|ship| $playerone.place(ship)}
-        $playertwo = Computer.new(boardsize)
+        $playertwo = Computer.new("COMPUTER TWO", boardsize)
         $listships.each {|ship| $playertwo.place(ship)}
     elsif $humanplayers == 1
-        $playerone = Player.new(boardsize)
+        $playerone = Player.new("   PLAYER   ", boardsize)
         puts "Place your ships."
         $listships.each do |ship|
-            puts $renderer.render($playerone.board, true)
+            puts $renderer.render($playerone.board, :all)
             puts "-" * 35
             result = $playerone.place(ship)
             return false if result == :quit
         end
-        $playertwo = Computer.new(boardsize)
+        $playertwo = Computer.new("  COMPUTER  ", boardsize)
         $listships.each {|ship| $playertwo.place(ship)}
     elsif $humanplayers == 2
-        $playerone = Player.new(boardsize)
+        $playerone = Player.new(" PLAYER ONE ", boardsize)
         puts "PLAYER ONE: Place your ships."
         $listships.each do |ship|
-            puts $renderer.render($playerone.board, true)
+            puts $renderer.render($playerone.board, :all)
             puts "-" * 35
             result = $playerone.place(ship)
             return false if result == :quit
         end
-        $playertwo = Player.new(boardsize)
+        $playertwo = Player.new(" PLAYER TWO ", boardsize)
         print "\n" * 100
         puts "PLAYER TWO: Place your ships."
         $listships.each do |ship|
-            puts $renderer.render($playertwo.board, true)
+            puts $renderer.render($playertwo.board, :all)
             puts "-" * 35
             result = $playertwo.place(ship)
             return false if result == :quit
@@ -78,86 +79,92 @@ def game
     if $humanplayers == 0
         while victor == :none
             #COMPUTER ONE GO:
-            puts "Computer One's Turn."
-            puts $renderer.render($playertwo.board, true)
+            puts "Computer One's Turn..."
+            puts $renderer.render($playertwo.board, :all)
             puts "-" * 35
-            result = $playerone.turn
+            result = $playerone.turn($playertwo)
             if result == :win
                 victor = :one
                 break
             end
-            gets
+            input = gets.chomp
+            return false if input == '!'
             print "\n\n\n"
             puts "-" * 35
             #COMPUTER TWO GO:
             puts "Computer Two's Turn..."
-            puts $renderer.render($playerone.board, true)
+            puts $renderer.render($playerone.board, :all)
             puts "-" * 35
-            result = $playertwo.turn
+            result = $playertwo.turn($playerone)
             if result == :win
                 victor = :one
                 break
             end
-            gets
+            input = gets.chomp
+            return false if input == '!'
             print "\n\n\n"
             puts "-" * 35
         end
     elsif $humanplayers == 1
         while victor == :none
             #PLAYER ONE GO:
-            puts "Player One's Turn."
-            puts $renderer.render($playertwo.board)
+            puts "Player One's Turn..."
+            puts $renderer.render($playertwo.board, :none)
             puts "-" * 35
-            result = $playerone.turn
+            result = $playerone.turn($playertwo)
             return false if result == :quit
             if result == :win
                 victor = :one
                 break
             end
-            gets
+            input = gets.chomp
+            return false if input == '!'
             print "\n\n\n"
             puts "-" * 35
             #COMPUTER GO:
             puts "Computer Turn..."
-            puts $renderer.render($playerone.board, true)
+            puts $renderer.render($playerone.board, :all)
             puts "-" * 35
-            result = $playertwo.turn
+            result = $playertwo.turn($playerone)
             if result == :win
                 victor = :one
                 break
             end
-            gets
+            input = gets.chomp
+            return false if input == '!'
             print "\n\n\n"
             puts "-" * 35
         end
     elsif $humanplayers == 2
         while victor == :none
             #PLAYER ONE GO:
-            puts "Player One's Turn."
-            puts $renderer.render($playertwo.board)
-            puts "-" * 35
-            result = $playerone.turn
+            puts "Player One's Turn..."
+            puts $renderer.render($playerone.board, $playertwo.board, :one)
+            puts "-" * 55
+            result = $playerone.turn($playertwo)
             return false if result == :quit
             if result == :win
                 victor = :one
                 break
             end
-            gets
-            print "\n\n\n"
-            puts "-" * 35
+            input = gets.chomp
+            return false if input == '!'
+            print "\n" * 50
+            puts "-" * 55
             #PLAYER TWO GO:
-            puts "Player Two's Turn."
-            puts $renderer.render($playerone.board)
-            puts "-" * 35
-            result = $playertwo.turn
+            puts "Player Two's Turn..."
+            puts $renderer.render($playertwo.board, $playerone.board, :one)
+            puts "-" * 55
+            result = $playertwo.turn($playerone)
             return false if result == :quit
             if result == :win
                 victor = :one
                 break
             end
-            gets
-            print "\n\n\n"
-            puts "-" * 35
+            input = gets.chomp
+            return false if input == '!'
+            print "\n" * 50
+            puts "-" * 55
         end
     end
     return true

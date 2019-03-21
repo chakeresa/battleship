@@ -1,9 +1,8 @@
 require './lib/cell'
-require './lib/render'
 
 class Board
-    attr_reader :cells, :size
-    def initialize(size = 10)
+    attr_reader :cells, :size, :name
+    def initialize(name, size)
         @cells = {}
         ('A'..(64+size).chr).each do |x| #As in x coord of graph
             ('1'..size.to_s).each do |y|
@@ -11,6 +10,7 @@ class Board
             end
         end
         @size = size
+        @name = name
     end
 
     def [](at)
@@ -72,9 +72,5 @@ class Board
           at = ((coord[0].ord + i).chr + coord[1]).to_sym
           @cells[at].place(ship)
       end
-    end
-
-    def render(reveal = false)
-      render_return = $renderer.render(@board, reveal)
     end
 end

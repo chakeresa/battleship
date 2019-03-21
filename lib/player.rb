@@ -1,10 +1,10 @@
 require './lib/board'
 
 class Player
-  attr_reader :board
+  attr_reader :board, :ships
 
-  def initialize(size = 10)
-    @board = Board.new(size)
+  def initialize(name, size)
+    @board = Board.new(name, size)
     @ships = []
   end
 
