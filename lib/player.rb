@@ -43,7 +43,6 @@ class Player
   end
 
   def turn
-    puts @board.render
     valid = false
     while !valid do
       puts "Pick a target."
