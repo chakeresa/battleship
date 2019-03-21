@@ -15,18 +15,20 @@ class ComputerTest < Minitest::Test
     assert_instance_of Board, computer.board
   end
 
-  def test_places_a_ship_if_valid_coord_and_dir
-    skip
-    computer = Computer.new(4)
+  def test_place_always_places_a_ship
+    computer = Computer.new(2) # board is only A1-B2
     sub = Ship.new("sub", 2)
 
-    actual = computer.place_if_valid(sub, :A1, 0) # A1 and A2
+    actual = computer.place(sub)
+
+    possibility1 = !computer.board[:A1].empty? && !computer.board[:A2].empty?
+    possibility2 = !computer.board[:A1].empty? && !computer.board[:B1].empty?
+    possibility3 = !computer.board[:B1].empty? && !computer.board[:B2].empty?
+    possibility4 = !computer.board[:A2].empty? && !computer.board[:B2].empty?
 
     assert_equal :success, actual
-    assert_equal false, computer.board[:A1].empty?
-    assert_equal false, computer.board[:A2].empty?
-    assert computer.board[:B1].empty?
-    assert computer.board[:B2].empty?
+    assert possibility1 || possibility2 || possibility3 || possibility4
+
   end
 
   def test_doesnt_place_a_ship_if_invalid_starting_coord

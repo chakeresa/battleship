@@ -16,7 +16,7 @@ class Computer
       # 0 = right (horizontal), 1 = down (vertical)
       horizontal = num == 0
 
-      @board.place(ship, coord, direction)
+      valid = @board.place(ship, coord, horizontal)
       # TO DO: ^ similar simplification to Player
     end
   end
