@@ -4,8 +4,17 @@ require './lib/computer'
 $playerone = nil
 $playertwo = nil
 $humanplayers = nil
-$listships = [Ship.new("Test1", 3), Ship.new("Test2", 5)]
 $renderer = Render.new
+
+def load
+    ships = []
+    xs = IO.readlines('ships.csv')
+    xs.each {|x| y = x.chomp.split(/,/); ships << Ship.new(y[0], y[1])}
+    return ships
+end
+
+$listships = load
+
 def setup
     valid = false
     while !valid do
