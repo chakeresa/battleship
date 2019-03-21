@@ -8,7 +8,7 @@ class BoardTest < Minitest::Test
         # Hash will contain each cell as a value to a Symbol key, where the key
         # is an X,Y coordinate, where X is a letter, and Y a number
     def test_board_init
-        test = Board.new
+        board = Board.new
         expected = {A1: Cell.new, A2: Cell.new, A3: Cell.new, A4: Cell.new,
                     A5: Cell.new, A6: Cell.new, A7: Cell.new, A8: Cell.new,
                     A9: Cell.new, A10: Cell.new,
@@ -40,33 +40,38 @@ class BoardTest < Minitest::Test
                     J5: Cell.new, J6: Cell.new, J7: Cell.new, J8: Cell.new,
                     J9: Cell.new, J10: Cell.new}
 
-        assert_equal expected.keys, test.cells.keys
-        #assert_equal expected.values, test.cells.values
+        assert_equal expected.keys, board.cells.keys
+        # Note: assert_equal expected.values, board.cells.values doesn't work
+        # because the cell objects are created in the Board class, so these
+        # are not the same exact objects
     end
 
     def test_ship_placement_valid
-        testBoard = Board.new
-        testShip = Ship.new("test", 5)
-        assert testBoard.place(testShip, 'B2', true)
-        assert_equal [testShip], testBoard.ships
-        0.upto(4) {|i| refute testBoard.cells[('B' + (2 + i).to_s).to_sym].empty?}
+        board = Board.new
+        ship = Ship.new("test", 5)
+
+        assert board.place(ship, 'B2', true) # B2 thru B6
+        assert_equal [ship], board.ships
+        0.upto(4) {|i| refute board.cells[('B' + (2 + i).to_s).to_sym].empty?}
     end
 
     def test_ship_placement_out_bounds
-        testBoard = Board.new
-        testShip = Ship.new("test", 5)
-        refute testBoard.place(testShip, 'B8', true)
-        assert_equal [], testBoard.ships
-        assert testBoard.cells[:B8].empty?
-        assert testBoard.cells[:B10].empty?
+        board = Board.new
+        ship = Ship.new("test", 5)
+
+        refute board.place(ship, 'B8', true)
+        assert_equal [], board.ships
+        assert board.cells[:B8].empty?
+        assert board.cells[:B10].empty?
     end
 
     def test_ship_placement_overlap
-        testBoard = Board.new
-        testShip = Ship.new("test", 5)
-        testShip2 = Ship.new("bad", 5)
-        assert testBoard.place(testShip, 'F5', true)
-        refute testBoard.place(testShip2, 'E7')
-        assert_equal [testShip], testBoard.ships
+        board = Board.new
+        ship = Ship.new("test", 5)
+        ship2 = Ship.new("bad", 5)
+
+        assert board.place(ship, 'F5', true)
+        refute board.place(ship2, 'E7')
+        assert_equal [ship], board.ships
     end
 end

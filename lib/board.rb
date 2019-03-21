@@ -12,45 +12,62 @@ class Board
         @size = size
         @ships = []
     end
+
     def valid_coordinate?(coord)
         @cells.keys.any? {|cell| cell.to_s == coord}
     end
+
     def place(ship, coord, horizontal = false)
-        #Test for out of bounds
-            #Starting coordinate out of bounds?
-        return false if coord[0] > (64 + @size).chr || coord[1].to_i > @size
-            #Ending coordinate out of bounds?
-        if horizontal
-            #We only need to check the furthest coord from out start.
-            return false if coord[1].to_i + ship.length > @size
-        else
-            return false if (coord[0].ord + ship.length).chr > (64 + @size).chr
-        end
-        #Test for overlap
-        if horizontal
-            0.upto(ship.length - 1) do |i|
-                at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
-                return false if !(@cells[at].empty?)
-            end
-        else
-            0.upto(ship.length - 1) do |i|
-                at = ((coord[0].ord + i).chr + coord[1]).to_sym
-                return false if !(@cells[at].empty?)
-            end
-        end
+        return false if out_of_bounds?(ship, coord, horizontal)
+        return false if overlap?(ship, coord, horizontal)
+
         #If tests passed, add ship
         @ships << ship
-        if horizontal
-            0.upto(ship.length - 1) do |i|
-                at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
-                @cells[at].place(ship)
-            end
-        else
-            0.upto(ship.length - 1) do |i|
-                at = ((coord[0].ord + i).chr + coord[1]).to_sym
-                @cells[at].place(ship)
-            end
-        end
+        horizontal ? add_horizontal_ship(ship, coord) : add_vertical_ship(ship, coord)
         return true
+    end
+
+    def out_of_bounds?(ship, coord, horizontal)
+      #Starting coordinate out of bounds?
+      return true if coord[0] > (64 + @size).chr || coord[1].to_i > @size
+
+      #Ending coordinate out of bounds?
+      if horizontal
+          #We only need to check the furthest coord from out start.
+          return coord[1].to_i + ship.length > @size
+      else
+          return (coord[0].ord + ship.length).chr > (64 + @size).chr
+      end
+
+    end
+
+    def overlap?(ship, coord, horizontal)
+      if horizontal
+          0.upto(ship.length - 1) do |i|
+              at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
+              return true if !(@cells[at].empty?)
+          end
+      else
+          0.upto(ship.length - 1) do |i|
+              at = ((coord[0].ord + i).chr + coord[1]).to_sym
+              return true if !(@cells[at].empty?)
+          end
+      end
+
+      return false # if not overlapping
+    end
+
+    def add_horizontal_ship(ship, coord)
+      0.upto(ship.length - 1) do |i|
+          at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
+          @cells[at].place(ship)
+      end
+    end
+
+    def add_vertical_ship(ship, coord)
+      0.upto(ship.length - 1) do |i|
+          at = ((coord[0].ord + i).chr + coord[1]).to_sym
+          @cells[at].place(ship)
+      end
     end
 end
