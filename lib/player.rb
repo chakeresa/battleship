@@ -11,7 +11,7 @@ class Player
     valid = :none
 
     while valid != :success do
-      puts "Placing :" + ship.name + ", with Length of " + ship.length
+      puts "Placing :" + ship.name + ", with Length of " + ship.length.to_s
       puts "Pick a starting coordinate."
       print ">> "; coord = gets.chomp
       return :quit if coord == '!'

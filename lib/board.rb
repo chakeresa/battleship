@@ -3,7 +3,7 @@ require './lib/render'
 
 class Board
     attr_reader :cells, :ships, :size
-    def initialize(size = 10)
+    def initialize(size)
         @cells = {}
         ('A'..(64+size).chr).each do |x| #As in x coord of graph
             ('1'..size.to_s).each do |y|
