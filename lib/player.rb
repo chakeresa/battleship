@@ -9,13 +9,13 @@ class Player
     def place(ship)
         valid = :none
         while valid != :success do
-            puts "Placing :" + ship.name + ", with Length of " + ship.length
+            puts "Placing :" + ship.name + ", with Length of " + ship.length.to_s
             puts "Pick a starting coordinate."
             print ">> "; coord = gets.chomp
-            return :quit if input == '!'
+            return :quit if coord == '!'
             puts "Pick a direction (left,right,up,down OR l,r,u,d)."
             print ">> "; direction = gets.chomp.downcase
-            return :quit if input == '!'
+            return :quit if direction == '!'
             if @board.valid_coordinate?(coord)
                 if direction.match?(/^l$|^left$/)
                     coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s

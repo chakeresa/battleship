@@ -2,7 +2,7 @@ require './lib/cell'
 
 class Board
     attr_reader :cells, :ships, :size
-    def initialize(size = 10)
+    def initialize(size)
         @cells = {}
         ('A'..(64+size).chr).each do |x| #As in x coord of graph
             ('1'..size.to_s).each do |y|
@@ -12,11 +12,11 @@ class Board
         @size = size
         @ships = []
     end
-  
+
     def [](at)
         return @cells[at]
     end
-  
+
     def valid_coordinate?(coord)
         @cells.keys.any? {|cell| cell.to_s == coord}
     end

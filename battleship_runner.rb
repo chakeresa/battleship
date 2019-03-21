@@ -15,6 +15,7 @@ def setup
         boardsize.match?(/^\d+$|^$/) ? valid = true : (puts "Invalid input.")
     end
     boardsize = 10 if boardsize.match?(/^$/)
+    boardsize = boardsize.to_i
     valid = false
     while !valid do
         puts "Enter number of players: (0, 1, or 2)."
@@ -22,7 +23,7 @@ def setup
         return false if players == '!'
         players.match?(/^[012]{1}$/) ? valid = true : (puts "Invalid input, options are 0, 1, or 2")
     end
-    $humanplayers = player.to_i
+    $humanplayers = players.to_i
     if $humanplayers == 0
         $playerone = Computer.new(boardsize)
         $listships.each {|ship| $playerone.place(ship)}
