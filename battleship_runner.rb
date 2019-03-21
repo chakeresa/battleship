@@ -9,7 +9,7 @@ $renderer = Render.new
 def load
     ships = []
     xs = IO.readlines('ships.csv')
-    xs.each {|x| y = x.chomp.split(/,/); ships << Ship.new(y[0], y[1])}
+    xs.each {|x| y = x.chomp.split(/,/); ships << Ship.new(y[0], y[1].to_i)}
     return ships
 end
 
@@ -77,7 +77,30 @@ def game
     victor = :none
     if $humanplayers == 0
         while victor == :none
-
+            #COMPUTER ONE GO:
+            puts "Computer One's Turn."
+            puts $renderer.render($playertwo.board, true)
+            puts "-" * 35
+            result = $playerone.turn
+            if result == :win
+                victor = :one
+                break
+            end
+            gets
+            print "\n\n\n"
+            puts "-" * 35
+            #COMPUTER TWO GO:
+            puts "Computer Two's Turn..."
+            puts $renderer.render($playerone.board, true)
+            puts "-" * 35
+            result = $playertwo.turn
+            if result == :win
+                victor = :one
+                break
+            end
+            gets
+            print "\n\n\n"
+            puts "-" * 35
         end
     elsif $humanplayers == 1
         while victor == :none
@@ -92,15 +115,26 @@ def game
                 break
             end
             gets
+            print "\n\n\n"
+            puts "-" * 35
             #COMPUTER GO:
-            puts "Computer Turn"
-
+            puts "Computer Turn..."
+            puts $renderer.render($playerone.board, true)
+            puts "-" * 35
+            result = $playertwo.turn
+            if result == :win
+                victor = :one
+                break
+            end
+            gets
+            print "\n\n\n"
+            puts "-" * 35
         end
     elsif $humanplayers == 2
         while victor == :none
             #PLAYER ONE GO:
             puts "Player One's Turn."
-            puts $renderer.render($playerone.board)
+            puts $renderer.render($playertwo.board)
             puts "-" * 35
             result = $playerone.turn
             return false if result == :quit
@@ -113,7 +147,7 @@ def game
             puts "-" * 35
             #PLAYER TWO GO:
             puts "Player Two's Turn."
-            puts $renderer.render($playertwo.board)
+            puts $renderer.render($playerone.board)
             puts "-" * 35
             result = $playertwo.turn
             return false if result == :quit
