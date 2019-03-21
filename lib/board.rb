@@ -11,7 +11,6 @@ class Board
             end
         end
         @size = size
-        @render = Render.new
     end
 
     def [](at)
@@ -76,6 +75,6 @@ class Board
     end
 
     def render(reveal = false)
-      render_return = @render.render(@board, reveal)
+      render_return = $renderer.render(@board, reveal)
     end
 end
