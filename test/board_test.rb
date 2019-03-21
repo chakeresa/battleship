@@ -47,32 +47,55 @@ class BoardTest < Minitest::Test
       # are not the same exact objects
     end
 
-    def test_ship_placement_valid
+    def test_ship_valid_horizontal_placement_returns_true
       board = Board.new
-      ship = Ship.new("test", 5)
+      ship = Ship.new("test", 2)
 
-      assert board.place(ship, 'B2', true) # B2 thru B6
+      actual = board.place(ship, 'B2', true) # B2 thru B3 (horizontal)
+
+      assert actual
       assert_equal [ship], board.ships
-      0.upto(4) {|i| refute board.cells[('B' + (2 + i).to_s).to_sym].empty?}
+      assert board.cells[:B1].empty?
+      assert_equal false, board.cells[:B2].empty?
+      assert_equal false, board.cells[:B3].empty?
+      assert board.cells[:B4].empty?
+    end
+
+    def test_ship_valid_vertical_placement_returns_true
+      board = Board.new
+      ship = Ship.new("test", 2)
+
+      actual = board.place(ship, 'B2', false) # B2 thru C2 (vertical)
+
+      assert actual
+      assert_equal [ship], board.ships
+      assert board.cells[:A2].empty?
+      assert_equal false, board.cells[:B2].empty?
+      assert_equal false, board.cells[:C2].empty?
+      assert board.cells[:D2].empty?
     end
 
     def test_ship_placement_out_bounds
       board = Board.new
       ship = Ship.new("test", 5)
 
-      refute board.place(ship, 'B8', true)
+      actual = board.place(ship, 'B8', true)
+
+      assert_equal false, actual
       assert_equal [], board.ships
       assert board.cells[:B8].empty?
       assert board.cells[:B10].empty?
     end
 
-    def test_ship_placement_overlap
+    def test_ship_placement_false_if_overlap
       board = Board.new
       ship = Ship.new("test", 5)
       ship2 = Ship.new("bad", 5)
 
-      assert board.place(ship, 'F5', true)
-      refute board.place(ship2, 'E7')
+      board.place(ship, 'F5', true)
+      actual = board.place(ship2, 'E7')
+
+      assert_equal false, actual
       assert_equal [ship], board.ships
     end
 
@@ -116,5 +139,9 @@ class BoardTest < Minitest::Test
       sub = Ship.new("Submarine", 2)
 
       assert_equal false, board.out_of_bounds?(sub, 'C3', false)
+    end
+
+    def test_overlap_returns_true_if_horizontal_and_first_cell_occupied
+
     end
 end
