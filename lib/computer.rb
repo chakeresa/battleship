@@ -13,36 +13,28 @@ class Computer
 
     while valid != :success do
       coord = @board.cells.keys.sample
-      direction = rand(2)
+      num = rand(2)
       # 0 = right (horizontal), 1 = down (vertical)
-      #require 'pry'; binding.pry
-      valid = place_if_valid(ship, coord, direction)
+      horizontal = num == 0
+
+      valid = @board.place(ship, coord, horizontal)
+      # TO DO: ^ similar simplification to Player
+      @ships << ship
     end
-    @ships << ship
+    valid
   end
 
-  def place_if_valid(ship, coord, direction)
-    if @board.valid_coordinate?(coord.to_s)
-      if direction == 0 # right
-        return @board.place(ship, coord, true)
-      else direction == 1 # down
-        return @board.place(ship, coord)
-      end
-    end
-    return :none
-  end
-
-  def find_valid_target
+  def find_valid_target(opp)
     @valid_target = false
     target = nil
 
     while !@valid_target do
-      target = @board.cells.keys.sample
+      target = opp.board.cells.keys.sample
       # TO DO ^ iter 4 smart computer
 
-      if @board.valid_coordinate?(target.to_s)
-        if !@board[target.to_sym].fired_upon?
-          @board[target.to_sym].fire_upon; @valid_target = true
+      if opp.board.valid_coordinate?(target.to_s)
+        if !opp.board[target.to_sym].fired_upon?
+          opp.board[target.to_sym].fire_upon; @valid_target = true
         end
       end
     end

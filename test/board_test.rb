@@ -99,7 +99,7 @@ class BoardTest < Minitest::Test
       board = Board.new(4)
       sub = Ship.new("Submarine", 2)
 
-      assert board.out_of_bounds?(sub, 'Z4', true)
+      assert board.out_of_bounds?(sub, 'E5', true)
     end
 
     def test_out_of_bounds_returns_true_if_number_starting_out_of_bounds
