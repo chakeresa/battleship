@@ -1,10 +1,11 @@
 require './lib/board'
 
 class Computer
-  attr_reader :board
+  attr_reader :board, :ships
 
-  def initialize(size = 10)
-    @board = Board.new(size)
+  def initialize(name, size = 10)
+    @board = Board.new(name, size)
+    @ships = []
   end
 
   def place(ship)
@@ -17,6 +18,7 @@ class Computer
       #require 'pry'; binding.pry
       valid = place_if_valid(ship, coord, direction)
     end
+    @ships << ship
   end
 
   def place_if_valid(ship, coord, direction)
@@ -47,19 +49,19 @@ class Computer
     target
   end
 
-  def turn
+  def turn(opp)
     target = find_valid_target
 
     puts "Computer fired on #{target}."
 
     # TO DO: abstract into a helper method
-    if @board[target.to_sym].empty?
+    if opp.board[target.to_sym].empty?
       puts " --- MISS!"
       return :none
     else
       puts " --- HIT!"
       # TO DO: message when sunk
-      if @ships.all {|ship| ship.sunk?}
+      if opp.ships.all? {|ship| ship.sunk?}
         return :win
       else
         return :none
