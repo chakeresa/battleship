@@ -16,7 +16,7 @@ class Render
 
   def first_row
     size = @board.size
-    first_row_return = " "
+    first_row_return = " " * 8
 
     ('1'..size.to_s).each do |number|
       first_row_return += " " + number
@@ -26,9 +26,10 @@ class Render
   end
 
   def subsequent_row(i)
+    row_render = " " * 7
     row_counter = i + 1 # starts at one
     letter = (64 + row_counter).chr
-    row_render = letter
+    row_render += letter
 
     @board.size.times do |i|
       number = (i + 1).to_s
