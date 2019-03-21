@@ -12,22 +12,13 @@ class Computer
 
     while valid != :success do
       coord = @board.cells.keys.sample
-      direction = rand(2)
+      num = rand(2)
       # 0 = right (horizontal), 1 = down (vertical)
-      #require 'pry'; binding.pry
-      valid = place_if_valid(ship, coord, direction)
-    end
-  end
+      horizontal = num == 0
 
-  def place_if_valid(ship, coord, direction)
-    if @board.valid_coordinate?(coord.to_s)
-      if direction == 0 # right
-        return @board.place(ship, coord, true)
-      else direction == 1 # down
-        return @board.place(ship, coord)
-      end
+      @board.place(ship, coord, direction)
+      # TO DO: ^ similar simplification to Player
     end
-    return :none
   end
 
   def find_valid_target
