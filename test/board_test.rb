@@ -8,7 +8,7 @@ class BoardTest < Minitest::Test
         # Hash will contain each cell as a value to a Symbol key, where the key
         # is an X,Y coordinate, where X is a letter, and Y a number
     def test_board_init
-      board = Board.new
+      board = Board.new("Board1")
       expected = {A1: Cell.new, A2: Cell.new, A3: Cell.new, A4: Cell.new,
                   A5: Cell.new, A6: Cell.new, A7: Cell.new, A8: Cell.new,
                   A9: Cell.new, A10: Cell.new,
@@ -48,7 +48,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_ship_valid_horizontal_placement_returns_success
-      board = Board.new
+      board = Board.new("Board1", 10)
       ship = Ship.new("test", 2)
 
       actual = board.place(ship, 'B2', true) # B2 thru B3 (horizontal)
@@ -61,7 +61,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_ship_valid_vertical_placement_returns_success
-      board = Board.new
+      board = Board.new("Board1")
       ship = Ship.new("test", 2)
 
       actual = board.place(ship, 'B2', false) # B2 thru C2 (vertical)
@@ -74,7 +74,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_ship_placement_returns_oob_if_out_of_bounds
-      board = Board.new
+      board = Board.new("Board")
       ship = Ship.new("test", 5)
 
       actual = board.place(ship, 'B8', true)
@@ -85,7 +85,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_ship_placement_returns_overlap_if_overlapping
-      board = Board.new
+      board = Board.new("Board")
       ship = Ship.new("test", 5)
       ship2 = Ship.new("bad", 5)
 
@@ -96,49 +96,49 @@ class BoardTest < Minitest::Test
     end
 
     def test_out_of_bounds_returns_true_if_letter_starting_out_of_bounds
-      board = Board.new(4)
+      board = Board.new("little board", 4)
       sub = Ship.new("Submarine", 2)
 
       assert board.out_of_bounds?(sub, 'E5', true)
     end
 
     def test_out_of_bounds_returns_true_if_number_starting_out_of_bounds
-      board = Board.new(4)
+      board = Board.new("little board", 4)
       sub = Ship.new("Submarine", 2)
 
       assert board.out_of_bounds?(sub, 'D9', true)
     end
 
     def test_out_of_bounds_returns_true_if_horizontal_ending_out_of_bounds
-      board = Board.new(4)
+      board = Board.new("little board", 4)
       sub = Ship.new("Submarine", 2)
 
       assert board.out_of_bounds?(sub, 'D4', true)
     end
 
     def test_out_of_bounds_returns_true_if_vertical_ending_out_of_bounds
-      board = Board.new(4)
+      board = Board.new("little board", 4)
       sub = Ship.new("Submarine", 2)
 
       assert board.out_of_bounds?(sub, 'D4', false)
     end
 
     def test_out_of_bounds_returns_false_if_horizontal_and_in_bounds
-      board = Board.new(4)
+      board = Board.new("little board", 4)
       sub = Ship.new("Submarine", 2)
 
       assert_equal false, board.out_of_bounds?(sub, 'C3', true)
     end
 
     def test_out_of_bounds_returns_false_if_vertical_and_in_bounds
-      board = Board.new(4)
+      board = Board.new("little board", 4)
       sub = Ship.new("Submarine", 2)
 
       assert_equal false, board.out_of_bounds?(sub, 'C3', false)
     end
 
     def test_overlap_returns_true_if_horizontal_and_first_cell_occupied
-      board = Board.new
+      board = Board.new("default board")
       ship1 = Ship.new("test", 2)
       ship2 = Ship.new("bad", 3)
 
@@ -148,7 +148,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_overlap_returns_true_if_horizontal_and_later_cell_occupied
-      board = Board.new
+      board = Board.new("default board")
       ship1 = Ship.new("test", 2)
       ship2 = Ship.new("bad", 3)
 
@@ -158,7 +158,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_overlap_returns_true_if_vertical_and_first_cell_occupied
-      board = Board.new
+      board = Board.new("default board")
       ship1 = Ship.new("test", 2)
       ship2 = Ship.new("bad", 3)
 
@@ -168,7 +168,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_overlap_returns_true_if_vertical_and_later_cell_occupied
-      board = Board.new
+      board = Board.new("default board")
       ship1 = Ship.new("test", 2)
       ship2 = Ship.new("bad", 3)
 
@@ -178,7 +178,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_add_horizontal_ship_adds_correct_length_ship
-      board = Board.new(4)
+      board = Board.new("little board", 4)
       sub = Ship.new("Submarine", 2)
 
       board.add_horizontal_ship(sub, 'B2') # B2 and B3
@@ -190,7 +190,7 @@ class BoardTest < Minitest::Test
     end
 
     def test_add_vertical_ship_adds_correct_length_ship
-      board = Board.new(4)
+      board = Board.new("little board", 4)
       sub = Ship.new("Submarine", 2)
 
       board.add_vertical_ship(sub, 'B2') # B2 and C2
@@ -199,6 +199,5 @@ class BoardTest < Minitest::Test
       assert_equal false, board.cells[:B2].empty?
       assert_equal false, board.cells[:C2].empty?
       assert board.cells[:D2].empty?
-
     end
 end

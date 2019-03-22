@@ -2,7 +2,7 @@ require './lib/cell'
 
 class Board
     attr_reader :cells, :size, :name
-    def initialize(name, size)
+    def initialize(name, size = 10)
         @cells = {}
         ('A'..(64+size).chr).each do |x| #As in x coord of graph
             ('1'..size.to_s).each do |y|
