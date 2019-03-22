@@ -98,4 +98,16 @@ class ComputerTest < Minitest::Test
     assert computer2.board[:A1].ship.sunk? # or just sub.sunk?
   end
 
+  def test_random_target_is_random
+    computer1 = Computer.new("Short Circuit", 2) # board is only A1-B2
+    computer2 = Computer.new("Wal-E", 2) # board is only A1-B2
+
+    all_coord = []
+    100.times do
+      coord = computer1.random_target(computer2)
+      all_coord << coord
+    end
+
+    assert all_coord.uniq.length != 1
+  end
 end
