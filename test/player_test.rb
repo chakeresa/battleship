@@ -11,7 +11,10 @@ class PlayerTest < Minitest::Test
     assert_instance_of Board, test.board
   end
 
+  # TO DO: need tests of get_starting_coord method
+  # TO DO: need tests of get_dir_input method
   # TO DO: need tests of place method
+  # TO DO: add tests for turn method after it's broken up into chunks
 
   def test_player_turn_valid_input
     player1 = Player.new("Fred", 6)

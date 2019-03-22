@@ -8,23 +8,41 @@ class Player
     @ships = []
   end
 
+  def get_starting_coord(ship)
+    puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
+    puts "Pick a starting coordinate (top left part of the ship)."
+    print ">> "; coord = gets.chomp
+    return :quit if coord == '!'
+
+    if @board.cells.keys.include?(coord.to_sym)
+      return coord
+    else
+      puts "Invalid starting coordinate."
+      return valid = :invalid_start_coord
+    end
+  end
+
+  def get_dir_input
+    puts "Pick a direction -- enter right (r) or down (d)."
+    print ">> "; direction = gets.chomp.downcase
+    return :quit if direction == '!'
+
+    if direction != "right" && direction != "r" && direction != "down" && direction != "d"
+      puts "Invalid direction input."
+      return valid = :invalid_dir_inp
+    else
+      return horizontal = direction == "right" || direction == "r"
+    end
+  end
+
   def place(ship)
     valid = :none
 
-
     while valid != :success do
-      get_starting_coord(ship)
-
-      puts "Pick a direction -- enter right (r) or down (d)."
-      print ">> "; direction = gets.chomp.downcase
-      return :quit if direction == '!'
-
-      if direction != "right" && direction != "r" && direction != "down" && direction != "d"
-        puts "Invalid direction input."
-        return valid = :invalid_dir_inp
-      else
-        horizontal = direction == "right" || direction == "r"
-      end
+      coord_input = get_starting_coord(ship)
+      coord_input == :quit ? (return :quit) : coord = coord_input
+      dir = get_dir_input
+      dir == :quit ? (return :quit) : horizontal = dir
 
       valid = @board.place(ship, coord, horizontal)
       @ships << ship if valid == :success
@@ -34,19 +52,7 @@ class Player
     end
   end
 
-  def get_starting_coord(ship)
-    puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
-    puts "Pick a starting coordinate (top left part of the ship)."
-    print ">> "; coord = gets.chomp
-    return :quit if coord == '!'
-
-    if @board.cells.keys.include?(coord.to_sym) == false
-      puts "Invalid starting coordinate."
-      return valid = :invalid_start_coord
-    end
-  end
-
-  def turn(opp)
+  def turn(opp) # TO DO: refactor
     valid = false
     while !valid do
       puts "Pick a target."
