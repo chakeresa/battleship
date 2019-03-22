@@ -12,10 +12,7 @@ class Computer
     valid = :none
 
     while valid != :success do
-      coord = @board.cells.keys.sample
-      num = rand(2)
-      # 0 = right (horizontal), 1 = down (vertical)
-      horizontal = num == 0
+      coord, horizontal = rand_coord_and_direc
 
       valid = @board.place(ship, coord, horizontal)
       # TO DO: ^ similar simplification to Player
@@ -25,7 +22,11 @@ class Computer
   end
 
   def rand_coord_and_direc
-    # TO DO: pull out lines 15 and 16 from above
+    coord = @board.cells.keys.sample
+    num = rand(2)
+    # 0 = right (horizontal), 1 = down (vertical)
+    horizontal = num == 0
+    return coord, horizontal
   end
 
   def find_valid_target(opp)
