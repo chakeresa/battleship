@@ -34,21 +34,25 @@ class Computer
     return coord, horizontal
   end
 
-  def find_valid_target(opp)
+  def find_valid_target(opp, target = random_target(opp))
     @valid_target = false
-    target = nil
 
     while !@valid_target do
-      target = opp.board.cells.keys.sample
-      # TO DO ^ iter 4 smart computer
-
       if opp.board.valid_coordinate?(target.to_s)
         if !opp.board[target.to_sym].fired_upon?
           opp.board[target.to_sym].fire_upon; @valid_target = true
+        else
+          target = random_target(opp)
+          # TO DO ^ iter 4 smart computer
         end
       end
+
     end
     target
+  end
+
+  def random_target(opp)
+    opp.board.cells.keys.sample
   end
 
   def turn(opp)

@@ -2,6 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/computer'
 require './lib/player'
+require './lib/cell'
 
 class ComputerTest < Minitest::Test
   def test_it_exists
@@ -60,22 +61,17 @@ class ComputerTest < Minitest::Test
   end
 
   def test_find_valid_target_always_finds_valid_target
-    skip
-    computer = Computer.new(2) # board is only A1-B2
-    player = Player.new(2) # board is only A1-B2
+    computer1 = Computer.new("Short Circuit", 2) # board is only A1-B2
+    computer2 = Computer.new("Wal-E", 2) # board is only A1-B2
     sub = Ship.new("sub", 2)
 
-    player.board[:A1].ship = sub
-    player.board[:A2].ship = sub
-    actual = computer.place(sub)
+    computer2.place(sub, [:A1, true]) # A1 and A2
+    computer1.find_valid_target(computer2, :A1)
+    computer1.find_valid_target(computer2, :A2) # sinks computer2's sub
+    actual = computer1.find_valid_target(computer2)
 
-    possibility1 = !computer.board[:A1].empty? && !computer.board[:A2].empty?
-    possibility2 = !computer.board[:A1].empty? && !computer.board[:B1].empty?
-    possibility3 = !computer.board[:B1].empty? && !computer.board[:B2].empty?
-    possibility4 = !computer.board[:A2].empty? && !computer.board[:B2].empty?
-
-    assert_equal :success, actual
-    assert possibility1 || possibility2 || possibility3 || possibility4
+    assert actual == :B1 || actual == :B2
+    assert computer2.board[:A1].ship.sunk? # or just sub.sunk?
   end
 
 end
