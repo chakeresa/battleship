@@ -19,11 +19,16 @@ $listships = load
 def setup
     valid = false
     while !valid do
-        puts "Welcome to battleship! Enter board size (Enter for default of 10)."
+        puts "Welcome to battleship! Enter board size between 2 and 26"
+        puts "(Enter for default of 10)."
         puts " -- (Type \'!\' at any time to exit the program.)"
         print ">> "; boardsize = gets.chomp
         return false if boardsize == '!'
-        boardsize.match?(/^\d+$|^$/) ? valid = true : (puts "Invalid input.")
+        if boardsize.match?(/^\d+$|^$/)
+            boardsize.to_i < 2 || boardsize.to_i > 26 ? valid = true : puts ("Board size out of bounds!")
+        else
+            puts "Invalid input."
+        end
     end
     boardsize = 10 if boardsize.match?(/^$/)
     boardsize = boardsize.to_i
