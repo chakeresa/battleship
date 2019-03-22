@@ -74,13 +74,13 @@ class ComputerTest < Minitest::Test
 
     all_coord = []
     all_horizontal = []
-    100.times do
+    1000.times do
       coord, horizontal = computer1.rand_coord_and_direc
       all_coord << coord
       all_horizontal << horizontal
     end
 
-    assert all_coord.uniq.length != 1
+    assert all_coord.uniq.length == 4
     assert all_horizontal.uniq.length == 2
   end
 
@@ -103,11 +103,11 @@ class ComputerTest < Minitest::Test
     computer2 = Computer.new("Wal-E", 2) # board is only A1-B2
 
     all_coord = []
-    100.times do
+    1000.times do
       coord = computer1.random_target(computer2)
       all_coord << coord
     end
 
-    assert all_coord.uniq.length != 1
+    assert all_coord.uniq.length == 4
   end
 end
