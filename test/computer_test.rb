@@ -48,6 +48,17 @@ class ComputerTest < Minitest::Test
     assert possibility1 || possibility2 || possibility3 || possibility4
   end
 
+  def test_places_a_ship_given_coord_and_dir
+    computer = Computer.new("Wal-E", 3) # board is A1-C3
+    sub1 = Ship.new("sub", 2)
+
+    actual = computer.place(sub1, [:C2, true]) # C2 and C3
+
+    assert_equal :success, actual
+    assert computer.board[:C2].ship == sub1
+    assert computer.board[:C3].ship == sub1
+  end
+
   def test_find_valid_target_always_finds_valid_target
     skip
     computer = Computer.new(2) # board is only A1-B2

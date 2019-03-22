@@ -6,17 +6,21 @@ class Computer
   def initialize(name, size = 10)
     @board = Board.new(name, size)
     @ships = []
+    # TO DO: ^ why needed?
   end
 
-  def place(ship)
+  def place(ship, coord_and_dir = rand_coord_and_direc)
     valid = :none
 
-    while valid != :success do
-      coord, horizontal = rand_coord_and_direc
+    coord, horizontal = coord_and_dir # allows for non-random placement for testing
+    i = 0
 
+    while valid != :success do
       valid = @board.place(ship, coord, horizontal)
       # TO DO: ^ similar simplification to Player
-      @ships << ship
+      @ships << ship # TO DO: adds ships every time it tries to place - fix
+
+      coord, horizontal = rand_coord_and_direc
     end
     valid
   end
