@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'stringio'
-require 'o_stream_catcher' # if missing do gem install o_stream_catcher
+require 'o_stream_catcher' # if missing do `gem install o_stream_catcher`
 require './lib/player'
 
 class PlayerTest < Minitest::Test

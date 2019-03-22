@@ -24,6 +24,10 @@ class Computer
     valid
   end
 
+  def rand_coord_and_direc
+    # TO DO: pull out lines 15 and 16 from above
+  end
+
   def find_valid_target(opp)
     @valid_target = false
     target = nil

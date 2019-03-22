@@ -5,19 +5,19 @@ require './lib/player'
 
 class ComputerTest < Minitest::Test
   def test_it_exists
-    computer = Computer.new
+    computer = Computer.new("Wal-E")
 
     assert_instance_of Computer, computer
   end
 
   def test_it_has_board_upon_init
-    computer = Computer.new
+    computer = Computer.new("Short Circuit")
 
     assert_instance_of Board, computer.board
   end
 
   def test_place_always_places_a_ship
-    computer = Computer.new(2) # board is only A1-B2
+    computer = Computer.new("Short Circuit", 2) # board is only A1-B2
     sub = Ship.new("sub", 2)
 
     actual = computer.place(sub)
@@ -32,7 +32,7 @@ class ComputerTest < Minitest::Test
   end
 
   def test_places_a_second_ship
-    computer = Computer.new(2) # board is only A1-B2
+    computer = Computer.new("Wal-E", 2) # board is only A1-B2
     sub1 = Ship.new("sub", 2)
     sub2 = Ship.new("sub", 2)
 
