@@ -18,10 +18,11 @@ class Computer
     while valid != :success do
       valid = @board.place(ship, coord, horizontal)
       # TO DO: ^ similar simplification to Player
-      @ships << ship # TO DO: adds ships every time it tries to place - fix
 
       coord, horizontal = rand_coord_and_direc
     end
+
+    @ships << ship
     valid
   end
 
