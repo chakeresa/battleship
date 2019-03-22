@@ -3,48 +3,56 @@ require './lib/board'
 class Player
   attr_reader :board, :ships
 
-  def initialize(name, size)
+  def initialize(name, size = 10)
     @board = Board.new(name, size)
     @ships = []
+  end
+
+  def get_starting_coord(ship)
+    puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
+    puts "Pick a starting coordinate (top left part of the ship)."
+    print ">> "; coord = gets.chomp
+    return :quit if coord == '!'
+
+    if @board.cells.keys.include?(coord.to_sym)
+      return coord
+    else
+      puts "Invalid starting coordinate."
+      return valid = :invalid_start_coord
+    end
+  end
+
+  def get_dir_input
+    puts "Pick a direction -- enter right (r) or down (d)."
+    print ">> "; direction = gets.chomp.downcase
+    return :quit if direction == '!'
+
+    if direction != "right" && direction != "r" && direction != "down" && direction != "d"
+      puts "Invalid direction input."
+      return valid = :invalid_dir_inp
+    else
+      return horizontal = direction == "right" || direction == "r"
+    end
   end
 
   def place(ship)
     valid = :none
 
     while valid != :success do
-      puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
-      puts "Pick a starting coordinate."
-      print ">> "; coord = gets.chomp
-      return :quit if coord == '!'
-      puts "Pick a direction (left,right,up,down OR l,r,u,d)."
-      print ">> "; direction = gets.chomp.downcase
-      return :quit if direction == '!'
+      coord_input = get_starting_coord(ship)
+      coord_input == :quit ? (return :quit) : coord = coord_input
+      dir = get_dir_input
+      dir == :quit ? (return :quit) : horizontal = dir
 
-      if @board.valid_coordinate?(coord)
-        if direction.match?(/^l$|^left$/)
-          coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
-          valid = @board.place(ship, coord, true)
-        elsif direction.match?(/^r$|^right$/)
-          valid = @board.place(ship, coord, true)
-        elsif direction.match?(/^u$|^up$/)
-          coord = (coord[0].ord - (ship.length - 1)).chr + coord[1]
-          valid = @board.place(ship, coord)
-        elsif direction.match?(/^d$|^down$/)
-          valid = @board.place(ship, coord)
-        else
-          puts "Invalid direction."
-        end
+      valid = @board.place(ship, coord, horizontal)
+      @ships << ship if valid == :success
 
-        puts "Out of bounds!" if valid == :oob
-        puts "Overlap!" if valid == :overlap
-      else
-        puts "Invalid starting coordinate."
-      end
+      puts "Out of bounds!" if valid == :oob
+      puts "Overlap!" if valid == :overlap
     end
-    @ships << ship
   end
 
-  def turn(opp)
+  def turn(opp) # TO DO: refactor
     valid = false
     while !valid do
       puts "Pick a target."

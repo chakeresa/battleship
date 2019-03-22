@@ -4,14 +4,15 @@ require './lib/render'
 
 class RenderTest < Minitest::Test
   def test_it_exists
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
 
     assert_instance_of Render, render
   end
 
   def test_first_row_shows_1_thru_default_board_size
-    board = Board.new
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
 
     render.render(board)
 
@@ -19,8 +20,8 @@ class RenderTest < Minitest::Test
   end
 
   def test_first_row_shows_1_thru_other_board_size
-    board = Board.new(4)
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
 
     render.render(board)
 
@@ -28,8 +29,8 @@ class RenderTest < Minitest::Test
   end
 
   def test_subsequent_row_renders_initial_board
-    board = Board.new(4)
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
 
     render.render(board)
 
@@ -40,8 +41,8 @@ class RenderTest < Minitest::Test
   end
 
   def test_subsequent_row_renders_ships_if_reveal
-    board = Board.new(4)
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
     sub = Ship.new("Sub", 2)
     cruiser = Ship.new("Cruiser", 3)
 
@@ -59,8 +60,8 @@ class RenderTest < Minitest::Test
   end
 
   def test_subsequent_row_doesnt_render_ships_if_reveal_is_false
-    board = Board.new(4)
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
     sub = Ship.new("Sub", 2)
     cruiser = Ship.new("Cruiser", 3)
 
@@ -78,8 +79,8 @@ class RenderTest < Minitest::Test
   end
 
   def test_subsequent_renders_hit_ships
-    board = Board.new(4)
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
     sub = Ship.new("Sub", 2)
 
     board.place(sub, "A1", true)
@@ -95,8 +96,8 @@ class RenderTest < Minitest::Test
   end
 
   def test_subsequent_renders_sunken_ships
-    board = Board.new(4)
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
     sub = Ship.new("Sub", 2)
 
     board.place(sub, "A1", true)
@@ -113,8 +114,8 @@ class RenderTest < Minitest::Test
   end
 
   def test_subsequent_renders_misses
-    board = Board.new(4)
-    render = Render.new
+    board = Board.new("Board 1", 4)
+    render = Render.new(board, false)
     sub = Ship.new("Sub", 2)
 
     board.place(sub, "A1", true)
@@ -131,8 +132,8 @@ class RenderTest < Minitest::Test
   end
 
   def test_entire_reveal
-    board = Board.new(5)
-    render = Render.new
+    board = Board.new("Board 1", 5)
+    render = Render.new(board, false)
 
     expected = "  1 2 3 4 5 \n"
     expected += "A . . . . . \n"

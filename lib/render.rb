@@ -3,6 +3,7 @@ require './lib/board'
 class Render
 
   def render(*boards, reveal)
+    # TO DO: ^ tests are very unhappy -- probably have to put reveal first
     @boards = boards
     @reveal = reveal
     render_return = names
