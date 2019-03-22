@@ -60,6 +60,30 @@ class ComputerTest < Minitest::Test
     assert computer.board[:C3].ship == sub1
   end
 
+  def test_rand_coord_and_direc_are_valid_cell_and_true_or_false
+    computer1 = Computer.new("Short Circuit", 2) # board is only A1-B2
+
+    coord, horizontal = computer1.rand_coord_and_direc
+
+    assert coord == :A1 || coord == :A2 || coord == :B1 || coord == :B2
+    assert horizontal == true || horizontal == false
+  end
+
+  def test_rand_coord_and_direc_are_random
+    computer1 = Computer.new("Short Circuit", 2) # board is only A1-B2
+
+    all_coord = []
+    all_horizontal = []
+    100.times do
+      coord, horizontal = computer1.rand_coord_and_direc
+      all_coord << coord
+      all_horizontal << horizontal
+    end
+
+    assert all_coord.uniq.length != 1
+    assert all_horizontal.uniq.length == 2
+  end
+
   def test_find_valid_target_always_finds_valid_target
     computer1 = Computer.new("Short Circuit", 2) # board is only A1-B2
     computer2 = Computer.new("Wal-E", 2) # board is only A1-B2
