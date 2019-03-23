@@ -59,25 +59,27 @@ class Player
       print ">> "; input = gets.chomp
       return :quit if input == '!'
 
-      if opp.board.valid_coordinate?(input)
-        if !opp.board[input.to_sym].fired_upon?
-          opp.board[input.to_sym].fire_upon; valid = true
+      input = input.to_sym
+      if opp.board.valid_coordinate?(input.to_s)
+        if !opp.board[input].fired_upon?
+          opp.board[input].fire_upon; valid = true
         else
           puts "That's already been fired upon!"
         end
-
       else
         puts "Invalid coordinate."
       end
     end
 
-    if opp.board[input.to_sym].empty?
+    if opp.board[input].empty?
       puts " --- MISS!"
       return :none
     else
       puts " --- HIT!"
-
-      # TO DO: message when sunk
+      if !opp.board[input].empty?
+          puts "You've sunk my #{opp.board[input].ship.name}!!!" \
+                                                                                        if opp.board[input].ship.sunk?
+      end
       if opp.ships.all? {|ship| ship.sunk?}
         return :win
       else

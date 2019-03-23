@@ -8,22 +8,34 @@ $humanplayers = nil
 $renderer = Render.new
 
 def load
-    ships = []
+    $oneships = []
+    $twoships = []
+    #redships
+    #blueships
     xs = IO.readlines('ships.csv')
-    xs.each {|x| y = x.chomp.split(/,/); ships << Ship.new(y[0], y[1].to_i)}
-    return ships
+    xs.each do |x|
+        y = x.chomp.split(/,/)
+        $oneships << Ship.new(y[0], y[1].to_i)
+        $twoships << Ship.new(y[0], y[1].to_i)
+    end
 end
 
-$listships = load
-
 def setup
+    load
     valid = false
+    puts "Welcome to battleship! Enter board size between 2 and 26"
+    puts "(Enter for default of 10)."
+    puts " -- (Type \'!\' at any time to exit the program.)"
+
     while !valid do
-        puts "Welcome to battleship! Enter board size (Enter for default of 10)."
-        puts " -- (Type \'!\' at any time to exit the program.)"
         print ">> "; boardsize = gets.chomp
         return false if boardsize == '!'
-        boardsize.match?(/^\d+$|^$/) ? valid = true : (puts "Invalid input.")
+        if boardsize.match?(/^\d+$|^$/)
+            (boardsize.to_i < 2 || boardsize.to_i > 26) ? (puts "Board size out of bounds!") : \
+                                                                                                                                            valid = true
+        else
+            puts "Invalid input."
+        end
     end
     boardsize = 10 if boardsize.match?(/^$/)
     boardsize = boardsize.to_i
@@ -38,24 +50,24 @@ def setup
     $humanplayers = players.to_i
     if $humanplayers == 0
         $playerone = Computer.new("COMPUTER ONE", boardsize)
-        $listships.each {|ship| $playerone.place(ship)}
+        $oneships.each {|ship| $playerone.place(ship)}
         $playertwo = Computer.new("COMPUTER TWO", boardsize)
-        $listships.each {|ship| $playertwo.place(ship)}
+        $twoships.each {|ship| $playertwo.place(ship)}
     elsif $humanplayers == 1
         $playerone = Player.new("   PLAYER   ", boardsize)
         puts "Place your ships."
-        $listships.each do |ship|
+        $oneships.each do |ship|
             puts $renderer.render($playerone.board, :all)
             puts "-" * 35
             result = $playerone.place(ship)
             return false if result == :quit
         end
         $playertwo = Computer.new("  COMPUTER  ", boardsize)
-        $listships.each {|ship| $playertwo.place(ship)}
+        $twoships.each {|ship| $playertwo.place(ship)}
     elsif $humanplayers == 2
         $playerone = Player.new(" PLAYER ONE ", boardsize)
         puts "PLAYER ONE: Place your ships."
-        $listships.each do |ship|
+        $oneships.each do |ship|
             puts $renderer.render($playerone.board, :all)
             puts "-" * 35
             result = $playerone.place(ship)
@@ -64,7 +76,7 @@ def setup
         $playertwo = Player.new(" PLAYER TWO ", boardsize)
         print "\n" * 100
         puts "PLAYER TWO: Place your ships."
-        $listships.each do |ship|
+        $twoships.each do |ship|
             puts $renderer.render($playertwo.board, :all)
             puts "-" * 35
             result = $playertwo.place(ship)
