@@ -66,7 +66,6 @@ class Player
         else
           puts "That's already been fired upon!"
         end
-
       else
         puts "Invalid coordinate."
       end
