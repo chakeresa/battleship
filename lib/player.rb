@@ -10,7 +10,7 @@ class Player
 
   def get_starting_coord(ship)
     puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
-    puts "Pick a starting coordinate (top left part of the ship)."
+    puts "Pick a starting coordinate."
     print ">> "; coord = gets.chomp
     return :quit if coord == '!'
 
@@ -22,17 +22,29 @@ class Player
     end
   end
 
-  def get_dir_input
-    puts "Pick a direction -- enter right (r) or down (d)."
-    print ">> "; direction = gets.chomp.downcase
-    return :quit if direction == '!'
+  def get_dir_input(coord, ship)
+    valid = false
+    while !valid
+        puts "Pick a direction (left, right, up, down OR l,r,u,d)."
+        print ">> "; direction = gets.chomp.downcase
+        return :quit if direction == '!'
 
-    if direction != "right" && direction != "r" && direction != "down" && direction != "d"
-      puts "Invalid direction input."
-      return valid = :invalid_dir_inp
-    else
-      return horizontal = direction == "right" || direction == "r"
+        direction_return = false
+        if direction.match?(/^l$|^left$/)
+            coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
+            direction_return = true; valid = true
+        elsif direction.match?(/^r$|^right$/)
+            direction_return = true; valid = true
+        elsif direction.match?(/^u$|^up$/)
+            coord = (coosrd[0].ord - (ship.length - 1)).chr + coord[1]; valid = true
+        elsif direction.match?(/^d$|^down$/)
+            valid = true
+        else
+            puts "Invalid direction input."
+        end
     end
+
+    return direction_return, coord
   end
 
   def place(ship)
@@ -41,7 +53,7 @@ class Player
     while valid != :success do
       coord_input = get_starting_coord(ship)
       coord_input == :quit ? (return :quit) : coord = coord_input
-      dir = get_dir_input
+      dir, coord = get_dir_input(coord, ship)
       dir == :quit ? (return :quit) : horizontal = dir
 
       valid = @board.place(ship, coord, horizontal)
