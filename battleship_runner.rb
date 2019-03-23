@@ -74,7 +74,7 @@ def setup
             return false if result == :quit
         end
         $playertwo = Player.new(" PLAYER TWO ", boardsize)
-        print "\n" * 100
+        puts "\e[H\e[2J"
         puts "PLAYER TWO: Place your ships."
         $twoships.each do |ship|
             puts $renderer.render($playertwo.board, :all)
@@ -92,7 +92,7 @@ def game
         while victor == :none
             #COMPUTER ONE GO:
             puts "Computer One's Turn..."
-            puts $renderer.render($playertwo.board, :all)
+            puts $renderer.render($playerone.board, $playertwo.board, :all)
             puts "-" * 35
             result = $playerone.turn($playertwo)
             if result == :win
@@ -101,11 +101,11 @@ def game
             end
             input = gets.chomp
             return false if input == '!'
-            print "\n\n\n"
+            puts "\e[H\e[2J"
             puts "-" * 35
             #COMPUTER TWO GO:
             puts "Computer Two's Turn..."
-            puts $renderer.render($playerone.board, :all)
+            puts $renderer.render($playerone.board, $playertwo.board, :all)
             puts "-" * 35
             result = $playertwo.turn($playerone)
             if result == :win
@@ -114,14 +114,14 @@ def game
             end
             input = gets.chomp
             return false if input == '!'
-            print "\n\n\n"
+            puts "\e[H\e[2J"
             puts "-" * 35
         end
     elsif $humanplayers == 1
         while victor == :none
             #PLAYER ONE GO:
             puts "Player One's Turn..."
-            puts $renderer.render($playertwo.board, :none)
+            puts $renderer.render($playerone.board, $playertwo.board, :one)
             puts "-" * 35
             result = $playerone.turn($playertwo)
             return false if result == :quit
@@ -131,12 +131,12 @@ def game
             end
             input = gets.chomp
             return false if input == '!'
-            print "\n\n\n"
+            puts "\e[H\e[2J"
             puts "-" * 35
             #COMPUTER GO:
             puts "Computer Turn..."
-            puts $renderer.render($playerone.board, :all)
-            puts "-" * 35
+            #puts $renderer.render($playerone.board, :all)
+            #puts "-" * 35
             result = $playertwo.turn($playerone)
             if result == :win
                 victor = :one
@@ -144,7 +144,7 @@ def game
             end
             input = gets.chomp
             return false if input == '!'
-            print "\n\n\n"
+            puts "\e[H\e[2J"
             puts "-" * 35
         end
     elsif $humanplayers == 2
@@ -161,7 +161,7 @@ def game
             end
             input = gets.chomp
             return false if input == '!'
-            print "\n" * 50
+            puts "\e[H\e[2J"
             puts "-" * 55
             #PLAYER TWO GO:
             puts "Player Two's Turn..."
@@ -175,7 +175,7 @@ def game
             end
             input = gets.chomp
             return false if input == '!'
-            print "\n" * 50
+            puts "\e[H\e[2J"
             puts "-" * 55
         end
     end
