@@ -1,7 +1,10 @@
 require './lib/board'
+require './lib/turn_result'
 
 class Computer
   attr_reader :name, :board, :ships
+
+  include TurnResult
 
   def initialize(name, size = 10)
     @name = name
@@ -60,22 +63,6 @@ class Computer
 
     puts "#{@name.lstrip.rstrip} fired on #{target}."
 
-    # TO DO: abstract into a helper method
-    if opp.board[target].empty?
-      puts " --- MISS!"
-      return :none
-    else
-      puts " --- HIT!"
-
-      if opp.board[target].ship.sunk?
-        puts "#{@name.lstrip.rstrip} sunk #{opp.name.lstrip.rstrip}'s #{opp.board[target].ship.name}!!!"
-      end
-
-      if opp.ships.all? {|ship| ship.sunk?}
-        return :win
-      else
-        return :none
-      end
-    end
+    return turn_result(opp, target)
   end
 end

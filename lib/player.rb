@@ -1,7 +1,10 @@
 require './lib/board'
+require './lib/turn_result'
 
 class Player
   attr_reader :name, :board, :ships
+
+  include TurnResult
 
   def initialize(name, size = 10)
     @name = name
@@ -10,16 +13,20 @@ class Player
   end
 
   def get_starting_coord(ship)
-    puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
-    puts "Pick a starting coordinate."
-    print ">> "; coord = gets.chomp
-    return :quit if coord == '!'
+    valid = false
+    while !valid
+      puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
+      puts "Pick a starting coordinate."
+      print ">> "; coord = gets.chomp
+      return :quit if coord == '!'
 
-    if @board.cells.keys.include?(coord.to_sym)
-      return coord
-    else
-      puts "Invalid starting coordinate."
-      return valid = :invalid_start_coord
+      if @board.cells.keys.include?(coord.to_sym)
+        valid = true
+        return coord
+      else
+        puts "Invalid starting coordinate."
+        valid = false
+      end
     end
   end
 
@@ -65,7 +72,7 @@ class Player
     end
   end
 
-  def turn(opp) # TO DO: refactor
+  def turn(opp)
     valid = false
     while !valid do
       puts "Pick a target."
@@ -84,21 +91,6 @@ class Player
       end
     end
 
-    if opp.board[target].empty?
-      puts " --- MISS!"
-      return :none
-    else
-      puts " --- HIT!"
-
-      if opp.board[target].ship.sunk?
-        puts "#{@name.lstrip.rstrip} sunk #{opp.name.lstrip.rstrip}'s #{opp.board[target].ship.name}!!!"
-      end
-
-      if opp.ships.all? {|ship| ship.sunk?}
-        return :win
-      else
-        return :none
-      end
-    end
+    return turn_result(opp, target)
   end
 end
