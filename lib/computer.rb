@@ -56,12 +56,12 @@ class Computer
   end
 
   def turn(opp)
-    target = find_valid_target(opp)
+    target = find_valid_target(opp).to_sym
 
     puts "#{@name.lstrip.rstrip} fired on #{target}."
 
     # TO DO: abstract into a helper method
-    if opp.board[target.to_sym].empty?
+    if opp.board[target].empty?
       puts " --- MISS!"
       return :none
     else

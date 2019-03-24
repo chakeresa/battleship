@@ -69,13 +69,13 @@ class Player
     valid = false
     while !valid do
       puts "Pick a target."
-      print ">> "; input = gets.chomp
-      return :quit if input == '!'
+      print ">> "; target = gets.chomp
+      return :quit if target == '!'
 
-      input = input.to_sym
-      if opp.board.valid_coordinate?(input.to_s)
-        if !opp.board[input].fired_upon?
-          opp.board[input].fire_upon; valid = true
+      target = target.to_sym
+      if opp.board.valid_coordinate?(target.to_s)
+        if !opp.board[target].fired_upon?
+          opp.board[target].fire_upon; valid = true
         else
           puts "That's already been fired upon!"
         end
@@ -84,14 +84,16 @@ class Player
       end
     end
 
-    if opp.board[input].empty?
+    if opp.board[target].empty?
       puts " --- MISS!"
       return :none
     else
       puts " --- HIT!"
-      if opp.board[input].ship.sunk?
-        puts "You've sunk my #{opp.board[input].ship.name}!!!"
+
+      if opp.board[target].ship.sunk?
+        puts "#{@name.lstrip.rstrip} sunk #{opp.name.lstrip.rstrip}'s #{opp.board[target].ship.name}!!!"
       end
+
       if opp.ships.all? {|ship| ship.sunk?}
         return :win
       else
