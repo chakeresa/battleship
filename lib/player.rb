@@ -1,9 +1,10 @@
 require './lib/board'
 
 class Player
-  attr_reader :board, :ships
+  attr_reader :name, :board, :ships
 
   def initialize(name, size = 10)
+    @name = name
     @board = Board.new(name, size)
     @ships = []
   end
@@ -88,9 +89,8 @@ class Player
       return :none
     else
       puts " --- HIT!"
-      if !opp.board[input].empty?
-          puts "You've sunk my #{opp.board[input].ship.name}!!!" \
-                                                                                        if opp.board[input].ship.sunk?
+      if opp.board[input].ship.sunk?
+        puts "You've sunk my #{opp.board[input].ship.name}!!!"
       end
       if opp.ships.all? {|ship| ship.sunk?}
         return :win

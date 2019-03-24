@@ -1,9 +1,10 @@
 require './lib/board'
 
 class Computer
-  attr_reader :board, :ships
+  attr_reader :name, :board, :ships
 
   def initialize(name, size = 10)
+    @name = name
     @board = Board.new(name, size)
     @ships = []
     # TO DO: ^ why needed?
@@ -17,7 +18,6 @@ class Computer
 
     while valid != :success do
       valid = @board.place(ship, coord, horizontal)
-      # TO DO: ^ similar simplification to Player
 
       coord, horizontal = rand_coord_and_direc
     end
@@ -58,7 +58,7 @@ class Computer
   def turn(opp)
     target = find_valid_target(opp)
 
-    puts "Computer fired on #{target}."
+    puts "#{@name.lstrip.rstrip} fired on #{target}."
 
     # TO DO: abstract into a helper method
     if opp.board[target.to_sym].empty?
@@ -66,7 +66,11 @@ class Computer
       return :none
     else
       puts " --- HIT!"
-      # TO DO: message when sunk
+
+      if opp.board[target].ship.sunk?
+        puts "#{@name.lstrip.rstrip} sunk #{opp.name.lstrip.rstrip}'s #{opp.board[target].ship.name}!!!"
+      end
+
       if opp.ships.all? {|ship| ship.sunk?}
         return :win
       else
