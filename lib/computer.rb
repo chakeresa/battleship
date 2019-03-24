@@ -38,12 +38,12 @@ class Computer
   end
 
   def find_valid_target(opp, target = random_target(opp))
-    @valid_target = false
+    valid = false
 
-    while !@valid_target do
+    while !valid do
       if opp.board.valid_coordinate?(target.to_s)
         if !opp.board[target.to_sym].fired_upon?
-          opp.board[target.to_sym].fire_upon; @valid_target = true
+          opp.board[target.to_sym].fire_upon; valid = true
         else
           target = random_target(opp)
           # TO DO ^ iter 4 smart computer

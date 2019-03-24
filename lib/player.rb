@@ -78,19 +78,25 @@ class Player
       puts "Pick a target."
       print ">> "; target = gets.chomp
       return :quit if target == '!'
-
       target = target.to_sym
-      if opp.board.valid_coordinate?(target.to_s)
-        if !opp.board[target].fired_upon?
-          opp.board[target].fire_upon; valid = true
-        else
-          puts "That's already been fired upon!"
-        end
-      else
-        puts "Invalid coordinate."
-      end
+      valid = valid_target?(opp, target)
     end
 
     return turn_result(opp, target)
+  end
+
+  def valid_target?(opp, target)
+    if opp.board.valid_coordinate?(target.to_s)
+      if !opp.board[target].fired_upon?
+        opp.board[target].fire_upon; return true
+      else
+        puts "That's already been fired upon!"
+        return false
+      end
+    else
+      puts "Invalid coordinate."
+      return false
+    end
+
   end
 end
