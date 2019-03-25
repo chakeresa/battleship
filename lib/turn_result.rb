@@ -33,3 +33,11 @@ module TurnResult
 
   end
 end
+
+class DummyTurnResult
+  include TurnResult
+
+  def initialize
+    @name = "dummy"
+  end
+end
