@@ -48,16 +48,6 @@ class Computer
     target
   end
 
-  def valid_target? (opp, target)
-    if opp.board.valid_coordinate?(target.to_s)
-      if !opp.board[target].fired_upon?
-        opp.board[target].fire_upon; return true
-      else
-        return false
-      end
-    end
-  end
-
   def random_target(opp)
     opp.board.cells.keys.sample
   end

@@ -84,19 +84,4 @@ class Player
 
     return turn_result(opp, target)
   end
-
-  def valid_target?(opp, target)
-    if opp.board.valid_coordinate?(target.to_s)
-      if !opp.board[target].fired_upon?
-        opp.board[target].fire_upon; return true
-      else
-        puts "That's already been fired upon!" if self.class == Player
-        return false
-      end
-    else
-      puts "Invalid coordinate." if self.class == Player
-      return false
-    end
-
-  end
 end
