@@ -61,4 +61,39 @@ class TurnResultTest < Minitest::Test
 
     assert_equal :win, actual
   end
+
+  def test_valid_target_returns_true_and_fires_upon_if_valid_target
+    mixin = DummyTurnResult.new
+    computer = Computer.new("COMPUTER 1", 2) # board is only A1-B2
+    sub = Ship.new("sub", 2)
+
+    computer.place(sub, [:A1, true]) # A1-A2
+    actual = mixin.valid_target?(computer, :A2) # fires upon A2
+
+    assert actual
+    assert computer.board[:A2].fired_upon?
+  end
+
+  def test_valid_target_returns_false_if_target_already_fired_upon
+    mixin = DummyTurnResult.new
+    computer = Computer.new("COMPUTER 1", 2) # board is only A1-B2
+    sub = Ship.new("sub", 2)
+
+    computer.place(sub, [:A1, true]) # A1-A2
+    computer.board[:A2].fire_upon # fires upon A2
+    actual = mixin.valid_target?(computer, :A2) # fires upon A2
+
+    assert_equal false, actual
+    assert_equal false, computer.board[:A2].ship.sunk?
+  end
+
+  def test_valid_target_returns_false_if_invalid_coordinate
+    mixin = DummyTurnResult.new
+    computer = Computer.new("COMPUTER 1", 2) # board is only A1-B2
+    sub = Ship.new("sub", 2)
+
+    actual = mixin.valid_target?(computer, :C3)
+
+    assert_equal false, actual
+  end
 end
