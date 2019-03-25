@@ -90,11 +90,11 @@ class Player
       if !opp.board[target].fired_upon?
         opp.board[target].fire_upon; return true
       else
-        puts "That's already been fired upon!"
+        puts "That's already been fired upon!" if self.class == Player
         return false
       end
     else
-      puts "Invalid coordinate."
+      puts "Invalid coordinate." if self.class == Player
       return false
     end
 

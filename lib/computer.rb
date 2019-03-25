@@ -41,17 +41,21 @@ class Computer
     valid = false
 
     while !valid do
-      if opp.board.valid_coordinate?(target.to_s)
-        if !opp.board[target.to_sym].fired_upon?
-          opp.board[target.to_sym].fire_upon; valid = true
-        else
-          target = random_target(opp)
-          # TO DO ^ iter 4 smart computer
-        end
-      end
-
+      valid = valid_target?(opp, target)
+      target = random_target(opp) if !valid
+      # TO DO ^ iter 4 smart computer
     end
     target
+  end
+
+  def valid_target? (opp, target)
+    if opp.board.valid_coordinate?(target.to_s)
+      if !opp.board[target].fired_upon?
+        opp.board[target].fire_upon; return true
+      else
+        return false
+      end
+    end
   end
 
   def random_target(opp)
