@@ -228,7 +228,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_place_gets_input_and_places_valid_ship
-    skip
+    # skip
     player = Player.new("Fred", 2) # board is just A1-B2
     sub = Ship.new("sub", 2)
     testInp = StringIO.new
@@ -241,8 +241,8 @@ class PlayerTest < Minitest::Test
     end
 
     assert_equal sub, player.board[:A1].ship
-    assert_equal sub, player.board[:A2].ship
-    assert_equal [sub], player.ships # TO DO: failing -- doesn't appear to be adding ship -- this is returning nil
+    assert_equal sub, player.board[:B1].ship
+    assert_equal [sub], player.ships
 
     $stdin = STDIN
   end
