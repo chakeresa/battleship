@@ -181,7 +181,7 @@ def game
 end
 
 def finish
-    puts "end" # TO DO: getting called too early (maybe when player 1 makes its first hit)... need to fix here or maybe in player
+    puts "end"
 end
 
 finish if game if setup

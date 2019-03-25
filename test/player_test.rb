@@ -228,7 +228,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_place_gets_input_and_places_valid_ship
-    # skip
     player = Player.new("Fred", 2) # board is just A1-B2
     sub = Ship.new("sub", 2)
     testInp = StringIO.new
