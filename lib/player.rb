@@ -33,23 +33,23 @@ class Player
   def get_dir_input(coord, ship)
     valid = false
     while !valid
-        puts "Pick a direction (left, right, up, down OR l,r,u,d)."
-        print ">> "; direction = gets.chomp.downcase
-        return :quit if direction == '!'
+      puts "Pick a direction (left, right, up, down OR l,r,u,d)."
+      print ">> "; direction = gets.chomp.downcase
+      return :quit if direction == '!'
 
-        direction_return = false
-        if direction.match?(/^l$|^left$/)
-            coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
-            direction_return = true; valid = true
-        elsif direction.match?(/^r$|^right$/)
-            direction_return = true; valid = true
-        elsif direction.match?(/^u$|^up$/)
-            coord = (coosrd[0].ord - (ship.length - 1)).chr + coord[1]; valid = true
-        elsif direction.match?(/^d$|^down$/)
-            valid = true
-        else
-            puts "Invalid direction input."
-        end
+      direction_return = false
+      if direction.match?(/^l$|^left$/)
+        coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
+        direction_return = true; valid = true
+      elsif direction.match?(/^r$|^right$/)
+        direction_return = true; valid = true
+      elsif direction.match?(/^u$|^up$/)
+        coord = (coord[0].ord - (ship.length - 1)).chr + coord[1]; valid = true
+      elsif direction.match?(/^d$|^down$/)
+        valid = true
+      else
+        puts "Invalid direction input."
+      end
     end
 
     return direction_return, coord
