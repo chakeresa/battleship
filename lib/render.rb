@@ -16,11 +16,16 @@ class Render
   end
 
   def names
-      if @boards.size == 1
-          return (" " * 12) + @boards[0].name + "\n"
-      else
-          return (" " * 5) + @boards[0].name + (" " * 8) + "|" + (" " * 9) + @boards[1].name + "\n"
-      end
+    first_name_length = @boards[0].name.length
+    board_size = @boards[0].size
+    board_render_width = 7 + 2 * board_size
+    padding = (board_render_width - first_name_length) / 2
+    padding = [padding, 0].max
+    if @boards.size == 1
+      return (" " * (5 + padding)) + @boards[0].name + "\n"
+    else
+      return (" " * padding) + @boards[0].name + (" " * padding) + (" " * padding) + @boards[1].name + "\n"
+    end
   end
 
   def first_row
