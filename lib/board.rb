@@ -48,16 +48,18 @@ class Board
       if horizontal
           0.upto(ship.length - 1) do |i|
               at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
+              return true if !@cells.include?(at) # needed for player's ship placement starting on board but running off to the left
               return true if !(@cells[at].empty?)
           end
       else
           0.upto(ship.length - 1) do |i|
               at = ((coord[0].ord + i).chr + coord[1]).to_sym
+              return true if !@cells.include?(at) # needed for player's ship placement starting on board but running off the top
               return true if !(@cells[at].empty?)
           end
       end
 
-      return false # if not overlapping
+      return false # if not overlapping or running off board
     end
 
     def add_horizontal_ship(ship, coord)

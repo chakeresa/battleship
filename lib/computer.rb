@@ -1,9 +1,13 @@
 require './lib/board'
+require './lib/turn_result'
 
 class Computer
-  attr_reader :board, :ships
+  attr_reader :name, :board, :ships
+
+  include TurnResult
 
   def initialize(name, size = 10)
+    @name = name
     @board = Board.new(name, size)
     @ships = []
     # TO DO: ^ why needed?
@@ -17,7 +21,6 @@ class Computer
 
     while valid != :success do
       valid = @board.place(ship, coord, horizontal)
-      # TO DO: ^ similar simplification to Player
 
       coord, horizontal = rand_coord_and_direc
     end
@@ -35,18 +38,12 @@ class Computer
   end
 
   def find_valid_target(opp, target = random_target(opp))
-    @valid_target = false
+    valid = false
 
-    while !@valid_target do
-      if opp.board.valid_coordinate?(target.to_s)
-        if !opp.board[target.to_sym].fired_upon?
-          opp.board[target.to_sym].fire_upon; @valid_target = true
-        else
-          target = random_target(opp)
-          # TO DO ^ iter 4 smart computer
-        end
-      end
-
+    while !valid do
+      valid = valid_target?(opp, target)
+      target = random_target(opp) if !valid
+      # TO DO ^ iter 4 smart computer
     end
     target
   end
@@ -55,23 +52,9 @@ class Computer
     opp.board.cells.keys.sample
   end
 
-  def turn(opp)
-    target = find_valid_target(opp)
+  def turn(opp, target = find_valid_target(opp))
+    puts "#{@name.lstrip.rstrip} fired on #{target}."
 
-    puts "Computer fired on #{target}."
-
-    # TO DO: abstract into a helper method
-    if opp.board[target.to_sym].empty?
-      puts " --- MISS!"
-      return :none
-    else
-      puts " --- HIT!"
-      # TO DO: message when sunk
-      if opp.ships.all? {|ship| ship.sunk?}
-        return :win
-      else
-        return :none
-      end
-    end
+    return turn_result(opp, target)
   end
 end

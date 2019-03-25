@@ -1,47 +1,55 @@
 require './lib/board'
+require './lib/turn_result'
 
 class Player
-  attr_reader :board, :ships
+  attr_reader :name, :board, :ships
+
+  include TurnResult
 
   def initialize(name, size = 10)
+    @name = name
     @board = Board.new(name, size)
     @ships = []
   end
 
   def get_starting_coord(ship)
-    puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
-    puts "Pick a starting coordinate."
-    print ">> "; coord = gets.chomp
-    return :quit if coord == '!'
+    valid = false
+    while !valid
+      puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
+      puts "Pick a starting coordinate."
+      print ">> "; coord = gets.chomp
+      return :quit if coord == '!'
 
-    if @board.cells.keys.include?(coord.to_sym)
-      return coord
-    else
-      puts "Invalid starting coordinate."
-      return valid = :invalid_start_coord
+      if @board.cells.keys.include?(coord.to_sym)
+        valid = true
+        return coord
+      else
+        puts "Invalid starting coordinate."
+        valid = false
+      end
     end
   end
 
   def get_dir_input(coord, ship)
     valid = false
     while !valid
-        puts "Pick a direction (left, right, up, down OR l,r,u,d)."
-        print ">> "; direction = gets.chomp.downcase
-        return :quit if direction == '!'
+      puts "Pick a direction (left, right, up, down OR l,r,u,d)."
+      print ">> "; direction = gets.chomp.downcase
+      return :quit if direction == '!'
 
-        direction_return = false
-        if direction.match?(/^l$|^left$/)
-            coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
-            direction_return = true; valid = true
-        elsif direction.match?(/^r$|^right$/)
-            direction_return = true; valid = true
-        elsif direction.match?(/^u$|^up$/)
-            coord = (coosrd[0].ord - (ship.length - 1)).chr + coord[1]; valid = true
-        elsif direction.match?(/^d$|^down$/)
-            valid = true
-        else
-            puts "Invalid direction input."
-        end
+      direction_return = false
+      if direction.match?(/^l$|^left$/)
+        coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
+        direction_return = true; valid = true
+      elsif direction.match?(/^r$|^right$/)
+        direction_return = true; valid = true
+      elsif direction.match?(/^u$|^up$/)
+        coord = (coord[0].ord - (ship.length - 1)).chr + coord[1]; valid = true
+      elsif direction.match?(/^d$|^down$/)
+        valid = true
+      else
+        puts "Invalid direction input."
+      end
     end
 
     return direction_return, coord
@@ -64,39 +72,16 @@ class Player
     end
   end
 
-  def turn(opp) # TO DO: refactor
+  def turn(opp)
     valid = false
     while !valid do
       puts "Pick a target."
-      print ">> "; input = gets.chomp
-      return :quit if input == '!'
-
-      input = input.to_sym
-      if opp.board.valid_coordinate?(input.to_s)
-        if !opp.board[input].fired_upon?
-          opp.board[input].fire_upon; valid = true
-        else
-          puts "That's already been fired upon!"
-        end
-      else
-        puts "Invalid coordinate."
-      end
+      print ">> "; target = gets.chomp
+      return :quit if target == '!'
+      target = target.to_sym
+      valid = valid_target?(opp, target)
     end
 
-    if opp.board[input].empty?
-      puts " --- MISS!"
-      return :none
-    else
-      puts " --- HIT!"
-      if !opp.board[input].empty?
-          puts "You've sunk my #{opp.board[input].ship.name}!!!" \
-                                                                                        if opp.board[input].ship.sunk?
-      end
-      if opp.ships.all? {|ship| ship.sunk?}
-        return :win
-      else
-        return :none
-      end
-    end
+    return turn_result(opp, target)
   end
 end
