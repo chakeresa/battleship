@@ -51,7 +51,7 @@ class RenderTest < Minitest::Test
     board.place(cruiser, "A4", false)
     # ^ places cruiser in A1 vertically -- A4 thru D4
 
-    render.render(board, true)
+    render.render(board, :one)
 
     assert_equal "       A S S . S \n", render.subsequent_row(0)
     assert_equal "       B . . . S \n", render.subsequent_row(1)
@@ -87,7 +87,7 @@ class RenderTest < Minitest::Test
     # ^ places sub in A1 horizontally -- A1 and A2
     board.cells[:A1].fire_upon
 
-    render.render(board, true)
+    render.render(board, :one)
 
     assert_equal "       A H S . . \n", render.subsequent_row(0)
     assert_equal "       B . . . . \n", render.subsequent_row(1)
@@ -123,7 +123,7 @@ class RenderTest < Minitest::Test
     board.cells[:A4].fire_upon # miss
     board.cells[:C2].fire_upon # miss
 
-    render.render(board, true)
+    render.render(board, :one)
 
     assert_equal "       A S S . M \n", render.subsequent_row(0)
     assert_equal "       B . . . . \n", render.subsequent_row(1)
