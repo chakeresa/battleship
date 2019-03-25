@@ -10,14 +10,18 @@ class Computer
     @name = name
     @board = Board.new(name, size)
     @ships = []
-    # TO DO: ^ why needed?
+    @state = :random
+    @last = nil
   end
+  #States are:
+  # :random = random firing pattern
+  # :inithit = We've made our first hit
+  # :direct = We know it's direction and are filling out the board
 
   def place(ship, coord_and_dir = rand_coord_and_direc)
     valid = :none
 
     coord, horizontal = coord_and_dir # allows for non-random placement for testing
-    i = 0
 
     while valid != :success do
       valid = @board.place(ship, coord, horizontal)
@@ -26,7 +30,19 @@ class Computer
     end
 
     @ships << ship
-    valid
+    return valid
+  end
+
+  def state_Random
+
+  end
+
+  def state_initialHit
+
+  end
+
+  def state_Directed
+
   end
 
   def rand_coord_and_direc
@@ -45,7 +61,7 @@ class Computer
       target = random_target(opp) if !valid
       # TO DO ^ iter 4 smart computer
     end
-    target
+    return target
   end
 
   def random_target(opp)
@@ -53,7 +69,7 @@ class Computer
   end
 
   def turn(opp, target = find_valid_target(opp))
-    puts "#{@name.lstrip.rstrip} fired on #{target}."
+    puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
 
     return turn_result(opp, target)
   end
