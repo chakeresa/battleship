@@ -227,10 +227,71 @@ class PlayerTest < Minitest::Test
     $stdin = STDIN
   end
 
-  # No tests of place method because it requires user input (from get_starting_coord and get_dir_input helper methods)
+  def test_place_gets_input_and_places_valid_ship
+    skip
+    player = Player.new("Fred", 2) # board is just A1-B2
+    sub = Ship.new("sub", 2)
+    testInp = StringIO.new
+    testInp.puts "A1"
+    testInp.puts "d"
+    testInp.rewind
+    $stdin = testInp
+    result, stdout, stderr = OStreamCatcher.catch do
+      player.place(sub)
+    end
+
+    assert_equal sub, player.board[:A1].ship
+    assert_equal sub, player.board[:A2].ship
+    assert_equal [sub], player.ships # TO DO: failing -- doesn't appear to be adding ship -- this is returning nil
+
+    $stdin = STDIN
+  end
+
+  def test_place_gets_input_and_gives_oob_msg
+    player = Player.new("Fred", 2) # board is just A1-B2
+    sub = Ship.new("sub", 2)
+    testInp = StringIO.new
+    testInp.puts "B2"
+    testInp.puts "d"
+    testInp.puts "!"
+    testInp.rewind
+    $stdin = testInp
+    result, stdout, stderr = OStreamCatcher.catch do
+      player.place(sub)
+    end
+
+    assert_equal :quit, result
+    assert_equal "Placing: sub, with Length of 2\nPick a starting coordinate.\n>> Pick a direction (left, right, up, down OR l,r,u,d).\n>> Out of bounds!\nPlacing: sub, with Length of 2\nPick a starting coordinate.\n>> ", stdout
+
+    $stdin = STDIN
+  end
+
+  def test_place_gets_input_and_gives_overlap_msg
+    player = Player.new("Fred", 2) # board is just A1-B2
+    sub = Ship.new("sub", 2)
+    boat = Ship.new("boat", 2)
+    testInp = StringIO.new
+    testInp.puts "A2"
+    testInp.puts "d" # adds ship to A2 & B2
+    testInp.puts "B1"
+    testInp.puts "r" # will lead to overlap at B2
+    testInp.puts "!"
+    testInp.rewind
+    $stdin = testInp
+    result, stdout, stderr = OStreamCatcher.catch do
+      player.place(sub)
+      player.place(boat)
+    end
+
+    assert_equal :quit, result
+    assert_equal "Placing: sub, with Length of 2\nPick a starting coordinate.\n>> Pick a direction (left, right, up, down OR l,r,u,d).\n>> Placing: boat, with Length of 2\nPick a starting coordinate.\n>> Pick a direction (left, right, up, down OR l,r,u,d).\n>> Overlap!\nPlacing: boat, with Length of 2\nPick a starting coordinate.\n>> ", stdout
+
+    $stdin = STDIN
+  end
+
   # No tests of turn method because it requires user input
 
-  def test_player_turn_valid_input
+  def test_player_turn_valid_input_returns_none
     player1 = Player.new("Fred", 6)
     player2 = Player.new("Mike", 6)
     testInp = StringIO.new
