@@ -2,7 +2,6 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/computer'
 require './lib/player'
-require './lib/cell'
 
 class ComputerTest < Minitest::Test
   def test_it_exists
@@ -15,6 +14,12 @@ class ComputerTest < Minitest::Test
     computer = Computer.new("Short Circuit")
 
     assert_instance_of Board, computer.board
+  end
+
+  def test_it_has_empty_ships_upon_init
+    computer = Computer.new("Short Circuit")
+
+    assert_equal [], computer.ships
   end
 
   def test_place_always_places_a_ship
@@ -109,5 +114,56 @@ class ComputerTest < Minitest::Test
     end
 
     assert all_coord.uniq.length == 4
+  end
+
+  def test_turn_returns_none_when_miss
+    computer1 = Computer.new("COMPUTER 1", 2) # board is only A1-B2
+    computer2 = Computer.new("COMPUTER 2", 2)
+    sub = Ship.new("sub", 2)
+
+    computer1.place(sub, [:A1, true]) # A1-A2
+    computer1.board[:B1].fire_upon
+    actual = computer2.turn_result(computer1, :B1)
+
+    assert_equal :none, actual
+  end
+
+  def test_turn_returns_none_when_hit_but_not_end_game
+    computer1 = Computer.new("COMPUTER 1", 2) # board is only A1-B2
+    computer2 = Computer.new("COMPUTER 2", 2)
+    sub = Ship.new("sub", 2)
+
+    computer1.place(sub, [:A1, true]) # A1-A2
+    computer1.board[:A2].fire_upon
+    actual = computer2.turn_result(computer1, :A2)
+
+    assert_equal :none, actual
+  end
+
+  def test_turn_returns_none_when_sunk_but_not_end_game
+    computer1 = Computer.new("COMPUTER 1", 2) # board is only A1-B2
+    computer2 = Computer.new("COMPUTER 2", 2)
+    sub = Ship.new("sub", 2)
+    tinyboat = Ship.new("tinyboat", 1)
+
+    computer1.place(sub, [:A1, true]) # A1-A2
+    computer1.place(tinyboat, [:B1, true]) # just B1
+    computer1.board[:B1].fire_upon
+    actual = computer2.turn_result(computer1, :B1)
+
+    assert_equal :none, actual
+  end
+
+  def test_turn_returns_win_when_end_game
+    computer1 = Computer.new("COMPUTER 1", 2) # board is only A1-B2
+    computer2 = Computer.new("COMPUTER 2", 2)
+    sub = Ship.new("sub", 2)
+
+    computer1.place(sub, [:A1, true]) # A1-A2
+    computer1.board[:A1].fire_upon
+    computer1.board[:A2].fire_upon
+    actual = computer2.turn_result(computer1, :A2)
+
+    assert_equal :win, actual
   end
 end

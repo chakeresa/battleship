@@ -52,9 +52,7 @@ class Computer
     opp.board.cells.keys.sample
   end
 
-  def turn(opp)
-    target = find_valid_target(opp).to_sym
-
+  def turn(opp, target = find_valid_target(opp))
     puts "#{@name.lstrip.rstrip} fired on #{target}."
 
     return turn_result(opp, target)
