@@ -21,20 +21,21 @@ def setup
     load
     valid = false
     puts "Welcome to battleship! Enter board size between 2 and 26"
-    puts "(Enter for default of 10)."
+    puts "(Enter for default of 10)." #ASDFHJKL
     puts " -- (Type \'!\' at any time to exit the program.)"
 
     while !valid do
         print ">> "; boardsize = gets.chomp
         return false if boardsize == '!'
-        if boardsize.match?(/^\d+$|^$/)
+        if boardsize.match?(/^\d+$/)
             (boardsize.to_i < 2 || boardsize.to_i > 26) ? (puts "Board size out of bounds!") : \
                                                                                                                                             valid = true
+        elsif boardsize.match?(/^$/)
+          boardsize = 10; valid = true
         else
-            puts "Invalid input."
+          puts "Invalid input."
         end
     end
-    boardsize = 10 if boardsize.match?(/^$/)
     boardsize = boardsize.to_i
     valid = false
     while !valid do
