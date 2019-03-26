@@ -94,23 +94,25 @@ class RenderTest < Minitest::Test
   end
 
   def test_first_row_their_board_returns_string_of_num_headings_for_small_board
-    board = Board.new("Board 1", 5)
+    board1 = Board.new("Board 1", 5)
+    board2 = Board.new("Board 2", 5)
     render = Render.new
-    render.render(board, false)
+    render.render(board1, board2, false)
 
-    actual = render.first_row_our_board(5)
+    actual = render.first_row_their_board(5)
 
-    assert_equal " 1  2  3  4  5 ", actual
+    assert_equal "   |       1  2  3  4  5 ", actual
   end
 
   def test_first_row_their_board_returns_string_of_num_headings_for_large_board
-    board = Board.new("Board 1", 11)
+    board1 = Board.new("Board 1", 11)
+    board2 = Board.new("Board 2", 11)
     render = Render.new
-    render.render(board, false)
+    render.render(board1, board2, false)
 
-    actual = render.first_row_our_board(11)
+    actual = render.first_row_their_board(11)
 
-    assert_equal " 1  2  3  4  5  6  7  8  9 10 11", actual
+    assert_equal "    |       1  2  3  4  5  6  7  8  9 10 11", actual
   end
 
   def test_first_row_shows_1_thru_default_board_size
@@ -129,6 +131,53 @@ class RenderTest < Minitest::Test
     render.render(board, false)
 
     assert_equal "          1  2  3  4  \n", render.first_row
+  end
+
+  def test_first_row_shows_1_thru_other_board_size_for_2_boards
+    board1 = Board.new("Board 1", 4)
+    board2 = Board.new("Board 2", 4)
+    render = Render.new
+
+    render.render(board1, board2, false)
+
+    assert_equal "   1  2  3  4    |       1  2  3  4  \n", render.first_row
+  end
+
+  def test_sub_row_ours_returns_rendered_cells_for_row_w_reveal
+    board = Board.new("Board 1", 4)
+    render = Render.new
+    sub = Ship.new("Sub", 2)
+
+    board.place(sub, :A1, true) # A1 & A2
+    render.render(board, :one)
+    actual = render.sub_row_ours("A")
+
+    assert_equal "  S  S  .  .", actual
+  end
+
+  def test_sub_row_ours_returns_rendered_cells_for_row_wo_reveal
+    board = Board.new("Board 1", 4)
+    render = Render.new
+    sub = Ship.new("Sub", 2)
+
+    board.place(sub, :A1, true) # A1 & A2
+    render.render(board, false)
+    actual = render.sub_row_ours("A")
+
+    assert_equal "  .  .  .  .", actual
+  end
+
+  def test_sub_row_theirs_returns_rendered_cells_for_row
+    board1 = Board.new("Board 1", 4)
+    board2 = Board.new("Board 1", 4)
+    render = Render.new
+    sub = Ship.new("Sub", 2)
+
+    board1.place(sub, :A1, true) # A1 & A2
+    render.render(board1, board2, :all)
+    actual = render.sub_row_ours("A")
+
+    assert_equal "  S  S  .  .", actual
   end
 
   def test_subsequent_row_renders_initial_board
@@ -234,7 +283,7 @@ class RenderTest < Minitest::Test
     assert_equal "       D  .  .  .  . \n", render.subsequent_row(3)
   end
 
-  def test_entire_reveal
+  def test_entire_render
     board = Board.new("Board 1", 5)
     render = Render.new
 
@@ -248,5 +297,4 @@ class RenderTest < Minitest::Test
 
     assert_equal expected, render.render(board, false)
   end
-
 end

@@ -55,13 +55,7 @@ class Render
       their_board_return = " " * 2
       their_board_return += " " if size >= 9
       their_board_return += " |      "
-
-      ('1'..size.to_s).each do |number|
-        their_board_return += " " + number
-        their_board_return += " " if number.to_i < 9
-      end
-
-      their_board_return
+      their_board_return += first_row_our_board(size)
     else
       ""
     end
