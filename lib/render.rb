@@ -44,8 +44,8 @@ class Render
 
     #THEIR BOARD
     if @boards.size > 1
-        first_row_return += " " * 3
-        first_row_return += " " if @boards[1].size < 10
+        first_row_return += " " * 2
+        first_row_return += " " if @boards[0].size >= 9
         first_row_return += " |"
         first_row_return += " " * 6
         ('1'..size.to_s).each do |number|

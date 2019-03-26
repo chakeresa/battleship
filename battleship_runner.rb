@@ -180,9 +180,5 @@ def game
     return true
 end
 
-def finish
-    puts "end"
-end
-
-finish if game if setup
+game if setup
 puts "Goodbye!"
