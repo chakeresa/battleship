@@ -137,12 +137,15 @@ def game
                 $victor = :two
                 break
             end
-            input = gets.chomp
-            return false if input == '!'
         end
     elsif $humanplayers == 2
         while $victor == :none
             #PLAYER ONE GO:
+            puts "\e[H\e[2J"
+            puts "PLAYER ONE'S TURN..."
+            puts "-" * ($playerone.board.size * 6 + 11)
+            puts $renderer.render($playerone.board, $playertwo.board, :one)
+            puts "-" * ($playertwo.board.size * 6 + 11)
             result = $playerone.turn($playertwo)
             return false if result == :quit
             if result == :win
@@ -154,6 +157,11 @@ def game
             puts "\e[H\e[2J"
             puts "-" * ($playerone.board.size * 6 + 11)
             #PLAYER TWO GO:
+            puts "\e[H\e[2J"
+            puts "PLAYER TWO'S TURN..."
+            puts "-" * ($playertwo.board.size * 6 + 11)
+            puts $renderer.render($playertwo.board, $playerone.board, :one)
+            puts "-" * ($playertwo.board.size * 6 + 11)
             result = $playertwo.turn($playerone)
             return false if result == :quit
             if result == :win
