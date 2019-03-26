@@ -325,27 +325,4 @@ class PlayerTest < Minitest::Test
 
     $stdin = STDIN
   end
-
-  def test_player_turn_already_hit
-    skip
-    player1 = Player.new("Fred", 6)
-    player2 = Player.new("Mike", 6)
-
-    # testInp = StringIO.new
-    # testInp.puts "B6"
-    # testInp.puts "B6"
-    # testInp.puts "!"
-    # testInp.rewind
-    # $stdin = testInp
-    #
-    # result, stdout, stderr = OStreamCatcher.catch do
-    #   player1.turn(player2); player1.turn(player2)
-    # end
-    #
-    # assert_equal "Pick a target.\n>>  --- MISS!\nPick a target.\n"\
-    #         ">> That's already been fired upon!\nPick a target.\n>> ",\
-    #         stdout
-    #
-    # $stdin = STDIN
-  end
 end
