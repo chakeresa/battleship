@@ -38,6 +38,7 @@ class Computer
     target = find_valid_target(@opp)
     puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
     result = turn_result(@opp, target)
+    @last = target
     if result == :hit
       @state = :inithit
     end
@@ -45,7 +46,39 @@ class Computer
   end
 
   def state_InitialHit
-    
+    valid = false
+    tried = [false, false, false, false]
+    direction = nil
+    while !valid
+      direction = rand(0..3)
+      case direction
+      when 0 #up
+        target = ((@last[0].ord - 1).chr + @last[1]).to_sym
+        tried[0] = true
+      when 1 #left
+        target = (@last[0] + (@last[1].to_i - 1).to_s).to_sym
+        tried[1] = true
+      when 2 #down
+        target = ((@last[0].ord + 1).chr + @last[1]).to_sym
+        tried[2]= true
+      when 3 #right
+        target = (@last[0] + (@last[1].to_i + 1).to_s).to_sym
+        tried[3] = true
+      end
+      valid = true if valid_target?(@opp, target)
+      break if tried == [true, true, true, true]
+    end
+    if valid
+      puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
+      result = turn_result(@opp, target)
+      if result == :hit
+        @state = [0, 2].include? direction ? :vertical : :horizontal
+      end
+      return result
+    else #Somehow there are no options. Give it a random go
+      @state = :random
+      return state_Random
+    end
   end
 
   def state_Directed_Horizontal
@@ -85,9 +118,9 @@ class Computer
       result = state_Random
     when :inithit
       result = state_InitialHit
-    when :directedHztl
+    when :horizontal
 
-    when :directedVert
+    when :vertical
 
     else
 
