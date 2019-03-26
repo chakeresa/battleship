@@ -72,33 +72,43 @@ class Render
     first_row_return += " \n"
   end
 
+  def sub_row_ours(letter)
+    sub_row_return = ""
+
+    @boards[0].size.times do |i|
+      number = (i + 1).to_s
+      cell = (letter + number).to_sym
+      sub_row_return += "  " + @boards[0][cell].render(@reveal == :one || @reveal == :all)
+    end
+
+    sub_row_return
+  end
+
+  def sub_row_theirs(letter)
+    sub_row_return = ""
+
+    if @boards.size > 1
+      sub_row_return += "    |    "
+      sub_row_return += letter
+
+      @boards[1].size.times do |i|
+        number = (i + 1).to_s
+        cell = (letter + number).to_sym
+        sub_row_return += "  " + @boards[1][cell].render(@reveal == :two || @reveal == :all)
+      end
+    end
+    
+    sub_row_return
+  end
+
   def subsequent_row(i)
     row_counter = i + 1 # starts at one
     letter = (64 + row_counter).chr
     row_render = ""
     row_render = " " * 7 if @boards.length == 1
     row_render += letter
-
-    #OUR BOARD
-    @boards[0].size.times do |i|
-      number = (i + 1).to_s
-      cell = (letter + number).to_sym
-      row_render += "  " + @boards[0][cell].render(@reveal == :one || @reveal == :all)
-    end
-
-    #THEIR BOARD
-    if @boards.size > 1
-        row_render += " " * 4
-        row_render += "|"
-        row_render += " " * 4
-        row_render += letter
-        @boards[1].size.times do |i|
-          number = (i + 1).to_s
-          cell = (letter + number).to_sym
-          row_render += "  " + @boards[1][cell].render(@reveal == :two || @reveal == :all)
-        end
-    end
-
+    row_render += sub_row_ours(letter)
+    row_render += sub_row_theirs(letter)
     row_render += " \n"
   end
 end
