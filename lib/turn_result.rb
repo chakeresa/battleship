@@ -1,6 +1,7 @@
 module TurnResult
   def turn_result(opp, target)
     sunk = false
+    opp.board[target].fire_upon
     if opp.board[target].empty?
       puts " --- MISS!"
       return :miss
@@ -23,7 +24,6 @@ module TurnResult
   def valid_target?(opp, target)
     if opp.board.valid_coordinate?(target.to_s)
       if !opp.board[target].fired_upon?
-        opp.board[target].fire_upon
         return true
       else
         puts "That's already been fired upon!" if self.class == Player

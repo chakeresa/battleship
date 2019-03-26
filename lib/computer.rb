@@ -34,25 +34,22 @@ class Computer
     @ships << ship
     return valid
   end
-  
-  def validate_target(target)
-      return @opp.board.cells.include?(target) && !@opp.board[target].fired_upon?
-  end
 
   def fetch_adjacent(direction)
     case direction
     when :up
       return ((@last[0].ord - 1).chr + @last[1]).to_sym
     when :right
-      return (@last[0] + (@last[1].to_i - 1).to_s).to_sym
+      return (@last[0] + (@last[1].to_i + 1).to_s).to_sym
     when :down
       return ((@last[0].ord + 1).chr + @last[1]).to_sym
     when :left
-      return ((@last[0].ord - 1).chr + @last[1]).to_sym
+      return (@last[0] + (@last[1].to_i - 1).to_s).to_sym
     end
   end
 
   def state_Random
+    puts "#{name} enters random"
     target = find_valid_target(@opp)
     puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
     result = turn_result(@opp, target)
@@ -65,33 +62,35 @@ class Computer
 
   def state_InitialHit
     valid = false
+    puts "#{name} enters inithit"
     tried = [false, false, false, false]
     direction = nil
     while !valid
-      direction = rand(3)
-      case direction
-      when 0 #up
+      direction = rand(4)
+      if direction == 0 && !tried[0] #up
         target = fetch_adjacent(:up)
         tried[0] = true
-    when 1 #right
+      elsif direction == 1 && !tried[1]#right
         target = fetch_adjacent(:right)
         tried[1] = true
-      when 2 #down
+      elsif direction == 2 && !tried[2]#down
         target = fetch_adjacent(:down)
         tried[2]= true
-      when 3 #left
+      elsif direction == 3 && !tried[3]#left
         target = fetch_adjacent(:left)
         tried[3] = true
       end
       valid = true if valid_target?(@opp, target)
+      #require 'pry'; binding.pry
+      p tried
       break if tried == [true, true, true, true]
     end
     if valid
       puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
       result = turn_result(@opp, target)
-      @last = target
       if result == :hit
-        @state = [0, 2].include? direction ? :vertical : :horizontal
+        @state = ([0, 2].include?(direction)) ? :vertical : :horizontal
+        @last = target
         @initHit = target
       end
       return result
@@ -102,45 +101,52 @@ class Computer
   end
 
   def state_Directed(horizontal = false)
+    puts "#{name} enters directed with #{horizontal}"
     target = nil
     if horizontal
       test =  fetch_adjacent(:left)
     else
       test = fetch_adjacent(:up)
     end
-    target = test if validate_target(test)
+    target = test if valid_target?(@opp, test)
     if !target
         if horizontal
           test = fetch_adjacent(:right)
         else
           test = fetch_adjacent(:down)
         end
-        target = test if validate_target(test)
+        target = test if valid_target?(@opp, test)
     end
     if !target
-        direction = rand(1)
+        direction = rand(2)
         if direction == 1
           if horizontal
             test = fetch_adjacent(:left)
-            test = fetch_adjacent(:right) if validate_target(test)
+            test = fetch_adjacent(:right) if valid_target?(@opp, test)
           else
             test = fetch_adjacent(:up)
-            test = fetch_adjacent(:down) if validate_target(test)
+            test = fetch_adjacent(:down) if valid_target?(@opp, test)
           end
         else
           if horizontal
             test = fetch_adjacent(:right)
-            test = fetch_adjacent(:left) if validate_target(test)
+            test = fetch_adjacent(:left) if valid_target?(@opp, test)
           else
             test = fetch_adjacent(:down)
-            test = fetch_adjacent(:up) if validate_target(test)
+            test = fetch_adjacent(:up) if valid_target?(@opp, test)
           end
         end
-        target = test if validate_target(test)
+        target = test if valid_target?(@opp, test)
     end
     if !target #We buggered it, give up
-        @state = :random
-        return state_Random
+      if @last == @initHit
+          @state = :random
+          return state_Random
+      end
+      @last = @initHit
+      puts "#{@last}"
+      return state_Directed
+      #require 'pry'; binding.pry
     end
     puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
     result = turn_result(@opp, target)
@@ -148,8 +154,6 @@ class Computer
       @state = :random
     elsif result == :hit
       @last = target
-    else
-      @last = @initHit
     end
     return result
   end
@@ -178,17 +182,16 @@ class Computer
   end
 
   def turn(opp)
+    @opp = opp
     case @state
     when :random
       result = state_Random
     when :inithit
       result = state_InitialHit
     when :horizontal
-
+      result = state_Directed(true)
     when :vertical
-
-    else
-
+      result = state_Directed
     end
 
     return result
