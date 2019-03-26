@@ -107,7 +107,6 @@ def game
             puts "-" * 35
             #COMPUTER TWO GO:
             puts "Computer Two's Turn..."
-            puts $renderer.render($playerone.board, $playertwo.board, :all)
             puts "-" * 35
             result = $playertwo.turn($playerone)
             if result == :win

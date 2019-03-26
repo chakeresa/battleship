@@ -1,9 +1,9 @@
 module TurnResult
   def turn_result(opp, target)
     sunk = false
+    opp.board[target].fire_upon
     refresh_render(opp)
     puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
-    opp.board[target].fire_upon
     if opp.board[target].empty?
       puts " --- MISS!"
       return :miss
