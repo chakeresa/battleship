@@ -156,6 +156,10 @@ def game
             input = gets.chomp
             return false if input == '!'
             puts "\e[H\e[2J"
+            puts "Press enter to continue."
+            input = gets.chomp
+            return false if input == '!'
+            puts "\e[H\e[2J"
             puts "-" * ($playerone.board.size * 6 + 11)
             #PLAYER TWO GO:
             puts "\e[H\e[2J"
@@ -169,6 +173,10 @@ def game
                 $victor = :two
                 break
             end
+            input = gets.chomp
+            return false if input == '!'
+            puts "\e[H\e[2J"
+            puts "Press enter to continue."
             input = gets.chomp
             return false if input == '!'
             puts "\e[H\e[2J"
