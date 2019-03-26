@@ -3,7 +3,6 @@ module TurnResult
     sunk = false
     opp.board[target].fire_upon
     refresh_render(opp)
-    puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
     if opp.board[target].empty?
       puts " --- MISS!"
       return :miss
@@ -26,9 +25,12 @@ module TurnResult
 
   def refresh_render(opp)
     puts "\e[H\e[2J"
-    puts "#{@name.lstrip.rstrip}'s Turn..."
+    puts "#{@name.lstrip.rstrip}'S TURN..."
+    puts "-" * 35
     if $humanplayers == 0
       puts $renderer.render($playerone.board, $playertwo.board, :all)
+    elsif $humanplayers == 1
+      puts $renderer.render($playerone.board, $playertwo.board, :one)
     elsif $humanplayers == 2
       if opp == $playerone
         puts $renderer.render($playerone.board, $playertwo.board, :one)

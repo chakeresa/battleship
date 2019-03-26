@@ -96,41 +96,41 @@ class Computer
 
   def state_Directed(horizontal = false)
     target = nil
-    # if horizontal
-    #   test = fetch_adjacent(:left)
-    # else
-    #   test = fetch_adjacent(:up)
-    # end
-    # target = test if valid_target?(@opp, test)
-    # if !target
-    #     if horizontal
-    #       test = fetch_adjacent(:right)
-    #     else
-    #       test = fetch_adjacent(:down)
-    #     end
-    #     target = test if valid_target?(@opp, test)
-    # end
+    if horizontal
+      test = fetch_adjacent(:left)
+    else
+      test = fetch_adjacent(:up)
+    end
+    target = test if valid_target?(@opp, test)
     if !target
-        direction = rand(2)
-        if direction == 1
-          if horizontal
-            test = fetch_adjacent(:left)
-            test = fetch_adjacent(:right) if valid_target?(@opp, test)
-          else
-            test = fetch_adjacent(:up)
-            test = fetch_adjacent(:down) if valid_target?(@opp, test)
-          end
+        if horizontal
+          test = fetch_adjacent(:right)
         else
-          if horizontal
-            test = fetch_adjacent(:right)
-            test = fetch_adjacent(:left) if valid_target?(@opp, test)
-          else
-            test = fetch_adjacent(:down)
-            test = fetch_adjacent(:up) if valid_target?(@opp, test)
-          end
+          test = fetch_adjacent(:down)
         end
         target = test if valid_target?(@opp, test)
     end
+    # if !target
+    #     direction = rand(2)
+    #     if direction == 1
+    #       if horizontal
+    #         test = fetch_adjacent(:left)
+    #         test = fetch_adjacent(:right) if valid_target?(@opp, test)
+    #       else
+    #         test = fetch_adjacent(:up)
+    #         test = fetch_adjacent(:down) if valid_target?(@opp, test)
+    #       end
+    #     else
+    #       if horizontal
+    #         test = fetch_adjacent(:right)
+    #         test = fetch_adjacent(:left) if valid_target?(@opp, test)
+    #       else
+    #         test = fetch_adjacent(:down)
+    #         test = fetch_adjacent(:up) if valid_target?(@opp, test)
+    #       end
+    #     end
+    #     target = test if valid_target?(@opp, test)
+    # end
     if !target #We buggered it, give up
       if @last == @initHit
           @state = :random

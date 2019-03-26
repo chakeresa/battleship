@@ -93,9 +93,6 @@ def game
     if $humanplayers == 0
         while $victor == :none
             #COMPUTER ONE GO:
-            # puts "Computer One's Turn..."
-            # puts $renderer.render($playerone.board, $playertwo.board, :all)
-            # puts "-" * 35
             result = $playerone.turn($playertwo)
             if result == :win
                 $victor = :one
@@ -106,8 +103,6 @@ def game
             puts "\e[H\e[2J"
             puts "-" * 35
             #COMPUTER TWO GO:
-            puts "Computer Two's Turn..."
-            puts "-" * 35
             result = $playertwo.turn($playerone)
             if result == :win
                 $victor = :two
@@ -121,7 +116,9 @@ def game
     elsif $humanplayers == 1
         while $victor == :none
             #PLAYER ONE GO:
-            puts "Player One's Turn..."
+            puts "\e[H\e[2J"
+            puts "PLAYER'S TURN..."
+            puts "-" * 35
             puts $renderer.render($playerone.board, $playertwo.board, :one)
             puts "-" * 35
             result = $playerone.turn($playertwo)
@@ -134,22 +131,17 @@ def game
             return false if input == '!'
             puts "-" * 35
             #COMPUTER GO:
-            puts "Computer Turn..."
-            #puts $renderer.render($playerone.board, :all)
-            #puts "-" * 35
             result = $playertwo.turn($playerone)
             if result == :win
                 $victor = :two
                 break
             end
-            puts "-" * 35
+            input = gets.chomp
+            return false if input == '!'
         end
     elsif $humanplayers == 2
         while $victor == :none
             #PLAYER ONE GO:
-            puts "Player One's Turn..."
-            puts $renderer.render($playerone.board, $playertwo.board, :one)
-            puts "-" * 55
             result = $playerone.turn($playertwo)
             return false if result == :quit
             if result == :win
@@ -161,9 +153,6 @@ def game
             puts "\e[H\e[2J"
             puts "-" * 55
             #PLAYER TWO GO:
-            puts "Player Two's Turn..."
-            puts $renderer.render($playertwo.board, $playerone.board, :one)
-            puts "-" * 55
             result = $playertwo.turn($playerone)
             return false if result == :quit
             if result == :win
