@@ -25,18 +25,14 @@ class Render
 
   def names
     if @boards.size == 1
-      return (" " * (5 + padding)) + @boards[0].name + "\n"
+      return (" " * padding) + @boards[0].name + "\n"
     else
       return (" " * padding) + @boards[0].name + (" " * padding) + (" " * padding) + @boards[1].name + "\n"
     end
   end
 
   def initial_padding
-    if @boards.size == 1
-      " " * 9
-    else
       " " * 2
-    end
   end
 
   def first_row_our_board(size)
@@ -63,7 +59,7 @@ class Render
 
   def first_row
     size = @boards[0].size
-    first_row_return = initial_padding
+    first_row_return = "  "
     first_row_return += first_row_our_board(size)
     first_row_return += first_row_their_board(size)
     first_row_return += " \n"
@@ -102,7 +98,6 @@ class Render
     row_counter = i + 1 # starts at one
     letter = (64 + row_counter).chr
     row_render = ""
-    row_render = " " * 7 if @boards.length == 1
     row_render += letter
     row_render += sub_row_ours(letter)
     row_render += sub_row_theirs(letter)
