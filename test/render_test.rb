@@ -38,7 +38,7 @@ class RenderTest < Minitest::Test
 
     actual = render.names
 
-    assert_equal "                       Board 1\n", actual
+    assert_equal "                  Board 1\n", actual
   end
 
   def test_names_returns_padding_and_two_names_for_two_boards
@@ -59,7 +59,7 @@ class RenderTest < Minitest::Test
 
     actual = render.initial_padding
 
-    assert_equal "         ", actual
+    assert_equal "  ", actual
   end
 
   def test_initial_padding_returns_2_spaces_for_2_boards
@@ -121,7 +121,7 @@ class RenderTest < Minitest::Test
 
     render.render(board, false)
 
-    assert_equal "          1  2  3  4  5  6  7  8  9 10 \n", render.first_row
+    assert_equal "   1  2  3  4  5  6  7  8  9 10 \n", render.first_row
   end
 
   def test_first_row_shows_1_thru_other_board_size
@@ -130,7 +130,7 @@ class RenderTest < Minitest::Test
 
     render.render(board, false)
 
-    assert_equal "          1  2  3  4  \n", render.first_row
+    assert_equal "   1  2  3  4  \n", render.first_row
   end
 
   def test_first_row_shows_1_thru_other_board_size_for_2_boards
@@ -186,10 +186,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, false)
 
-    assert_equal "       A  .  .  .  . \n", render.subsequent_row(0)
-    assert_equal "       B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "       C  .  .  .  . \n", render.subsequent_row(2)
-    assert_equal "       D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  .  .  .  . \n", render.subsequent_row(0)
+    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
+    assert_equal "C  .  .  .  . \n", render.subsequent_row(2)
+    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
   end
 
   def test_subsequent_row_renders_ships_if_reveal
@@ -205,10 +205,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "       A  S  S  .  S \n", render.subsequent_row(0)
-    assert_equal "       B  .  .  .  S \n", render.subsequent_row(1)
-    assert_equal "       C  .  .  .  S \n", render.subsequent_row(2)
-    assert_equal "       D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  S  S  .  S \n", render.subsequent_row(0)
+    assert_equal "B  .  .  .  S \n", render.subsequent_row(1)
+    assert_equal "C  .  .  .  S \n", render.subsequent_row(2)
+    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
   end
 
   def test_subsequent_row_doesnt_render_ships_if_reveal_is_false
@@ -224,10 +224,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, false) # inherent false for reveal
 
-    assert_equal "       A  .  .  .  . \n", render.subsequent_row(0)
-    assert_equal "       B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "       C  .  .  .  . \n", render.subsequent_row(2)
-    assert_equal "       D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  .  .  .  . \n", render.subsequent_row(0)
+    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
+    assert_equal "C  .  .  .  . \n", render.subsequent_row(2)
+    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
   end
 
   def test_subsequent_renders_hit_ships
@@ -241,10 +241,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "       A  H  S  .  . \n", render.subsequent_row(0)
-    assert_equal "       B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "       C  .  .  .  . \n", render.subsequent_row(2)
-    assert_equal "       D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  H  S  .  . \n", render.subsequent_row(0)
+    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
+    assert_equal "C  .  .  .  . \n", render.subsequent_row(2)
+    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
   end
 
   def test_subsequent_renders_sunken_ships
@@ -259,10 +259,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, false)
 
-    assert_equal "       A  X  X  .  . \n", render.subsequent_row(0)
-    assert_equal "       B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "       C  .  .  .  . \n", render.subsequent_row(2)
-    assert_equal "       D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  X  X  .  . \n", render.subsequent_row(0)
+    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
+    assert_equal "C  .  .  .  . \n", render.subsequent_row(2)
+    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
   end
 
   def test_subsequent_renders_misses
@@ -277,23 +277,23 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "       A  S  S  .  M \n", render.subsequent_row(0)
-    assert_equal "       B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "       C  .  M  .  . \n", render.subsequent_row(2)
-    assert_equal "       D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  S  S  .  M \n", render.subsequent_row(0)
+    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
+    assert_equal "C  .  M  .  . \n", render.subsequent_row(2)
+    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
   end
 
   def test_entire_render
     board = Board.new("Board 1", 5)
     render = Render.new
 
-    expected = "            Board 1\n"
-    expected += "          1  2  3  4  5  \n"
-    expected += "       A  .  .  .  .  . \n"
-    expected += "       B  .  .  .  .  . \n"
-    expected += "       C  .  .  .  .  . \n"
-    expected += "       D  .  .  .  .  . \n"
-    expected += "       E  .  .  .  .  . \n"
+    expected = "       Board 1\n"
+    expected += "   1  2  3  4  5  \n"
+    expected += "A  .  .  .  .  . \n"
+    expected += "B  .  .  .  .  . \n"
+    expected += "C  .  .  .  .  . \n"
+    expected += "D  .  .  .  .  . \n"
+    expected += "E  .  .  .  .  . \n"
 
     assert_equal expected, render.render(board, false)
   end

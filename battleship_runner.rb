@@ -21,19 +21,21 @@ def setup
     load
     valid = false
     puts "Welcome to battleship! Enter board size between 2 and 26"
+    puts "(Enter for default of 10)."
     puts " -- (Type \'!\' at any time to exit the program.)"
 
     while !valid do
         print ">> "; boardsize = gets.chomp
         return false if boardsize == '!'
-        if boardsize.match?(/^\d+$|^$/)
+        if boardsize.match?(/^\d+$/)
             (boardsize.to_i < 2 || boardsize.to_i > 26) ? (puts "Board size out of bounds!") : \
                                                                                                                                             valid = true
+        elsif boardsize.match?(/^$/)
+          boardsize = 10; valid = true
         else
-            puts "Invalid input."
+          puts "Invalid input."
         end
     end
-    boardsize = 10 if boardsize.match?(/^$/)
     boardsize = boardsize.to_i
     valid = false
     while !valid do
@@ -55,7 +57,7 @@ def setup
         $oneships.each do |ship|
             puts "\e[H\e[2J"
             puts $renderer.render($playerone.board, :all)
-            puts "-" * 35
+            puts "-" * (boardsize * 6 + 11)
             result = $playerone.place(ship)
             return false if result == :quit
         end
@@ -67,7 +69,7 @@ def setup
         $oneships.each do |ship|
             puts "\e[H\e[2J"
             puts $renderer.render($playerone.board, :all)
-            puts "-" * 35
+            puts "-" * (boardsize * 6 + 11)
             result = $playerone.place(ship)
             return false if result == :quit
         end
@@ -77,7 +79,7 @@ def setup
         $twoships.each do |ship|
             puts "\e[H\e[2J"
             puts $renderer.render($playertwo.board, :all)
-            puts "-" * 35
+            puts "-" * (boardsize * 6 + 11)
             result = $playertwo.place(ship)
             return false if result == :quit
         end
@@ -91,9 +93,6 @@ def game
     if $humanplayers == 0
         while $victor == :none
             #COMPUTER ONE GO:
-            puts "Computer One's Turn..."
-            puts $renderer.render($playerone.board, $playertwo.board, :all)
-            puts "-" * 35
             result = $playerone.turn($playertwo)
             if result == :win
                 $victor = :one
@@ -102,11 +101,8 @@ def game
             input = gets.chomp
             return false if input == '!'
             puts "\e[H\e[2J"
-            puts "-" * 35
+            puts "-" * ($playerone.board.size * 6 + 11)
             #COMPUTER TWO GO:
-            puts "Computer Two's Turn..."
-            puts $renderer.render($playerone.board, $playertwo.board, :all)
-            puts "-" * 35
             result = $playertwo.turn($playerone)
             if result == :win
                 $victor = :two
@@ -115,14 +111,16 @@ def game
             input = gets.chomp
             return false if input == '!'
             puts "\e[H\e[2J"
-            puts "-" * 35
+            puts "-" * ($playertwo.board.size * 6 + 11)
         end
     elsif $humanplayers == 1
         while $victor == :none
             #PLAYER ONE GO:
-            puts "Player One's Turn..."
+            puts "\e[H\e[2J"
+            puts "PLAYER'S TURN..."
+            puts "-" * ($playerone.board.size * 6 + 11)
             puts $renderer.render($playerone.board, $playertwo.board, :one)
-            puts "-" * 35
+            puts "-" * ($playertwo.board.size * 6 + 11)
             result = $playerone.turn($playertwo)
             return false if result == :quit
             if result == :win
@@ -132,24 +130,22 @@ def game
             input = gets.chomp
             return false if input == '!'
             puts "\e[H\e[2J"
-            puts "-" * 35
+            puts "-" * ($playerone.board.size * 6 + 11)
             #COMPUTER GO:
-            puts "Computer Turn..."
-            #puts $renderer.render($playerone.board, :all)
-            #puts "-" * 35
             result = $playertwo.turn($playerone)
             if result == :win
                 $victor = :two
                 break
             end
-            puts "-" * 35
         end
     elsif $humanplayers == 2
         while $victor == :none
             #PLAYER ONE GO:
-            puts "Player One's Turn..."
+            puts "\e[H\e[2J"
+            puts "PLAYER ONE'S TURN..."
+            puts "-" * ($playerone.board.size * 6 + 11)
             puts $renderer.render($playerone.board, $playertwo.board, :one)
-            puts "-" * 55
+            puts "-" * ($playertwo.board.size * 6 + 11)
             result = $playerone.turn($playertwo)
             return false if result == :quit
             if result == :win
@@ -159,11 +155,13 @@ def game
             input = gets.chomp
             return false if input == '!'
             puts "\e[H\e[2J"
-            puts "-" * 55
+            puts "-" * ($playerone.board.size * 6 + 11)
             #PLAYER TWO GO:
-            puts "Player Two's Turn..."
+            puts "\e[H\e[2J"
+            puts "PLAYER TWO'S TURN..."
+            puts "-" * ($playertwo.board.size * 6 + 11)
             puts $renderer.render($playertwo.board, $playerone.board, :one)
-            puts "-" * 55
+            puts "-" * ($playertwo.board.size * 6 + 11)
             result = $playertwo.turn($playerone)
             return false if result == :quit
             if result == :win
@@ -173,7 +171,7 @@ def game
             input = gets.chomp
             return false if input == '!'
             puts "\e[H\e[2J"
-            puts "-" * 55
+            puts "-" * ($playertwo.board.size * 6 + 11)
         end
     end
     return true
