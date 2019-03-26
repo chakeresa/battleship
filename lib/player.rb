@@ -76,7 +76,7 @@ class Player
     valid = false
     while !valid do
       puts "Pick a target."
-      print ">> "; target = gets.chomp
+      print ">> "; target = gets.chomp.upcase
       return :quit if target == '!'
       target = target.to_sym
       valid = valid_target?(opp, target)

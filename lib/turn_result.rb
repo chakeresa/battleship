@@ -3,7 +3,7 @@ module TurnResult
     sunk = false
     opp.board[target].fire_upon
     refresh_render(opp)
-    puts "#{@name} fired upon #{target}."
+    puts "#{@name.lstrip.rstrip} fired upon #{target}."
     if opp.board[target].empty?
       puts " --- MISS!"
       return :miss

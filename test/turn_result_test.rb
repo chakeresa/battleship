@@ -3,6 +3,7 @@ require 'minitest/pride'
 require './lib/turn_result' # also holds DummyTurnResult
 require './lib/player'
 require './lib/computer'
+$humanplayers = 1
 
 class TurnResultTest < Minitest::Test
   def test_it_exists
