@@ -70,19 +70,17 @@ class Computer
       if direction == 0 && !tried[0] #up
         target = fetch_adjacent(:up)
         tried[0] = true
-      elsif direction == 1 && !tried[1]#right
+      elsif direction == 1 && !tried[1] #right
         target = fetch_adjacent(:right)
         tried[1] = true
-      elsif direction == 2 && !tried[2]#down
+      elsif direction == 2 && !tried[2] #down
         target = fetch_adjacent(:down)
         tried[2]= true
-      elsif direction == 3 && !tried[3]#left
+      elsif direction == 3 && !tried[3] #left
         target = fetch_adjacent(:left)
         tried[3] = true
       end
       valid = true if valid_target?(@opp, target)
-      #require 'pry'; binding.pry
-      p tried
       break if tried == [true, true, true, true]
     end
     if valid
@@ -104,7 +102,7 @@ class Computer
     puts "#{name} enters directed with #{horizontal}"
     target = nil
     if horizontal
-      test =  fetch_adjacent(:left)
+      test = fetch_adjacent(:left)
     else
       test = fetch_adjacent(:up)
     end
@@ -118,6 +116,7 @@ class Computer
         target = test if valid_target?(@opp, test)
     end
     if !target
+        puts "\n\n\n\nRANDOM\n\n"
         direction = rand(2)
         if direction == 1
           if horizontal

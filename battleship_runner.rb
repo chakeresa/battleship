@@ -132,7 +132,6 @@ def game
             end
             input = gets.chomp
             return false if input == '!'
-            puts "\e[H\e[2J"
             puts "-" * 35
             #COMPUTER GO:
             puts "Computer Turn..."

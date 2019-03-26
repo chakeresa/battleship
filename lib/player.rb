@@ -17,7 +17,7 @@ class Player
     while !valid
       puts "Placing: " + ship.name + ", with Length of " + ship.length.to_s
       puts "Pick a starting coordinate."
-      print ">> "; coord = gets.chomp
+      print ">> "; coord = gets.chomp.upcase
       return :quit if coord == '!'
 
       if @board.cells.keys.include?(coord.to_sym)
