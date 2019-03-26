@@ -50,7 +50,7 @@ class Computer
     tried = [false, false, false, false]
     direction = nil
     while !valid
-      direction = rand(0..3)
+      direction = rand(3)
       case direction
       when 0 #up
         target = ((@last[0].ord - 1).chr + @last[1]).to_sym
@@ -71,6 +71,7 @@ class Computer
     if valid
       puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
       result = turn_result(@opp, target)
+      @last = target
       if result == :hit
         @state = [0, 2].include? direction ? :vertical : :horizontal
       end
@@ -82,7 +83,26 @@ class Computer
   end
 
   def state_Directed_Horizontal
+    target = ((@last[0].ord - 1).chr + @last[1]).to_sym
+    if @opp.board.cells.include? target && !@opp.board[target].fired_upon?
+      puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
+      result = turn_result(@opp, target)
+      if result == :sunk
+        @state = :random
+      elsif result == :hit
 
+      return result
+    end
+    target = ((@last[0].ord + 1).chr + @last[1]).to_sym
+    if @opp.board.cells.include? target && !@opp.board[target].fired_upon?
+
+    end
+    direction = rand(1)
+    if direction == 1
+
+    else
+
+    end
   end
 
   def state_Directed_Vertical
