@@ -27,7 +27,7 @@ module TurnResult
   def refresh_render(opp)
     puts "\e[H\e[2J"
     puts "#{@name.lstrip.rstrip}'S TURN..."
-    puts "-" * 35
+    puts "-" * ($boardsize * 6 + 11)
     if $humanplayers == 0
       puts $renderer.render($playerone.board, $playertwo.board, :all)
     elsif $humanplayers == 1
@@ -39,7 +39,7 @@ module TurnResult
         puts $renderer.render($playertwo.board, $playerone.board, :one)
       end
     end
-    puts "-" * 35
+    puts "-" * ($boardsize * 6 + 11)
   end
 
   def valid_target?(opp, target)
