@@ -1,19 +1,21 @@
 module TurnResult
   def turn_result(opp, target)
+    sunk = false
     if opp.board[target].empty?
       puts " --- MISS!"
-      return :none
+      return :miss
     else
       puts " --- HIT!"
 
       if opp.board[target].ship.sunk?
-        puts "#{@name.lstrip.rstrip} sunk #{opp.name.lstrip.rstrip}'s #{opp.board[target].ship.name}!!!"
+        puts "#{@name.lstrip.rstrip.capitalize} sunk #{opp.name.lstrip.rstrip.capitalize}'s #{opp.board[target].ship.name}!!!"
+        sunk = true
       end
 
       if opp.ships.all? {|ship| ship.sunk?}
         return :win
       else
-        return :none
+        return sunk ? :sunk : :hit
       end
     end
   end

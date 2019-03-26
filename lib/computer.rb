@@ -12,6 +12,7 @@ class Computer
     @ships = []
     @state = :random
     @last = nil
+    @opp = nil
   end
   #States are:
   # :random = random firing pattern
@@ -34,14 +35,24 @@ class Computer
   end
 
   def state_Random
+    target = find_valid_target(@opp)
+    puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
+    result = turn_result(@opp, target)
+    if result == :hit
+      @state = :inithit
+    end
+    return result
+  end
+
+  def state_InitialHit
+    
+  end
+
+  def state_Directed_Horizontal
 
   end
 
-  def state_initialHit
-
-  end
-
-  def state_Directed
+  def state_Directed_Vertical
 
   end
 
@@ -68,9 +79,20 @@ class Computer
     opp.board.cells.keys.sample
   end
 
-  def turn(opp, target = find_valid_target(opp))
-    puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
+  def turn(opp)
+    case @state
+    when :random
+      result = state_Random
+    when :inithit
+      result = state_InitialHit
+    when :directedHztl
 
-    return turn_result(opp, target)
+    when :directedVert
+
+    else
+
+    end
+
+    return result
   end
 end
