@@ -28,32 +28,47 @@ class Render
     end
   end
 
+  def initial_padding
+    if @boards.size == 1
+      " " * 9
+    else
+      " " * 2
+    end
+  end
+
+  def first_row_our_board(size)
+    our_board_return = ""
+
+    ('1'..size.to_s).each do |number|
+      our_board_return += " " + number
+      our_board_return += " " if number.to_i < 9
+    end
+
+    our_board_return
+  end
+
+  def first_row_their_board(size)
+    if @boards.size > 1
+      their_board_return = " " * 2
+      their_board_return += " " if size >= 9
+      their_board_return += " |      "
+
+      ('1'..size.to_s).each do |number|
+        their_board_return += " " + number
+        their_board_return += " " if number.to_i < 9
+      end
+
+      their_board_return
+    else
+      ""
+    end
+  end
+
   def first_row
     size = @boards[0].size
-    if @boards.size == 1
-        first_row_return = " " * 9
-    else
-        first_row_return = "  "
-    end
-
-    #OUR BOARD
-    ('1'..size.to_s).each do |number|
-      first_row_return += " " + number
-      first_row_return += " " if number.to_i < 9
-    end
-
-    #THEIR BOARD
-    if @boards.size > 1
-        first_row_return += " " * 2
-        first_row_return += " " if @boards[0].size >= 9
-        first_row_return += " |"
-        first_row_return += " " * 6
-        ('1'..size.to_s).each do |number|
-          first_row_return += " " + number
-          first_row_return += " " if number.to_i < 9
-        end
-    end
-
+    first_row_return = initial_padding
+    first_row_return += first_row_our_board(size)
+    first_row_return += first_row_their_board(size)
     first_row_return += " \n"
   end
 

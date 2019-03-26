@@ -21,7 +21,6 @@ def setup
     load
     valid = false
     puts "Welcome to battleship! Enter board size between 2 and 26"
-    puts "(Enter for default of 10)."
     puts " -- (Type \'!\' at any time to exit the program.)"
 
     while !valid do
