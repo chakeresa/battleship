@@ -3,7 +3,6 @@ require './lib/board'
 class Render
 
   def render(*boards, reveal)
-    # TO DO: ^ tests are very unhappy -- probably have to put reveal first
     @boards = boards
     @reveal = reveal
     render_return = names
@@ -17,34 +16,41 @@ class Render
   end
 
   def names
-      if @boards.size == 1
-          return (" " * 12) + @boards[0].name + "\n"
-      else
-          return (" " * 5) + @boards[0].name + (" " * 8) + "|" + (" " * 9) + @boards[1].name + "\n"
-      end
+    first_name_length = @boards[0].name.length
+    board_size = @boards[0].size
+    board_render_width = 7 + 3 * board_size
+    padding = (board_render_width - first_name_length) / 2
+    padding = [padding, 0].max
+    if @boards.size == 1
+      return (" " * (5 + padding)) + @boards[0].name + "\n"
+    else
+      return (" " * padding) + @boards[0].name + (" " * padding) + (" " * padding) + @boards[1].name + "\n"
+    end
   end
 
   def first_row
     size = @boards[0].size
     if @boards.size == 1
-        first_row_return = " " * 8
+        first_row_return = " " * 9
     else
-        first_row_return = " "
+        first_row_return = "  "
     end
 
     #OUR BOARD
     ('1'..size.to_s).each do |number|
       first_row_return += " " + number
+      first_row_return += " " if number.to_i < 9
     end
 
     #THEIR BOARD
     if @boards.size > 1
         first_row_return += " " * 3
         first_row_return += " " if @boards[1].size < 10
-        first_row_return += "|"
-        first_row_return += " " * 5
+        first_row_return += " |"
+        first_row_return += " " * 6
         ('1'..size.to_s).each do |number|
           first_row_return += " " + number
+          first_row_return += " " if number.to_i < 9
         end
     end
 
@@ -62,7 +68,7 @@ class Render
     @boards[0].size.times do |i|
       number = (i + 1).to_s
       cell = (letter + number).to_sym
-      row_render += " " + @boards[0][cell].render(@reveal == :one || @reveal == :all)
+      row_render += "  " + @boards[0][cell].render(@reveal == :one || @reveal == :all)
     end
 
     #THEIR BOARD
@@ -74,7 +80,7 @@ class Render
         @boards[1].size.times do |i|
           number = (i + 1).to_s
           cell = (letter + number).to_sym
-          row_render += " " + @boards[1][cell].render(@reveal == :two || @reveal == :all)
+          row_render += "  " + @boards[1][cell].render(@reveal == :two || @reveal == :all)
         end
     end
 
