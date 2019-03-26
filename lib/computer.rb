@@ -13,6 +13,7 @@ class Computer
     @state = :random
     @last = nil
     @opp = nil
+    @initHit = nil
   end
   #States are:
   # :random = random firing pattern
@@ -32,6 +33,23 @@ class Computer
 
     @ships << ship
     return valid
+  end
+  
+  def validate_target(target)
+      return @opp.board.cells.include?(target) && !@opp.board[target].fired_upon?
+  end
+
+  def fetch_adjacent(direction)
+    case direction
+    when :up
+      return ((@last[0].ord - 1).chr + @last[1]).to_sym
+    when :right
+      return (@last[0] + (@last[1].to_i - 1).to_s).to_sym
+    when :down
+      return ((@last[0].ord + 1).chr + @last[1]).to_sym
+    when :left
+      return ((@last[0].ord - 1).chr + @last[1]).to_sym
+    end
   end
 
   def state_Random
@@ -53,16 +71,16 @@ class Computer
       direction = rand(3)
       case direction
       when 0 #up
-        target = ((@last[0].ord - 1).chr + @last[1]).to_sym
+        target = fetch_adjacent(:up)
         tried[0] = true
-      when 1 #left
-        target = (@last[0] + (@last[1].to_i - 1).to_s).to_sym
+    when 1 #right
+        target = fetch_adjacent(:right)
         tried[1] = true
       when 2 #down
-        target = ((@last[0].ord + 1).chr + @last[1]).to_sym
+        target = fetch_adjacent(:down)
         tried[2]= true
-      when 3 #right
-        target = (@last[0] + (@last[1].to_i + 1).to_s).to_sym
+      when 3 #left
+        target = fetch_adjacent(:left)
         tried[3] = true
       end
       valid = true if valid_target?(@opp, target)
@@ -74,6 +92,7 @@ class Computer
       @last = target
       if result == :hit
         @state = [0, 2].include? direction ? :vertical : :horizontal
+        @initHit = target
       end
       return result
     else #Somehow there are no options. Give it a random go
@@ -82,31 +101,57 @@ class Computer
     end
   end
 
-  def state_Directed_Horizontal
-    target = ((@last[0].ord - 1).chr + @last[1]).to_sym
-    if @opp.board.cells.include? target && !@opp.board[target].fired_upon?
-      puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
-      result = turn_result(@opp, target)
-      if result == :sunk
-        @state = :random
-      elsif result == :hit
-
-      return result
-    end
-    target = ((@last[0].ord + 1).chr + @last[1]).to_sym
-    if @opp.board.cells.include? target && !@opp.board[target].fired_upon?
-
-    end
-    direction = rand(1)
-    if direction == 1
-
+  def state_Directed(horizontal = false)
+    target = nil
+    if horizontal
+      test =  fetch_adjacent(:left)
     else
-
+      test = fetch_adjacent(:up)
     end
-  end
-
-  def state_Directed_Vertical
-
+    target = test if validate_target(test)
+    if !target
+        if horizontal
+          test = fetch_adjacent(:right)
+        else
+          test = fetch_adjacent(:down)
+        end
+        target = test if validate_target(test)
+    end
+    if !target
+        direction = rand(1)
+        if direction == 1
+          if horizontal
+            test = fetch_adjacent(:left)
+            test = fetch_adjacent(:right) if validate_target(test)
+          else
+            test = fetch_adjacent(:up)
+            test = fetch_adjacent(:down) if validate_target(test)
+          end
+        else
+          if horizontal
+            test = fetch_adjacent(:right)
+            test = fetch_adjacent(:left) if validate_target(test)
+          else
+            test = fetch_adjacent(:down)
+            test = fetch_adjacent(:up) if validate_target(test)
+          end
+        end
+        target = test if validate_target(test)
+    end
+    if !target #We buggered it, give up
+        @state = :random
+        return state_Random
+    end
+    puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
+    result = turn_result(@opp, target)
+    if result == :sunk
+      @state = :random
+    elsif result == :hit
+      @last = target
+    else
+      @last = @initHit
+    end
+    return result
   end
 
   def rand_coord_and_direc
