@@ -19,8 +19,9 @@ end
 
 def setup
     load
+    longship = $oneships.max {|a,b| a.length <=> b.length}
     valid = false
-    puts "Welcome to battleship! Enter board size between 2 and 26"
+    puts "Welcome to battleship! Enter board size between #{longship.length} and 26"
     puts "(Enter for default of 10)."
     puts " -- (Type \'!\' at any time to exit the program.)"
 
@@ -28,8 +29,8 @@ def setup
         print ">> "; boardsize = gets.chomp
         return false if boardsize == '!'
         if boardsize.match?(/^\d+$/)
-            (boardsize.to_i < 2 || boardsize.to_i > 26) ? (puts "Board size out of bounds!") : \
-                                                                                                                                            valid = true
+            (boardsize.to_i < longship.length || boardsize.to_i > 26) ? \
+            (puts "Board size out of bounds!") : valid = true
         elsif boardsize.match?(/^$/)
           boardsize = 10; valid = true
         else
