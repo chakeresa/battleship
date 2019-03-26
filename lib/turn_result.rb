@@ -15,6 +15,7 @@ module TurnResult
       end
 
       if opp.ships.all? {|ship| ship.sunk?}
+        puts "#{@name.lstrip.rstrip} wins!!!"
         return :win
       else
         return sunk ? :sunk : :hit

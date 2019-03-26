@@ -21,7 +21,7 @@ def setup
     load
     valid = false
     puts "Welcome to battleship! Enter board size between 2 and 26"
-    puts "(Enter for default of 10)." #ASDFHJKL
+    puts "(Enter for default of 10)."
     puts " -- (Type \'!\' at any time to exit the program.)"
 
     while !valid do
@@ -180,9 +180,5 @@ def game
     return true
 end
 
-def finish
-    puts "end"
-end
-
-finish if game if setup
+game if setup
 puts "Goodbye!"

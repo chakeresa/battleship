@@ -87,7 +87,6 @@ class TurnResultTest < Minitest::Test
   def test_valid_target_returns_false_if_invalid_coordinate
     mixin = DummyTurnResult.new
     computer = Computer.new("COMPUTER 1", 2) # board is only A1-B2
-    sub = Ship.new("sub", 2)
 
     actual = mixin.valid_target?(computer, :C3)
 

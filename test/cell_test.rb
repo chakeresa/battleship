@@ -27,7 +27,6 @@ class CellTest < Minitest::Test
 
   def test_it_is_not_fired_upon_initially
     cell = Cell.new
-    boat = Ship.new("Boot", 5)
 
     refute cell.fired_upon?
   end
