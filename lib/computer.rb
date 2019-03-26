@@ -49,7 +49,6 @@ class Computer
   end
 
   def state_Random
-    puts "#{name} enters random"
     target = find_valid_target(@opp)
     puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
     result = turn_result(@opp, target)
@@ -62,6 +61,7 @@ class Computer
 
   def state_InitialHit
     valid = false
+    @initHit = @last
     puts "#{name} enters inithit"
     tried = [false, false, false, false]
     direction = nil
@@ -89,7 +89,6 @@ class Computer
       if result == :hit
         @state = ([0, 2].include?(direction)) ? :vertical : :horizontal
         @last = target
-        @initHit = target
       end
       return result
     else #Somehow there are no options. Give it a random go
@@ -101,22 +100,21 @@ class Computer
   def state_Directed(horizontal = false)
     puts "#{name} enters directed with #{horizontal}"
     target = nil
-    if horizontal
-      test = fetch_adjacent(:left)
-    else
-      test = fetch_adjacent(:up)
-    end
-    target = test if valid_target?(@opp, test)
+    # if horizontal
+    #   test = fetch_adjacent(:left)
+    # else
+    #   test = fetch_adjacent(:up)
+    # end
+    # target = test if valid_target?(@opp, test)
+    # if !target
+    #     if horizontal
+    #       test = fetch_adjacent(:right)
+    #     else
+    #       test = fetch_adjacent(:down)
+    #     end
+    #     target = test if valid_target?(@opp, test)
+    # end
     if !target
-        if horizontal
-          test = fetch_adjacent(:right)
-        else
-          test = fetch_adjacent(:down)
-        end
-        target = test if valid_target?(@opp, test)
-    end
-    if !target
-        puts "\n\n\n\nRANDOM\n\n"
         direction = rand(2)
         if direction == 1
           if horizontal
@@ -143,9 +141,7 @@ class Computer
           return state_Random
       end
       @last = @initHit
-      puts "#{@last}"
-      return state_Directed
-      #require 'pry'; binding.pry
+      return state_Directed(horizontal)
     end
     puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
     result = turn_result(@opp, target)

@@ -92,9 +92,9 @@ def game
     if $humanplayers == 0
         while $victor == :none
             #COMPUTER ONE GO:
-            puts "Computer One's Turn..."
-            puts $renderer.render($playerone.board, $playertwo.board, :all)
-            puts "-" * 35
+            # puts "Computer One's Turn..."
+            # puts $renderer.render($playerone.board, $playertwo.board, :all)
+            # puts "-" * 35
             result = $playerone.turn($playertwo)
             if result == :win
                 $victor = :one

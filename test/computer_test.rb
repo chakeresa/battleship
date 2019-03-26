@@ -96,7 +96,9 @@ class ComputerTest < Minitest::Test
 
     computer2.place(sub, [:A1, true]) # A1 and A2
     computer1.find_valid_target(computer2, :A1)
+    computer1.turn_result(computer2, :A1)
     computer1.find_valid_target(computer2, :A2) # sinks computer2's sub
+    computer1.turn_result(computer2, :A2)
     actual = computer1.find_valid_target(computer2)
 
     assert actual == :B1 || actual == :B2
@@ -116,7 +118,7 @@ class ComputerTest < Minitest::Test
     assert all_coord.uniq.length == 4
   end
 
-  def test_turn_returns_none_when_miss
+  def test_turn_returns_miss_when_miss
     computer1 = Computer.new("COMPUTER 1", 2) # board is only A1-B2
     computer2 = Computer.new("COMPUTER 2", 2)
     sub = Ship.new("sub", 2)
@@ -125,22 +127,21 @@ class ComputerTest < Minitest::Test
     computer1.board[:B1].fire_upon
     actual = computer2.turn_result(computer1, :B1)
 
-    assert_equal :none, actual
+    assert_equal :miss, actual
   end
 
-  def test_turn_returns_none_when_hit_but_not_end_game
+  def test_turn_returns_hit_when_hit_but_not_end_game
     computer1 = Computer.new("COMPUTER 1", 2) # board is only A1-B2
     computer2 = Computer.new("COMPUTER 2", 2)
     sub = Ship.new("sub", 2)
 
     computer1.place(sub, [:A1, true]) # A1-A2
-    computer1.board[:A2].fire_upon
     actual = computer2.turn_result(computer1, :A2)
 
-    assert_equal :none, actual
+    assert_equal :hit, actual
   end
 
-  def test_turn_returns_none_when_sunk_but_not_end_game
+  def test_turn_returns_sunk_when_sunk_but_not_end_game
     computer1 = Computer.new("COMPUTER 1", 2) # board is only A1-B2
     computer2 = Computer.new("COMPUTER 2", 2)
     sub = Ship.new("sub", 2)
@@ -148,10 +149,9 @@ class ComputerTest < Minitest::Test
 
     computer1.place(sub, [:A1, true]) # A1-A2
     computer1.place(tinyboat, [:B1, true]) # just B1
-    computer1.board[:B1].fire_upon
     actual = computer2.turn_result(computer1, :B1)
 
-    assert_equal :none, actual
+    assert_equal :sunk, actual
   end
 
   def test_turn_returns_win_when_end_game
@@ -161,7 +161,6 @@ class ComputerTest < Minitest::Test
 
     computer1.place(sub, [:A1, true]) # A1-A2
     computer1.board[:A1].fire_upon
-    computer1.board[:A2].fire_upon
     actual = computer2.turn_result(computer1, :A2)
 
     assert_equal :win, actual
