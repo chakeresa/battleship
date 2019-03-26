@@ -50,7 +50,6 @@ class Computer
 
   def state_Random
     target = find_valid_target(@opp)
-    puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
     result = turn_result(@opp, target)
     @last = target
     if result == :hit
@@ -62,7 +61,6 @@ class Computer
   def state_InitialHit
     valid = false
     @initHit = @last
-    puts "#{name} enters inithit"
     tried = [false, false, false, false]
     direction = nil
     while !valid
@@ -84,7 +82,6 @@ class Computer
       break if tried == [true, true, true, true]
     end
     if valid
-      puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
       result = turn_result(@opp, target)
       if result == :hit
         @state = ([0, 2].include?(direction)) ? :vertical : :horizontal
@@ -98,7 +95,6 @@ class Computer
   end
 
   def state_Directed(horizontal = false)
-    puts "#{name} enters directed with #{horizontal}"
     target = nil
     # if horizontal
     #   test = fetch_adjacent(:left)
@@ -143,7 +139,6 @@ class Computer
       @last = @initHit
       return state_Directed(horizontal)
     end
-    puts "#{@name.lstrip.rstrip.capitalize} fired on #{target}."
     result = turn_result(@opp, target)
     if result == :sunk
       @state = :random
