@@ -15,12 +15,15 @@ class Render
     render_return
   end
 
-  def names
+  def padding
     first_name_length = @boards[0].name.length
     board_size = @boards[0].size
     board_render_width = 7 + 3 * board_size
-    padding = (board_render_width - first_name_length) / 2
-    padding = [padding, 0].max
+    padding_return = (board_render_width - first_name_length) / 2
+    padding_return = [padding_return, 0].max
+  end
+
+  def names
     if @boards.size == 1
       return (" " * (5 + padding)) + @boards[0].name + "\n"
     else
@@ -97,7 +100,7 @@ class Render
         sub_row_return += "  " + @boards[1][cell].render(@reveal == :two || @reveal == :all)
       end
     end
-    
+
     sub_row_return
   end
 
