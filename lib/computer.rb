@@ -38,13 +38,13 @@ class Computer
   def fetch_adjacent(direction)
     case direction
     when :up
-      return ((@last[0].ord - 1).chr + @last[1]).to_sym
+      return ((@last[0].ord - 1).chr + @last[1..-1]).to_sym
     when :right
-      return (@last[0] + (@last[1].to_i + 1).to_s).to_sym
+      return (@last[0] + (@last[1..-1].to_i + 1).to_s).to_sym
     when :down
-      return ((@last[0].ord + 1).chr + @last[1]).to_sym
+      return ((@last[0].ord + 1).chr + @last[1..-1]).to_sym
     when :left
-      return (@last[0] + (@last[1].to_i - 1).to_s).to_sym
+      return (@last[0] + (@last[1..-1].to_i - 1).to_s).to_sym
     end
   end
 

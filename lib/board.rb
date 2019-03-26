@@ -32,12 +32,12 @@ class Board
 
     def out_of_bounds?(ship, coord, horizontal)
       #Starting coordinate out of bounds?
-      return true if coord[0] > (64 + @size).chr || coord[1].to_i > @size
+      return true if coord[0] > (64 + @size).chr || coord[1..-1].to_i > @size
 
       #Ending coordinate out of bounds?
       if horizontal
           #We only need to check the furthest coord from out start.
-          return coord[1].to_i + ship.length - 1 > @size
+          return coord[1..-1].to_i + ship.length - 1 > @size
       else
           return (coord[0].ord + ship.length - 1).chr > (64 + @size).chr
       end
@@ -47,13 +47,13 @@ class Board
     def overlap?(ship, coord, horizontal)
       if horizontal
           0.upto(ship.length - 1) do |i|
-              at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
+              at = (coord[0] + (coord[1..-1].to_i + i).to_s).to_sym
               return true if !@cells.include?(at) # needed for player's ship placement starting on board but running off to the left
               return true if !(@cells[at].empty?)
           end
       else
           0.upto(ship.length - 1) do |i|
-              at = ((coord[0].ord + i).chr + coord[1]).to_sym
+              at = ((coord[0].ord + i).chr + coord[1..-1]).to_sym
               return true if !@cells.include?(at) # needed for player's ship placement starting on board but running off the top
               return true if !(@cells[at].empty?)
           end
@@ -64,14 +64,14 @@ class Board
 
     def add_horizontal_ship(ship, coord)
       0.upto(ship.length - 1) do |i|
-          at = (coord[0] + (coord[1].to_i + i).to_s).to_sym
+          at = (coord[0] + (coord[1..-1].to_i + i).to_s).to_sym
           @cells[at].place(ship)
       end
     end
 
     def add_vertical_ship(ship, coord)
       0.upto(ship.length - 1) do |i|
-          at = ((coord[0].ord + i).chr + coord[1]).to_sym
+          at = ((coord[0].ord + i).chr + coord[1..-1]).to_sym
           @cells[at].place(ship)
       end
     end
