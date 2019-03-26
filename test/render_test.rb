@@ -4,10 +4,113 @@ require './lib/render'
 
 class RenderTest < Minitest::Test
   def test_it_exists
-    board = Board.new("Board 1", 4)
     render = Render.new
 
     assert_instance_of Render, render
+  end
+
+  def test_padding_returns_a_non_negative_int_for_big_board
+    board = Board.new("Board 1", 15)
+    render = Render.new
+    render.render(board, false)
+
+    actual = render.padding
+
+    assert_instance_of Integer, actual
+    assert actual >= 0
+  end
+
+  def test_padding_returns_a_non_negative_int_for_small_board
+    board = Board.new("Board 1", 3)
+    render = Render.new
+    render.render(board, false)
+
+    actual = render.padding
+
+    assert_instance_of Integer, actual
+    assert actual >= 0
+  end
+
+  def test_names_returns_padding_and_one_name_for_one_board
+    board = Board.new("Board 1", 12)
+    render = Render.new
+    render.render(board, false)
+
+    actual = render.names
+
+    assert_equal "                       Board 1\n", actual
+  end
+
+  def test_names_returns_padding_and_two_names_for_two_boards
+    board1 = Board.new("Board 1", 12)
+    board2 = Board.new("Board 2", 12)
+    render = Render.new
+    render.render(board1, board2, false)
+
+    actual = render.names
+
+    assert_equal "                  Board 1                                    Board 2\n", actual
+  end
+
+  def test_initial_padding_returns_9_spaces_for_1_board
+    board = Board.new("Board 1", 12)
+    render = Render.new
+    render.render(board, false)
+
+    actual = render.initial_padding
+
+    assert_equal "         ", actual
+  end
+
+  def test_initial_padding_returns_2_spaces_for_2_boards
+    board1 = Board.new("Board 1", 12)
+    board2 = Board.new("Board 2", 12)
+    render = Render.new
+    render.render(board1, board2, false)
+
+    actual = render.initial_padding
+
+    assert_equal "  ", actual
+  end
+
+  def test_first_row_our_board_returns_string_of_num_headings_for_small_board
+    board = Board.new("Board 1", 5)
+    render = Render.new
+    render.render(board, false)
+
+    actual = render.first_row_our_board(5)
+
+    assert_equal " 1  2  3  4  5 ", actual
+  end
+
+  def test_first_row_our_board_returns_string_of_num_headings_for_large_board
+    board = Board.new("Board 1", 11)
+    render = Render.new
+    render.render(board, false)
+
+    actual = render.first_row_our_board(11)
+
+    assert_equal " 1  2  3  4  5  6  7  8  9 10 11", actual
+  end
+
+  def test_first_row_their_board_returns_string_of_num_headings_for_small_board
+    board = Board.new("Board 1", 5)
+    render = Render.new
+    render.render(board, false)
+
+    actual = render.first_row_our_board(5)
+
+    assert_equal " 1  2  3  4  5 ", actual
+  end
+
+  def test_first_row_their_board_returns_string_of_num_headings_for_large_board
+    board = Board.new("Board 1", 11)
+    render = Render.new
+    render.render(board, false)
+
+    actual = render.first_row_our_board(11)
+
+    assert_equal " 1  2  3  4  5  6  7  8  9 10 11", actual
   end
 
   def test_first_row_shows_1_thru_default_board_size
