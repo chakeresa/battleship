@@ -61,6 +61,7 @@ end
 class DummyTurnResult
   include TurnResult
 
+  attr_accessor :name, :board
   def initialize
     @name = "dummy"
     @board = Board.new("dummy")
