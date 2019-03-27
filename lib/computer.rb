@@ -164,27 +164,6 @@ class Computer
         end
         target = test if valid_target?(@opp, test)
     end
-    # if !target
-    #     direction = rand(2)
-    #     if direction == 1
-    #       if horizontal
-    #         test = fetch_adjacent(@last, :left)
-    #         test = fetch_adjacent(@last, :right) if valid_target?(@opp, test)
-    #       else
-    #         test = fetch_adjacent(@last, :up)
-    #         test = fetch_adjacent(@last, :down) if valid_target?(@opp, test)
-    #       end
-    #     else
-    #       if horizontal
-    #         test = fetch_adjacent(@last, :right)
-    #         test = fetch_adjacent(@last, :left) if valid_target?(@opp, test)
-    #       else
-    #         test = fetch_adjacent(@last, :down)
-    #         test = fetch_adjacent(@last, :up) if valid_target?(@opp, test)
-    #       end
-    #     end
-    #     target = test if valid_target?(@opp, test)
-    # end
     if !target #We buggered it, give up
       if @last == @initHit
           @state = :random
@@ -216,7 +195,6 @@ class Computer
     while !valid do
       valid = valid_target?(opp, target)
       target = random_target(opp) if !valid
-      # TO DO ^ iter 4 smart computer
     end
     return target
   end
