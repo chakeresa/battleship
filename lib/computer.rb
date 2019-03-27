@@ -35,27 +35,81 @@ class Computer
     return valid
   end
 
-  def fetch_adjacent(direction)
+  def fetch_adjacent(coord, direction)
     case direction
     when :up
-      return ((@last[0].ord - 1).chr + @last[1..-1]).to_sym
+      return ((coord[0].ord - 1).chr + coord[1..-1]).to_sym
     when :right
-      return (@last[0] + (@last[1..-1].to_i + 1).to_s).to_sym
+      return (coord[0] + (coord[1..-1].to_i + 1).to_s).to_sym
     when :down
-      return ((@last[0].ord + 1).chr + @last[1..-1]).to_sym
+      return ((coord[0].ord + 1).chr + coord[1..-1]).to_sym
     when :left
-      return (@last[0] + (@last[1..-1].to_i - 1).to_s).to_sym
+      return (coord[0] + (coord[1..-1].to_i - 1).to_s).to_sym
     end
   end
 
   def state_Random
-    target = find_valid_target(@opp)
+    target = find_likely_target
     result = turn_result(@opp, target)
     @last = target
     if result == :hit
       @state = :inithit
     end
     return result
+  end
+
+  def find_likely_target
+  #require 'pry'; binding.pry
+    lengths = @opp.ships.map {|x| x.sunk? ? nil : x.length}
+    if lengths.compact
+      lengths.compact!
+    end
+    lengths.sort!
+    until lengths == []
+      weights = {}
+      @opp.board.cells.keys.each do |key|
+        if !@opp.board[key].fired_upon?
+          weights[key] = iterate_possibilities(key, false, lengths.last - 1, 0, 0) +\
+                                      iterate_possibilities(key, true, lengths.last - 1, 0, 0)
+        else
+          weights[key] = 0
+        end
+      end
+      bestChoice = weights.max_by{|k, v| v}[0]
+      return bestChoice if weights[bestChoice] != 0
+      lengths.pop
+    end
+      return find_valid_target(@opp)
+  end
+
+  def iterate_possibilities(key, horizontal, forward, reverse, out)
+    if forward == 0
+      if horizontal
+        out += 1 if find_empty(key, :left, reverse, 0)
+      else
+        out += 1 if find_empty(key, :up, reverse, 0)
+      end
+      return out
+    end
+    if horizontal
+      out += 1 if find_empty(key, :right, forward, 0) && find_empty(key, :left, reverse, 0)
+      return iterate_possibilities(key, horizontal, forward - 1, reverse + 1, out)
+    else
+      out += 1 if find_empty(key, :down, forward, 0) && find_empty(key, :up, reverse, 0)
+      return iterate_possibilities(key, horizontal, forward - 1, reverse + 1, out)
+    end
+  end
+
+  def find_empty(coord, direction, length, i)
+    if i == length
+      return true
+    end
+    target = fetch_adjacent(coord, direction)
+    if !@opp.board.valid_coordinate?(target.to_s) || @opp.board[target].fired_upon?
+      return false
+    end
+    cell = @opp.board[target]
+    return true && find_empty(target, direction, length, (i + 1))
   end
 
   def state_InitialHit
@@ -66,16 +120,16 @@ class Computer
     while !valid
       direction = rand(4)
       if direction == 0 && !tried[0] #up
-        target = fetch_adjacent(:up)
+        target = fetch_adjacent(@last, :up)
         tried[0] = true
       elsif direction == 1 && !tried[1] #right
-        target = fetch_adjacent(:right)
+        target = fetch_adjacent(@last, :right)
         tried[1] = true
       elsif direction == 2 && !tried[2] #down
-        target = fetch_adjacent(:down)
+        target = fetch_adjacent(@last, :down)
         tried[2]= true
       elsif direction == 3 && !tried[3] #left
-        target = fetch_adjacent(:left)
+        target = fetch_adjacent(@last, :left)
         tried[3] = true
       end
       valid = true if valid_target?(@opp, target)
@@ -97,20 +151,19 @@ class Computer
   def state_Directed(horizontal = false)
     target = nil
     if horizontal
-      test = fetch_adjacent(:left)
+      test = fetch_adjacent(@last, :left)
     else
-      test = fetch_adjacent(:up)
+      test = fetch_adjacent(@last, :up)
     end
     target = test if valid_target?(@opp, test)
     if !target
         if horizontal
-          test = fetch_adjacent(:right)
+          test = fetch_adjacent(@last, :right)
         else
-          test = fetch_adjacent(:down)
+          test = fetch_adjacent(@last, :down)
         end
         target = test if valid_target?(@opp, test)
     end
-
     if !target #We buggered it, give up
       if @last == @initHit
           @state = :random
