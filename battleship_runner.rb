@@ -89,7 +89,7 @@ class Game
       return true
   end
 
-  def game
+  def play
       $victor = :none
       puts "\e[H\e[2J"
       if $humanplayers == 0
@@ -186,5 +186,6 @@ class Game
   end
 end
 
-Game.game if Game.setup
+game = Game.new
+game.play if game.setup
 puts "Goodbye!"
