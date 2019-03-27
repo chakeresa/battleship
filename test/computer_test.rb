@@ -102,7 +102,7 @@ class ComputerTest < Minitest::Test
     actual = computer1.find_valid_target(computer2)
 
     assert actual == :B1 || actual == :B2
-    assert computer2.board[:A1].ship.sunk? # or just sub.sunk?
+    assert computer2.board[:A1].ship.sunk?
   end
 
   def test_random_target_is_random

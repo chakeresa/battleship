@@ -2,11 +2,6 @@ require 'minitest/autorun'
 require './lib/board'
 
 class BoardTest < Minitest::Test
-    # initialize -> Board
-        # Creates a new hash of new Cell objects, stored in @cells
-        # Has associated attr_reader
-        # Hash will contain each cell as a value to a Symbol key, where the key
-        # is an X,Y coordinate, where X is a letter, and Y a number
     def test_board_init
       board = Board.new("Board1")
       expected = {A1: Cell.new, A2: Cell.new, A3: Cell.new, A4: Cell.new,

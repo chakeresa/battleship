@@ -222,7 +222,7 @@ class RenderTest < Minitest::Test
     board.place(cruiser, "A4", false)
     # ^ places cruiser in A1 vertically -- A4 thru D4
 
-    render.render(board, false) # inherent false for reveal
+    render.render(board, false)
 
     assert_equal "A  #{CELL_EMPTY}  #{CELL_EMPTY}  #{CELL_EMPTY}  #{CELL_EMPTY} \n", render.subsequent_row(0)
     assert_equal "B  #{CELL_EMPTY}  #{CELL_EMPTY}  #{CELL_EMPTY}  #{CELL_EMPTY} \n", render.subsequent_row(1)

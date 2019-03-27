@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'stringio'
-require 'o_stream_catcher' # if missing do `gem install o_stream_catcher`
+require 'o_stream_catcher'
 require './lib/player'
 
 class PlayerTest < Minitest::Test
@@ -287,8 +287,6 @@ class PlayerTest < Minitest::Test
 
     $stdin = STDIN
   end
-
-  # No tests of turn method because it requires user input
 
   def test_player_turn_valid_input_returns_miss
     player1 = Player.new("Fred", 6)
