@@ -35,16 +35,16 @@ class Computer
     return valid
   end
 
-  def fetch_adjacent(direction)
+  def fetch_adjacent(coord, direction)
     case direction
     when :up
-      return ((@last[0].ord - 1).chr + @last[1..-1]).to_sym
+      return ((coord[0].ord - 1).chr + coord[1..-1]).to_sym
     when :right
-      return (@last[0] + (@last[1..-1].to_i + 1).to_s).to_sym
+      return (coord[0] + (coord[1..-1].to_i + 1).to_s).to_sym
     when :down
-      return ((@last[0].ord + 1).chr + @last[1..-1]).to_sym
+      return ((coord[0].ord + 1).chr + coord[1..-1]).to_sym
     when :left
-      return (@last[0] + (@last[1..-1].to_i - 1).to_s).to_sym
+      return (coord[0] + (coord[1..-1].to_i - 1).to_s).to_sym
     end
   end
 
@@ -58,6 +58,34 @@ class Computer
     return result
   end
 
+  def find_likely_target
+    guess = find_valid_target(@opp)
+    require 'pry'; binding.pry
+    lengths = @opp.ships.map {|x| x.sunk? ? x.length : nil}.compact!.sort!
+    until lengths == []
+      @opp.board.keys.each do |key|
+        if @opp.board[key].empty?
+          if find_empty(key, :up, lengths.last, 0) && find_empty(key, :down, lengths.last, 0) && \
+             find_empty(key, :left, lengths.last, 0) && find_empty(key, :right, lengths.last, 0)
+
+             
+        end
+      end
+      lengths.pop
+  end
+
+  def find_empty(coord, direction, length, i)
+    next = fetch_adjacent(coord, direction)
+    cell = @opp.board[next]
+    if !cell.valid_coordinate?
+      return false
+    elsif i == length
+      return true
+    else
+      return true & find_empty(next, direction, length, (i + 1))
+    end
+  end
+
   def state_InitialHit
     valid = false
     @initHit = @last
@@ -66,16 +94,16 @@ class Computer
     while !valid
       direction = rand(4)
       if direction == 0 && !tried[0] #up
-        target = fetch_adjacent(:up)
+        target = fetch_adjacent(@last, :up)
         tried[0] = true
       elsif direction == 1 && !tried[1] #right
-        target = fetch_adjacent(:right)
+        target = fetch_adjacent(@last, :right)
         tried[1] = true
       elsif direction == 2 && !tried[2] #down
-        target = fetch_adjacent(:down)
+        target = fetch_adjacent(@last, :down)
         tried[2]= true
       elsif direction == 3 && !tried[3] #left
-        target = fetch_adjacent(:left)
+        target = fetch_adjacent(@last, :left)
         tried[3] = true
       end
       valid = true if valid_target?(@opp, target)
@@ -97,16 +125,16 @@ class Computer
   def state_Directed(horizontal = false)
     target = nil
     if horizontal
-      test = fetch_adjacent(:left)
+      test = fetch_adjacent(@last, :left)
     else
-      test = fetch_adjacent(:up)
+      test = fetch_adjacent(@last, :up)
     end
     target = test if valid_target?(@opp, test)
     if !target
         if horizontal
-          test = fetch_adjacent(:right)
+          test = fetch_adjacent(@last, :right)
         else
-          test = fetch_adjacent(:down)
+          test = fetch_adjacent(@last, :down)
         end
         target = test if valid_target?(@opp, test)
     end
@@ -114,19 +142,19 @@ class Computer
     #     direction = rand(2)
     #     if direction == 1
     #       if horizontal
-    #         test = fetch_adjacent(:left)
-    #         test = fetch_adjacent(:right) if valid_target?(@opp, test)
+    #         test = fetch_adjacent(@last, :left)
+    #         test = fetch_adjacent(@last, :right) if valid_target?(@opp, test)
     #       else
-    #         test = fetch_adjacent(:up)
-    #         test = fetch_adjacent(:down) if valid_target?(@opp, test)
+    #         test = fetch_adjacent(@last, :up)
+    #         test = fetch_adjacent(@last, :down) if valid_target?(@opp, test)
     #       end
     #     else
     #       if horizontal
-    #         test = fetch_adjacent(:right)
-    #         test = fetch_adjacent(:left) if valid_target?(@opp, test)
+    #         test = fetch_adjacent(@last, :right)
+    #         test = fetch_adjacent(@last, :left) if valid_target?(@opp, test)
     #       else
-    #         test = fetch_adjacent(:down)
-    #         test = fetch_adjacent(:up) if valid_target?(@opp, test)
+    #         test = fetch_adjacent(@last, :down)
+    #         test = fetch_adjacent(@last, :up) if valid_target?(@opp, test)
     #       end
     #     end
     #     target = test if valid_target?(@opp, test)
