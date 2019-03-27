@@ -76,7 +76,7 @@ class CellTest < Minitest::Test
     cell.fire_upon
 
     assert cell.ship.sunk?
-    assert_equal "\e[31mX\e[m", cell.render
+    assert_equal "\e[38;5;29mX\e[m", cell.render
   end
 
   def test_it_renders_dot_for_non_fired_cells_with_ship
@@ -96,6 +96,6 @@ class CellTest < Minitest::Test
     cell.place(cruiser)
 
     assert_instance_of Ship, cell.ship
-    assert_equal "\e[33mS\e[m", cell.render(true)
+    assert_equal "\e[38;5;136mS\e[m", cell.render(true)
   end
 end

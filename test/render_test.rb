@@ -152,7 +152,7 @@ class RenderTest < Minitest::Test
     render.render(board, :one)
     actual = render.sub_row_ours("A")
 
-    assert_equal "  \e[33mS\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m", actual
+    assert_equal "  \e[38;5;136mS\e[m  \e[38;5;136mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m", actual
   end
 
   def test_sub_row_ours_returns_rendered_cells_for_row_wo_reveal
@@ -177,7 +177,7 @@ class RenderTest < Minitest::Test
     render.render(board1, board2, :all)
     actual = render.sub_row_ours("A")
 
-    assert_equal "  \e[33mS\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m", actual
+    assert_equal "  \e[38;5;136mS\e[m  \e[38;5;136mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m", actual
   end
 
   def test_subsequent_row_renders_initial_board
@@ -205,9 +205,9 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "A  \e[33mS\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  \e[33mS\e[m \n", render.subsequent_row(0)
-    assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[33mS\e[m \n", render.subsequent_row(1)
-    assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[33mS\e[m \n", render.subsequent_row(2)
+    assert_equal "A  \e[38;5;136mS\e[m  \e[38;5;136mS\e[m  \e[38;5;33m.\e[m  \e[38;5;136mS\e[m \n", render.subsequent_row(0)
+    assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;136mS\e[m \n", render.subsequent_row(1)
+    assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;136mS\e[m \n", render.subsequent_row(2)
     assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
   end
 
@@ -241,7 +241,7 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "A  \e[31mH\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(0)
+    assert_equal "A  \e[31mH\e[m  \e[38;5;136mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(0)
     assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(1)
     assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(2)
     assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
@@ -259,7 +259,7 @@ class RenderTest < Minitest::Test
 
     render.render(board, false)
 
-    assert_equal "A  \e[31mX\e[m  \e[31mX\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(0)
+    assert_equal "A  \e[38;5;29mX\e[m  \e[38;5;29mX\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(0)
     assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(1)
     assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(2)
     assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
@@ -277,7 +277,7 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "A  \e[33mS\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  M \n", render.subsequent_row(0)
+    assert_equal "A  \e[38;5;136mS\e[m  \e[38;5;136mS\e[m  \e[38;5;33m.\e[m  M \n", render.subsequent_row(0)
     assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(1)
     assert_equal "C  \e[38;5;33m.\e[m  M  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(2)
     assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)

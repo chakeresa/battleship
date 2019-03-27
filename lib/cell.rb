@@ -31,9 +31,9 @@ class Cell
             return @fired ? 'M' : "\e[38;5;33m.\e[m"
         else
             if @fired
-                return @ship.sunk? ? "\e[31mX\e[m" : "\e[31mH\e[m"
+                return @ship.sunk? ? "\e[38;5;29mX\e[m" : "\e[31mH\e[m"
             else
-                return reveal ? "\e[33mS\e[m" : "\e[38;5;33m.\e[m"
+                return reveal ? "\e[38;5;136mS\e[m" : "\e[38;5;33m.\e[m"
             end
         end
     end
