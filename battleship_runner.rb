@@ -117,10 +117,12 @@ def game
     elsif $humanplayers == 1
         while $victor == :none
             #PLAYER ONE GO:
-            puts "\e[H\e[2J"
-            puts "PLAYER'S TURN..."
             puts "-" * ($playerone.board.size * 6 + 11)
-            puts $renderer.render($playerone.board, $playertwo.board, :one)
+            result = $playertwo.turn($playerone)
+            if result == :win
+                $victor = :two
+                break
+            end
             puts "-" * ($playertwo.board.size * 6 + 11)
             result = $playerone.turn($playertwo)
             return false if result == :quit
@@ -133,11 +135,7 @@ def game
             puts "\e[H\e[2J"
             puts "-" * ($playerone.board.size * 6 + 11)
             #COMPUTER GO:
-            result = $playertwo.turn($playerone)
-            if result == :win
-                $victor = :two
-                break
-            end
+            puts "PLAYER'S TURN..."
         end
     elsif $humanplayers == 2
         while $victor == :none
