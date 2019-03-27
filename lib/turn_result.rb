@@ -34,9 +34,9 @@ module TurnResult
       puts $renderer.render($playerone.board, $playertwo.board, :one)
     elsif $humanplayers == 2
       if opp == $playerone
-        puts $renderer.render($playerone.board, $playertwo.board, :one)
-      else
         puts $renderer.render($playertwo.board, $playerone.board, :one)
+      else
+        puts $renderer.render($playerone.board, $playertwo.board, :one)
       end
     end
     puts "-" * (@board.size * 6 + 11)
