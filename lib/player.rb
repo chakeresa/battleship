@@ -39,12 +39,12 @@ class Player
 
       direction_return = false
       if direction.match?(/^l$|^left$/)
-        coord = coord[0] + (coord[1].to_i - (ship.length - 1)).to_s
+        coord = coord[0] + (coord[1..-1].to_i - (ship.length - 1)).to_s
         direction_return = true; valid = true
       elsif direction.match?(/^r$|^right$/)
         direction_return = true; valid = true
       elsif direction.match?(/^u$|^up$/)
-        coord = (coord[0].ord - (ship.length - 1)).chr + coord[1]; valid = true
+        coord = (coord[0].ord - (ship.length - 1)).chr + coord[1..-1]; valid = true
       elsif direction.match?(/^d$|^down$/)
         valid = true
       else
