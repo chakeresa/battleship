@@ -49,7 +49,7 @@ class Computer
   end
 
   def state_Random
-    target = find_valid_target(@opp)
+    target = find_likely_target
     result = turn_result(@opp, target)
     @last = target
     if result == :hit
@@ -59,31 +59,57 @@ class Computer
   end
 
   def find_likely_target
-    guess = find_valid_target(@opp)
-    require 'pry'; binding.pry
-    lengths = @opp.ships.map {|x| x.sunk? ? x.length : nil}.compact!.sort!
+  #require 'pry'; binding.pry
+    lengths = @opp.ships.map {|x| x.sunk? ? nil : x.length}
+    if lengths.compact
+      lengths.compact!
+    end
+    lengths.sort!
     until lengths == []
-      @opp.board.keys.each do |key|
-        if @opp.board[key].empty?
-          if find_empty(key, :up, lengths.last, 0) && find_empty(key, :down, lengths.last, 0) && \
-             find_empty(key, :left, lengths.last, 0) && find_empty(key, :right, lengths.last, 0)
-
-             
+      weights = {}
+      @opp.board.cells.keys.each do |key|
+        if !@opp.board[key].fired_upon?
+          weights[key] = iterate_possibilities(key, false, lengths.last - 1, 0, 0) +\
+                                      iterate_possibilities(key, true, lengths.last - 1, 0, 0)
+        else
+          weights[key] = 0
         end
       end
+      bestChoice = weights.max_by{|k, v| v}[0]
+      return bestChoice if weights[bestChoice] != 0
       lengths.pop
+    end
+      return find_valid_target(@opp)
+  end
+
+  def iterate_possibilities(key, horizontal, forward, reverse, out)
+    if forward == 0
+      if horizontal
+        out += 1 if find_empty(key, :left, reverse, 0)
+      else
+        out += 1 if find_empty(key, :up, reverse, 0)
+      end
+      return out
+    end
+    if horizontal
+      out += 1 if find_empty(key, :right, forward, 0) && find_empty(key, :left, reverse, 0)
+      return iterate_possibilities(key, horizontal, forward - 1, reverse + 1, out)
+    else
+      out += 1 if find_empty(key, :down, forward, 0) && find_empty(key, :up, reverse, 0)
+      return iterate_possibilities(key, horizontal, forward - 1, reverse + 1, out)
+    end
   end
 
   def find_empty(coord, direction, length, i)
-    next = fetch_adjacent(coord, direction)
-    cell = @opp.board[next]
-    if !cell.valid_coordinate?
-      return false
-    elsif i == length
+    if i == length
       return true
-    else
-      return true & find_empty(next, direction, length, (i + 1))
     end
+    target = fetch_adjacent(coord, direction)
+    if !@opp.board.valid_coordinate?(target.to_s) || @opp.board[target].fired_upon?
+      return false
+    end
+    cell = @opp.board[target]
+    return true && find_empty(target, direction, length, (i + 1))
   end
 
   def state_InitialHit
