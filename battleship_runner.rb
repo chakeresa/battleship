@@ -18,6 +18,15 @@ class Game
       end
   end
 
+  def continue?
+    puts "\e[H\e[2J"
+    puts "Press enter to continue."
+    input = gets.chomp
+    return false if input == '!'
+    puts "\e[H\e[2J"
+    return true
+  end
+
   def setup
       load
       longship = $oneships.max {|a,b| a.length <=> b.length}
@@ -75,6 +84,7 @@ class Game
               result = $playerone.place(ship)
               return false if result == :quit
           end
+          return false if !continue?
           $playertwo = Player.new(" PLAYER TWO ", boardsize)
           puts "\e[H\e[2J"
           puts "PLAYER TWO: Place your ships."
@@ -85,6 +95,7 @@ class Game
               result = $playertwo.place(ship)
               return false if result == :quit
           end
+          return false if !continue?
       end
       return true
   end
@@ -154,11 +165,7 @@ class Game
               end
               input = gets.chomp
               return false if input == '!'
-              puts "\e[H\e[2J"
-              puts "Press enter to continue."
-              input = gets.chomp
-              return false if input == '!'
-              puts "\e[H\e[2J"
+              return false if !continue?
               puts "-" * ($playerone.board.size * 6 + 11)
               #PLAYER TWO GO:
               puts "\e[H\e[2J"
@@ -174,10 +181,7 @@ class Game
               end
               input = gets.chomp
               return false if input == '!'
-              puts "\e[H\e[2J"
-              puts "Press enter to continue."
-              input = gets.chomp
-              return false if input == '!'
+              return false if !continue?
               puts "\e[H\e[2J"
               puts "-" * ($playertwo.board.size * 6 + 11)
           end
