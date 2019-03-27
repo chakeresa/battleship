@@ -45,7 +45,7 @@ class CellTest < Minitest::Test
   def test_it_initially_renders_dot
     cell = Cell.new
 
-    assert_equal ".", cell.render
+    assert_equal "\e[38;5;33m.\e[m", cell.render
   end
 
   def test_it_renders_m_after_miss
@@ -63,7 +63,7 @@ class CellTest < Minitest::Test
     cell.place(cruiser)
     cell.fire_upon
 
-    assert_equal "H", cell.render
+    assert_equal "\e[31mH\e[m", cell.render
   end
 
   def test_it_renders_x_after_sinking
@@ -76,7 +76,7 @@ class CellTest < Minitest::Test
     cell.fire_upon
 
     assert cell.ship.sunk?
-    assert_equal "X", cell.render
+    assert_equal "\e[31mX\e[m", cell.render
   end
 
   def test_it_renders_dot_for_non_fired_cells_with_ship
@@ -86,7 +86,7 @@ class CellTest < Minitest::Test
     cell.place(cruiser)
 
     assert_instance_of Ship, cell.ship
-    assert_equal ".", cell.render
+    assert_equal "\e[38;5;33m.\e[m", cell.render
   end
 
   def test_it_renders_s_for_non_fired_cells_with_ship_with_reveal
@@ -96,6 +96,6 @@ class CellTest < Minitest::Test
     cell.place(cruiser)
 
     assert_instance_of Ship, cell.ship
-    assert_equal "S", cell.render(true)
+    assert_equal "\e[33mS\e[m", cell.render(true)
   end
 end

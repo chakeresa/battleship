@@ -152,7 +152,7 @@ class RenderTest < Minitest::Test
     render.render(board, :one)
     actual = render.sub_row_ours("A")
 
-    assert_equal "  S  S  .  .", actual
+    assert_equal "  \e[33mS\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m", actual
   end
 
   def test_sub_row_ours_returns_rendered_cells_for_row_wo_reveal
@@ -164,7 +164,7 @@ class RenderTest < Minitest::Test
     render.render(board, false)
     actual = render.sub_row_ours("A")
 
-    assert_equal "  .  .  .  .", actual
+    assert_equal "  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m", actual
   end
 
   def test_sub_row_theirs_returns_rendered_cells_for_row
@@ -177,7 +177,7 @@ class RenderTest < Minitest::Test
     render.render(board1, board2, :all)
     actual = render.sub_row_ours("A")
 
-    assert_equal "  S  S  .  .", actual
+    assert_equal "  \e[33mS\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m", actual
   end
 
   def test_subsequent_row_renders_initial_board
@@ -186,10 +186,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, false)
 
-    assert_equal "A  .  .  .  . \n", render.subsequent_row(0)
-    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "C  .  .  .  . \n", render.subsequent_row(2)
-    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(0)
+    assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(1)
+    assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(2)
+    assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
   end
 
   def test_subsequent_row_renders_ships_if_reveal
@@ -205,10 +205,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "A  S  S  .  S \n", render.subsequent_row(0)
-    assert_equal "B  .  .  .  S \n", render.subsequent_row(1)
-    assert_equal "C  .  .  .  S \n", render.subsequent_row(2)
-    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  \e[33mS\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  \e[33mS\e[m \n", render.subsequent_row(0)
+    assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[33mS\e[m \n", render.subsequent_row(1)
+    assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[33mS\e[m \n", render.subsequent_row(2)
+    assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
   end
 
   def test_subsequent_row_doesnt_render_ships_if_reveal_is_false
@@ -224,10 +224,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, false) # inherent false for reveal
 
-    assert_equal "A  .  .  .  . \n", render.subsequent_row(0)
-    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "C  .  .  .  . \n", render.subsequent_row(2)
-    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(0)
+    assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(1)
+    assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(2)
+    assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
   end
 
   def test_subsequent_renders_hit_ships
@@ -241,10 +241,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "A  H  S  .  . \n", render.subsequent_row(0)
-    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "C  .  .  .  . \n", render.subsequent_row(2)
-    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  \e[31mH\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(0)
+    assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(1)
+    assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(2)
+    assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
   end
 
   def test_subsequent_renders_sunken_ships
@@ -259,10 +259,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, false)
 
-    assert_equal "A  X  X  .  . \n", render.subsequent_row(0)
-    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "C  .  .  .  . \n", render.subsequent_row(2)
-    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  \e[31mX\e[m  \e[31mX\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(0)
+    assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(1)
+    assert_equal "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(2)
+    assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
   end
 
   def test_subsequent_renders_misses
@@ -277,10 +277,10 @@ class RenderTest < Minitest::Test
 
     render.render(board, :one)
 
-    assert_equal "A  S  S  .  M \n", render.subsequent_row(0)
-    assert_equal "B  .  .  .  . \n", render.subsequent_row(1)
-    assert_equal "C  .  M  .  . \n", render.subsequent_row(2)
-    assert_equal "D  .  .  .  . \n", render.subsequent_row(3)
+    assert_equal "A  \e[33mS\e[m  \e[33mS\e[m  \e[38;5;33m.\e[m  M \n", render.subsequent_row(0)
+    assert_equal "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(1)
+    assert_equal "C  \e[38;5;33m.\e[m  M  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(2)
+    assert_equal "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n", render.subsequent_row(3)
   end
 
   def test_entire_render
@@ -289,11 +289,11 @@ class RenderTest < Minitest::Test
 
     expected = "       Board 1\n"
     expected += "   1  2  3  4  5  \n"
-    expected += "A  .  .  .  .  . \n"
-    expected += "B  .  .  .  .  . \n"
-    expected += "C  .  .  .  .  . \n"
-    expected += "D  .  .  .  .  . \n"
-    expected += "E  .  .  .  .  . \n"
+    expected += "A  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n"
+    expected += "B  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n"
+    expected += "C  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n"
+    expected += "D  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n"
+    expected += "E  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m  \e[38;5;33m.\e[m \n"
 
     assert_equal expected, render.render(board, false)
   end

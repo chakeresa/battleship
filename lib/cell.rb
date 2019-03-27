@@ -28,12 +28,12 @@ class Cell
 
     def render(reveal = false)
         if self.empty?
-            return @fired ? 'M' : '.'
+            return @fired ? 'M' : "\e[38;5;33m.\e[m"
         else
             if @fired
-                return @ship.sunk? ? 'X' : 'H'
+                return @ship.sunk? ? "\e[31mX\e[m" : "\e[31mH\e[m"
             else
-                return reveal ? 'S' : '.'
+                return reveal ? "\e[33mS\e[m" : "\e[38;5;33m.\e[m"
             end
         end
     end
