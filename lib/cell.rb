@@ -1,5 +1,11 @@
 require './lib/ship'
 
+CELL_EMPTY = "\e[38;5;33m.\e[m"
+CELL_MISS = "M"
+CELL_HIT = "\e[31mH\e[m"
+CELL_SHIP = "\e[38;5;136mS\e[m"
+CELL_SUNK = "\e[38;5;29mX\e[m"
+
 class Cell
     attr_reader :ship
     def initialize
@@ -28,12 +34,12 @@ class Cell
 
     def render(reveal = false)
         if self.empty?
-            return @fired ? 'M' : "\e[38;5;33m.\e[m"
+            return @fired ? CELL_MISS : CELL_EMPTY
         else
             if @fired
-                return @ship.sunk? ? "\e[38;5;29mX\e[m" : "\e[31mH\e[m"
+                return @ship.sunk? ? CELL_SUNK : CELL_HIT
             else
-                return reveal ? "\e[38;5;136mS\e[m" : "\e[38;5;33m.\e[m"
+                return reveal ? CELL_SHIP : CELL_EMPTY
             end
         end
     end
