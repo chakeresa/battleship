@@ -190,6 +190,27 @@ class Game
   end
 end
 
-game = Game.new
-game.play if game.setup
+play_again = true
+
+while play_again
+  game = Game.new
+  valid_input = false
+  play_again = false
+  
+  if game.setup && game.play
+    while !valid_input
+      puts "Play again? Enter yes (y) or no (n)."
+      print ">> "; user_input = gets.chomp.downcase
+      if user_input.match?(/^[!ny]|yes|no$/)
+        if user_input.match?(/^y|yes$/)
+          play_again = true
+        end
+        valid_input = true
+      else
+        puts "Invalid input."
+      end
+    end
+  end
+end
+
 puts "Goodbye!"
