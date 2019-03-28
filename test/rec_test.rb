@@ -1,4 +1,4 @@
-require './lib/tail_rec'
+require './lib/rec'
 
 class Heck
   extend TailRec

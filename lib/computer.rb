@@ -1,6 +1,6 @@
 require './lib/board'
 require './lib/turn_result'
-require './lib/tail_rec'
+require './lib/rec'
 
 class Computer
   extend TailRec
