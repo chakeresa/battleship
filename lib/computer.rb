@@ -109,7 +109,6 @@ class Computer
     if !@opp.board.valid_coordinate?(target.to_s) || @opp.board[target].fired_upon?
       return false
     end
-    cell = @opp.board[target]
     find_empty(target, direction, length, (i + 1))
   end
 
