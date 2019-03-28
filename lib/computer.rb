@@ -76,7 +76,8 @@ class Computer
           weights[key] = 0
         end
       end
-      bestChoice = weights.max_by{|k, v| v}[0]
+      bestValue = weights.max_by{|k, v| v}[1]
+      bestChoice = weights.keep_if{|k,v| v == bestValue}.keys.sample
       return bestChoice if weights[bestChoice] != 0
       lengths.pop
     end
