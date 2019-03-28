@@ -1,11 +1,12 @@
 require './lib/board'
 require './lib/turn_result'
+require './lib/tail_rec'
 
 class Computer
-  attr_reader :name, :board, :ships
-
+  extend TailRec
   include TurnResult
 
+  attr_reader :name, :board, :ships
   def initialize(name, size = 10)
     @name = name
     @board = Board.new(name, size)
@@ -82,7 +83,7 @@ class Computer
       return find_valid_target(@opp)
   end
 
-  def iterate_possibilities(key, horizontal, forward, reverse, out)
+  rec def iterate_possibilities(key, horizontal, forward, reverse, out)
     if forward == 0
       if horizontal
         out += 1 if find_empty(key, :left, reverse, 0)
@@ -93,14 +94,13 @@ class Computer
     end
     if horizontal
       out += 1 if find_empty(key, :right, forward, 0) && find_empty(key, :left, reverse, 0)
-      return iterate_possibilities(key, horizontal, forward - 1, reverse + 1, out)
     else
       out += 1 if find_empty(key, :down, forward, 0) && find_empty(key, :up, reverse, 0)
-      return iterate_possibilities(key, horizontal, forward - 1, reverse + 1, out)
     end
+    iterate_possibilities(key, horizontal, forward - 1, reverse + 1, out)
   end
 
-  def find_empty(coord, direction, length, i)
+  rec def find_empty(coord, direction, length, i)
     if i == length
       return true
     end
@@ -109,7 +109,7 @@ class Computer
       return false
     end
     cell = @opp.board[target]
-    return true && find_empty(target, direction, length, (i + 1))
+    find_empty(target, direction, length, (i + 1))
   end
 
   def state_InitialHit
