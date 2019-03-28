@@ -168,8 +168,8 @@ class Computer
     end
     if !target #We buggered it, give up
       if @last == @initHit
-          @state = :random
-          return state_Random
+          @state = :inithit
+          return state_InitialHit
       end
       @last = @initHit
       return state_Directed(horizontal)
@@ -209,7 +209,14 @@ class Computer
     @opp = opp
     case @state
     when :random
-      result = state_Random
+      maybeHits = opp.board.cells.select {|k,v| !v.empty? && v.fired_upon?\
+                                                          && !v.ship.sunk?}
+      if maybeHits == {}
+        result = state_Random
+      else
+        @last = maybeHits.keys.sample
+        result = state_InitialHit
+      end
     when :inithit
       result = state_InitialHit
     when :horizontal
