@@ -1,6 +1,8 @@
 require './lib/cell'
+require './lib/memoize'
 
 class Board
+    extend Memoize
     attr_reader :cells, :size, :name
     def initialize(name, size = 10)
         @cells = {}
@@ -17,7 +19,7 @@ class Board
         return @cells[at]
     end
 
-    def valid_coordinate?(coord)
+    memo def valid_coordinate?(coord)
         @cells.keys.any? {|cell| cell.to_s == coord}
     end
 

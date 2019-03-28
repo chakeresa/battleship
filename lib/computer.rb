@@ -1,9 +1,11 @@
 require './lib/board'
 require './lib/turn_result'
 require './lib/rec'
+require './lib/memoize'
 
 class Computer
   extend TailRec
+  extend Memoize
   include TurnResult
 
   attr_reader :name, :board, :ships
@@ -36,7 +38,7 @@ class Computer
     return valid
   end
 
-  def fetch_adjacent(coord, direction)
+  memo def fetch_adjacent(coord, direction)
     case direction
     when :up
       return ((coord[0].ord - 1).chr + coord[1..-1]).to_sym
